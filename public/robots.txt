@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /thank-you
+
+Sitemap: https://ai-integrator-landing.vercel.app/sitemap.xml

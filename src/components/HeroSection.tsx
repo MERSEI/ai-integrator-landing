@@ -1,5 +1,6 @@
 import EmailForm from "./EmailForm";
 import Reveal from "./Reveal";
+import TypewriterHeading from "./TypewriterHeading";
 import { FiCheck } from "react-icons/fi";
 
 export default function HeroSection() {
@@ -38,10 +39,16 @@ export default function HeroSection() {
             </span>
             Запуск за 48 часов, без разработчиков
           </p>
-          <h1 className="mx-auto max-w-4xl font-heading text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[60px]">
-            Ваш AI-помощник для{" "}
-            <span className="text-gradient">продаж и привлечения клиентов</span>
-          </h1>
+          <TypewriterHeading
+            className="mx-auto max-w-4xl font-heading text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[60px]"
+            segments={[
+              { text: "Ваш AI-маркетплейс для " },
+              {
+                text: "продаж и привлечения клиентов",
+                className: "text-gradient",
+              },
+            ]}
+          />
           <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-300">
             15 готовых приложений для автоматизации продаж, маркетинга и
             операционки. Работают за 48 часов без разработчиков.

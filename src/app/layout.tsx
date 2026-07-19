@@ -17,7 +17,7 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ai-integrator-landing.vercel.app"),
-  title: "AI Integrator — Ваш AI-помощник для продаж и привлечения клиентов",
+  title: "AI Integrator — Ваш AI-маркетплейс для продаж и привлечения клиентов",
   description:
     "15 готовых AI-приложений для автоматизации продаж, маркетинга и операционки. Работают за 48 часов без разработчиков.",
   keywords: [
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     "AI инструменты",
   ],
   openGraph: {
-    title: "AI Integrator — AI-помощник для продаж",
+    title: "AI Integrator — AI-маркетплейс для продаж",
     description:
       "15 готовых AI-приложений для автоматизации продаж, маркетинга и операционки. Запуск за 48 часов.",
     type: "website",

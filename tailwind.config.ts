@@ -53,12 +53,23 @@ const config: Config = {
           "0%": { backgroundPosition: "200% 0" },
           "100%": { backgroundPosition: "-200% 0" },
         },
+        blink: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
+        },
+        "blink-fade": {
+          "0%, 60%": { opacity: "1" },
+          "30%": { opacity: "0" },
+          "100%": { opacity: "0" },
+        },
       },
       animation: {
         drift: "drift 18s ease-in-out infinite",
         "drift-alt": "drift-alt 22s ease-in-out infinite",
         "pulse-dot": "pulse-dot 2.4s ease-in-out infinite",
         shimmer: "shimmer 8s linear infinite",
+        blink: "blink 0.9s step-end infinite",
+        "blink-fade": "blink-fade 2.4s ease-out forwards",
       },
     },
   },

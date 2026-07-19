@@ -49,10 +49,10 @@ export default function ProblemsSection() {
               aria-hidden="true"
             />
             <Image
-              src="/images/problems.png"
+              src="/images/problems.jpg"
               alt="Предприниматель, перегруженный хаосом ручных процессов"
-              width={640}
-              height={360}
+              width={1280}
+              height={714}
               className="relative rounded-xl border border-white/10 shadow-card"
               loading="lazy"
             />

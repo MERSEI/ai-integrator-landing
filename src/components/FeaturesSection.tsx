@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { TbTrendingUp, TbRobot } from "react-icons/tb";
 import Reveal from "./Reveal";
 import { FEATURED_APPS, APP_CATEGORIES } from "@/lib/content";
@@ -15,19 +16,43 @@ export default function FeaturesSection() {
       : FEATURED_APPS.filter((app) => app.category === category);
 
   return (
-    <section id="features" className="relative bg-dark py-20 sm:py-28">
-      <div className="container-section">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <h2 className="section-title">
-            15 готовых AI-инструментов для вашего бизнеса
-          </h2>
-          <p className="mt-4 text-lg text-slate-400">
-            Выберите нужные приложения и начните работать через 48 часов
-          </p>
-        </Reveal>
+    <section id="features" className="relative overflow-hidden bg-dark py-20 sm:py-28">
+      <div
+        className="pointer-events-none absolute left-[-10%] top-1/4 h-[400px] w-[400px] rounded-full bg-secondary/10 blur-[130px]"
+        aria-hidden="true"
+      />
+      <div className="container-section relative">
+        <div className="grid items-center gap-12 lg:grid-cols-2">
+          <Reveal>
+            <h2 className="section-title">
+              15 готовых AI-инструментов для вашего бизнеса
+            </h2>
+            <p className="mt-4 text-lg text-slate-400">
+              Выберите нужные приложения и начните работать через 48 часов —
+              каждый бот берёт на себя свою часть рутины: лидов, аналитику,
+              переписку и контент.
+            </p>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <div className="relative">
+              <div
+                className="absolute -inset-4 rounded-xl bg-primary/10 blur-2xl"
+                aria-hidden="true"
+              />
+              <Image
+                src="/images/features.jpg"
+                alt="Команда AI-ботов помогает в работе с лидами, аналитикой, письмами и контентом"
+                width={1280}
+                height={714}
+                className="relative rounded-xl border border-white/10 shadow-card"
+                loading="lazy"
+              />
+            </div>
+          </Reveal>
+        </div>
 
         <div
-          className="mt-10 flex flex-wrap justify-center gap-3"
+          className="mt-14 flex flex-wrap justify-center gap-3"
           role="tablist"
           aria-label="Категории приложений"
         >

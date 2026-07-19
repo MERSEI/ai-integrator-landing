@@ -5,7 +5,7 @@ import { FiCheck } from "react-icons/fi";
 
 export default function HeroSection() {
   return (
-    <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-dark pt-16">
+    <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-dark pt-[72px]">
       {/* Video background */}
       <video
         className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"

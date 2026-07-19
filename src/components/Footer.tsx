@@ -1,4 +1,5 @@
 import { FaLinkedin, FaTwitter, FaFacebook } from "react-icons/fa";
+import Logo from "./Logo";
 import { CONTACTS } from "@/lib/content";
 
 const PRODUCT_LINKS = [
@@ -13,12 +14,7 @@ export default function Footer() {
     <footer className="border-t border-white/10 bg-dark py-14">
       <div className="container-section grid gap-10 md:grid-cols-3">
         <div>
-          <p className="flex items-center gap-2.5 font-heading text-lg font-extrabold tracking-tight text-white">
-            <span className="flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-primary to-secondary text-sm shadow-glow-sm">
-              AI
-            </span>
-            AI Integrator
-          </p>
+          <Logo className="h-8 w-auto" />
           <p className="mt-3 text-sm text-slate-500">
             Making AI work for everyone
           </p>

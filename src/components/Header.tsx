@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { HiMenu, HiX } from "react-icons/hi";
 import { FiChevronDown, FiArrowRight } from "react-icons/fi";
-import { TbBrandTelegram, TbRobot } from "react-icons/tb";
+import { TbBrandTelegram } from "react-icons/tb";
 import Logo from "./Logo";
 import { FEATURED_APPS, CONTACTS } from "@/lib/content";
-import { APP_ICONS } from "@/lib/app-icons";
 
 const NAV_LINKS = [
   { href: "#how-it-works", label: "Как это работает" },
@@ -70,7 +70,6 @@ export default function Header() {
               <div className="absolute left-1/2 top-full mt-3 w-[560px] -translate-x-1/2 card-glass !bg-surface-2/95 p-4 shadow-card">
                 <div className="grid grid-cols-2 gap-1">
                   {FEATURED_APPS.map((app) => {
-                    const Icon = APP_ICONS[app.icon] ?? TbRobot;
                     return (
                       <a
                         key={app.id}
@@ -78,8 +77,14 @@ export default function Header() {
                         onClick={() => setAppsOpen(false)}
                         className="flex items-start gap-3 rounded-md p-3 transition-colors duration-200 hover:bg-white/5"
                       >
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-primary/25 to-secondary/25 text-primary-light">
-                          <Icon size={18} aria-hidden="true" />
+                        <span className="h-9 w-9 shrink-0 overflow-hidden rounded-md ring-1 ring-inset ring-white/10">
+                          <Image
+                            src={app.image}
+                            alt=""
+                            width={36}
+                            height={36}
+                            className="h-full w-full object-cover"
+                          />
                         </span>
                         <span>
                           <span className="block text-sm font-semibold text-white">

@@ -2,10 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { TbTrendingUp, TbRobot } from "react-icons/tb";
+import { TbTrendingUp } from "react-icons/tb";
 import Reveal from "./Reveal";
 import { FEATURED_APPS, APP_CATEGORIES } from "@/lib/content";
-import { APP_ICONS } from "@/lib/app-icons";
 
 export default function FeaturesSection() {
   const [category, setCategory] = useState<string>("Все");
@@ -76,12 +75,17 @@ export default function FeaturesSection() {
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {apps.map((app, i) => {
-            const Icon = APP_ICONS[app.icon] ?? TbRobot;
             return (
               <Reveal key={app.id} delay={i * 0.07}>
                 <article className="group flex h-full flex-col card-glass p-6 transition-all duration-300 ease-premium hover:-translate-y-1.5 hover:border-primary-light/40 hover:shadow-glow-sm">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-md bg-gradient-to-br from-primary/25 to-secondary/25 text-primary-light ring-1 ring-inset ring-white/10 transition-transform duration-300 ease-premium group-hover:scale-110">
-                    <Icon size={26} aria-hidden="true" />
+                  <div className="h-12 w-12 overflow-hidden rounded-md ring-1 ring-inset ring-white/10 transition-transform duration-300 ease-premium group-hover:scale-110">
+                    <Image
+                      src={app.image}
+                      alt=""
+                      width={48}
+                      height={48}
+                      className="h-full w-full object-cover"
+                    />
                   </div>
                   <h3 className="mt-5 font-heading text-xl font-bold tracking-tight text-white">
                     {app.name}{" "}

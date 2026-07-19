@@ -6,17 +6,19 @@ import { FiCheck } from "react-icons/fi";
 export default function HeroSection() {
   return (
     <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-dark pt-[72px]">
-      {/* Video background */}
+      {/* Video background — портретный кадр на мобильных, широкий на десктопе */}
       <video
         className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
-        src="/videos/hero-bg.mp4"
         poster="/images/hero.png"
         autoPlay
         muted
         loop
         playsInline
         aria-hidden="true"
-      />
+      >
+        <source media="(max-width: 767px)" src="/videos/hero-bg-mobile.mp4" type="video/mp4" />
+        <source src="/videos/hero-bg.mp4" type="video/mp4" />
+      </video>
       {/* Readability overlays */}
       <div
         className="absolute inset-0 bg-dark/60"

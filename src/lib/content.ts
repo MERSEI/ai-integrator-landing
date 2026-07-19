@@ -4,7 +4,7 @@ export const FEATURED_APPS = [
     name: "Poaching",
     tagline: "Охота на лидов",
     category: "Привлечение",
-    icon: "🎯",
+    icon: "target",
     description:
       "Мониторит конкурентов и находит людей, которые уже ищут твой продукт",
     result: "+30 лидов за неделю",
@@ -14,7 +14,7 @@ export const FEATURED_APPS = [
     name: "SalesAgent",
     tagline: "AI продажник",
     category: "Продажи",
-    icon: "🤖",
+    icon: "robot",
     description:
       "Квалифицирует лидов, работает с возражениями, назначает встречи 24/7",
     result: "Конверсия +25%",
@@ -24,7 +24,7 @@ export const FEATURED_APPS = [
     name: "BizDoctor",
     tagline: "Аналитика",
     category: "Аналитика",
-    icon: "📊",
+    icon: "chart",
     description:
       "Показывает, где вы теряете деньги и что делать, чтобы вырасти",
     result: "Прибыль +40%",
@@ -34,7 +34,7 @@ export const FEATURED_APPS = [
     name: "ColdMessage Pro",
     tagline: "Письма",
     category: "Продажи",
-    icon: "📧",
+    icon: "mail",
     description:
       "Персонализирует каждое письмо через AI — в 3–5 раз выше open rate",
     result: "Open rate +300%",
@@ -44,7 +44,7 @@ export const FEATURED_APPS = [
     name: "ContentLoop",
     tagline: "Контент",
     category: "Контент",
-    icon: "📱",
+    icon: "loop",
     description:
       "Автоматически создаёт и публикует контент в соцсети",
     result: "Экономия 20+ часов/месяц",
@@ -54,7 +54,7 @@ export const FEATURED_APPS = [
     name: "ObjectionKiller",
     tagline: "Возражения",
     category: "Продажи",
-    icon: "🛡️",
+    icon: "shield",
     description:
       "Подсказывает, как ответить на возражение клиента в реальном времени",
     result: "Сделки +20%",

@@ -13,8 +13,8 @@ export default function Footer() {
     <footer className="border-t border-white/10 bg-dark py-14">
       <div className="container-section grid gap-10 md:grid-cols-3">
         <div>
-          <p className="flex items-center gap-2 font-heading text-lg font-bold text-white">
-            <span className="flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-primary to-secondary text-sm">
+          <p className="flex items-center gap-2.5 font-heading text-lg font-extrabold tracking-tight text-white">
+            <span className="flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-primary to-secondary text-sm shadow-glow-sm">
               AI
             </span>
             AI Integrator
@@ -69,16 +69,21 @@ export default function Footer() {
             </li>
             <li>{CONTACTS.address}</li>
           </ul>
-          <div className="mt-5 flex gap-4 text-slate-500">
-            <a href="#" aria-label="LinkedIn" className="transition hover:text-white">
-              <FaLinkedin size={20} />
-            </a>
-            <a href="#" aria-label="Twitter" className="transition hover:text-white">
-              <FaTwitter size={20} />
-            </a>
-            <a href="#" aria-label="Facebook" className="transition hover:text-white">
-              <FaFacebook size={20} />
-            </a>
+          <div className="mt-5 flex gap-3 text-slate-500">
+            {[
+              { Icon: FaLinkedin, label: "LinkedIn" },
+              { Icon: FaTwitter, label: "Twitter" },
+              { Icon: FaFacebook, label: "Facebook" },
+            ].map(({ Icon, label }) => (
+              <a
+                key={label}
+                href="#"
+                aria-label={label}
+                className="flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:border-primary-light/40 hover:text-white"
+              >
+                <Icon size={18} />
+              </a>
+            ))}
           </div>
         </div>
       </div>

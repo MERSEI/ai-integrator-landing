@@ -58,7 +58,7 @@ export default function EmailForm({
           type="email"
           placeholder="Ваш email"
           autoComplete="email"
-          className="min-h-12 w-full rounded-md border border-slate-600 bg-slate-900/70 px-4 py-3 text-white placeholder-slate-500 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
+          className="min-h-12 w-full rounded-md border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-slate-500 backdrop-blur-sm transition-all duration-300 ease-premium hover:border-white/25 focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
           aria-invalid={!!errors.email}
           {...register("email", {
             required: "Введите email",
@@ -69,7 +69,7 @@ export default function EmailForm({
           })}
         />
         {(errors.email || serverError) && (
-          <p role="alert" className="mt-2 text-sm text-red-400">
+          <p role="alert" className="mt-2 text-sm text-rose-400">
             {errors.email?.message ?? serverError}
           </p>
         )}

@@ -1,15 +1,26 @@
+import { FiCheck } from "react-icons/fi";
 import Reveal from "./Reveal";
 import EmailForm from "./EmailForm";
 import { CONTACTS } from "@/lib/content";
+
+const TRUST_SIGNALS = [
+  "Не нужна кредитная карта",
+  "Результаты за 48 часов гарантированы",
+  "Первый месяц бесплатно",
+];
 
 export default function FinalCTASection() {
   return (
     <section
       id="final-cta"
-      className="relative overflow-hidden bg-gradient-to-br from-[#1b1f4b] via-[#241a52] to-dark py-20 sm:py-28"
+      className="relative overflow-hidden bg-dark py-20 sm:py-28"
     >
       <div
-        className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[600px] -translate-x-1/2 rounded-full bg-primary/20 blur-[120px]"
+        className="pointer-events-none absolute left-1/2 top-[-30%] h-[420px] w-[720px] -translate-x-1/2 animate-drift rounded-full bg-primary/20 blur-[150px]"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute bottom-[-40%] right-[10%] h-[320px] w-[320px] animate-drift-alt rounded-full bg-accent/10 blur-[130px]"
         aria-hidden="true"
       />
       <div className="container-section relative flex flex-col items-center text-center">
@@ -26,26 +37,32 @@ export default function FinalCTASection() {
 
         <Reveal delay={0.2}>
           <ul className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-slate-400">
-            <li>✓ Не нужна кредитная карта</li>
-            <li>✓ Результаты за 48 часов гарантированы</li>
-            <li>✓ Первый месяц бесплатно</li>
+            {TRUST_SIGNALS.map((signal) => (
+              <li key={signal} className="flex items-center gap-1.5">
+                <FiCheck className="text-success" aria-hidden="true" />
+                {signal}
+              </li>
+            ))}
           </ul>
           <p className="mt-6 text-sm text-slate-500">
             Или напишите нам: Telegram{" "}
             <a
               href={`https://t.me/${CONTACTS.telegram.replace("@", "")}`}
-              className="text-primary hover:underline"
+              className="text-primary-light transition-colors hover:text-white"
             >
               {CONTACTS.telegram}
             </a>{" "}
             · Email{" "}
-            <a href={`mailto:${CONTACTS.email}`} className="text-primary hover:underline">
+            <a
+              href={`mailto:${CONTACTS.email}`}
+              className="text-primary-light transition-colors hover:text-white"
+            >
               {CONTACTS.email}
             </a>{" "}
             · Телефон{" "}
             <a
               href={`tel:${CONTACTS.phone.replace(/\s/g, "")}`}
-              className="text-primary hover:underline"
+              className="text-primary-light transition-colors hover:text-white"
             >
               {CONTACTS.phone}
             </a>

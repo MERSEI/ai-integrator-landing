@@ -1,8 +1,27 @@
 "use client";
 
 import { useState } from "react";
+import type { IconType } from "react-icons";
+import {
+  TbTargetArrow,
+  TbRobot,
+  TbChartHistogram,
+  TbMailBolt,
+  TbRefresh,
+  TbShieldCheck,
+  TbTrendingUp,
+} from "react-icons/tb";
 import Reveal from "./Reveal";
 import { FEATURED_APPS, APP_CATEGORIES } from "@/lib/content";
+
+const ICONS: Record<string, IconType> = {
+  target: TbTargetArrow,
+  robot: TbRobot,
+  chart: TbChartHistogram,
+  mail: TbMailBolt,
+  loop: TbRefresh,
+  shield: TbShieldCheck,
+};
 
 export default function FeaturesSection() {
   const [category, setCategory] = useState<string>("Все");
@@ -13,7 +32,7 @@ export default function FeaturesSection() {
       : FEATURED_APPS.filter((app) => app.category === category);
 
   return (
-    <section id="features" className="bg-dark py-20 sm:py-28">
+    <section id="features" className="relative bg-dark py-20 sm:py-28">
       <div className="container-section">
         <Reveal className="mx-auto max-w-2xl text-center">
           <h2 className="section-title">
@@ -36,10 +55,10 @@ export default function FeaturesSection() {
               role="tab"
               aria-selected={category === cat}
               onClick={() => setCategory(cat)}
-              className={`min-h-12 rounded-full px-5 py-2 text-sm font-medium transition ${
+              className={`min-h-11 cursor-pointer rounded-full px-5 py-2 text-sm font-medium transition-all duration-300 ease-premium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light ${
                 category === cat
-                  ? "bg-primary text-white"
-                  : "bg-white/5 text-slate-300 hover:bg-white/10"
+                  ? "bg-gradient-to-r from-primary to-secondary text-white shadow-glow-sm"
+                  : "border border-white/10 bg-white/5 text-slate-300 hover:border-primary-light/40 hover:bg-white/10 hover:text-white"
               }`}
             >
               {cat}
@@ -48,22 +67,29 @@ export default function FeaturesSection() {
         </div>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {apps.map((app, i) => (
-            <Reveal key={app.id} delay={i * 0.06}>
-              <article className="group flex h-full flex-col rounded-lg border border-white/10 bg-[#151d38] p-6 transition duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10">
-                <div className="text-4xl" aria-hidden="true">
-                  {app.icon}
-                </div>
-                <h3 className="mt-4 font-heading text-xl font-bold text-white">
-                  {app.name} — {app.tagline}
-                </h3>
-                <p className="mt-2 flex-1 text-slate-400">{app.description}</p>
-                <p className="mt-4 inline-flex w-fit rounded-full bg-success/10 px-3 py-1 text-sm font-semibold text-success">
-                  {app.result}
-                </p>
-              </article>
-            </Reveal>
-          ))}
+          {apps.map((app, i) => {
+            const Icon = ICONS[app.icon] ?? TbRobot;
+            return (
+              <Reveal key={app.id} delay={i * 0.07}>
+                <article className="group flex h-full flex-col card-glass p-6 transition-all duration-300 ease-premium hover:-translate-y-1.5 hover:border-primary-light/40 hover:shadow-glow-sm">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-md bg-gradient-to-br from-primary/25 to-secondary/25 text-primary-light ring-1 ring-inset ring-white/10 transition-transform duration-300 ease-premium group-hover:scale-110">
+                    <Icon size={26} aria-hidden="true" />
+                  </div>
+                  <h3 className="mt-5 font-heading text-xl font-bold tracking-tight text-white">
+                    {app.name}{" "}
+                    <span className="text-slate-400">— {app.tagline}</span>
+                  </h3>
+                  <p className="mt-2 flex-1 leading-relaxed text-slate-400">
+                    {app.description}
+                  </p>
+                  <p className="chip-result mt-5">
+                    <TbTrendingUp size={16} aria-hidden="true" />
+                    {app.result}
+                  </p>
+                </article>
+              </Reveal>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -5,7 +5,7 @@ export const FEATURED_APPS = [
     tagline: "Охота на лидов",
     category: "Привлечение",
     image: "/images/apps/poaching.jpg",
-    href: "/apps/leadradar",
+    href: "/apps/poaching",
     description:
       "Мониторит конкурентов и находит людей, которые уже ищут твой продукт",
     result: "+30 лидов за неделю",
@@ -62,6 +62,13 @@ export const FEATURED_APPS = [
       "Подсказывает, как ответить на возражение клиента в реальном времени",
     result: "Сделки +20%",
   },
+] as const;
+
+/** Отдельные работающие приложения (не входят в featured-6, доступны напрямую). */
+export const STANDALONE_APPS = [
+  { id: "leadradar", name: "LeadRadar", tagline: "Радар горячих запросов", href: "/apps/leadradar" },
+  { id: "commenthunter", name: "Comment Hunter", tagline: "Лиды в комментариях", href: "/apps/commenthunter" },
+  { id: "trendsniper", name: "Trend Sniper", tagline: "Аналитика трендов", href: "/apps/trendsniper" },
 ] as const;
 
 export const APP_CATEGORIES = [

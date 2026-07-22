@@ -7,7 +7,7 @@ import { HiMenu, HiX } from "react-icons/hi";
 import { FiChevronDown, FiArrowRight } from "react-icons/fi";
 import { TbBrandTelegram } from "react-icons/tb";
 import Logo from "./Logo";
-import { FEATURED_APPS, CONTACTS } from "@/lib/content";
+import { FEATURED_APPS, STANDALONE_APPS, CONTACTS } from "@/lib/content";
 
 const NAV_LINKS = [
   { href: "#how-it-works", label: "Как это работает" },
@@ -104,6 +104,28 @@ export default function Header() {
                       </a>
                     );
                   })}
+                </div>
+                <div className="mt-2 border-t border-white/10 pt-2">
+                  <p className="px-3 pb-1 pt-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    Работают уже сейчас
+                  </p>
+                  <div className="grid grid-cols-2 gap-1">
+                    {STANDALONE_APPS.map((app) => (
+                      <a
+                        key={app.id}
+                        href={app.href}
+                        onClick={() => setAppsOpen(false)}
+                        className="flex items-center gap-2 rounded-md p-2.5 transition-colors duration-200 hover:bg-white/5"
+                      >
+                        <span className="flex items-center gap-1.5 text-sm font-semibold text-white">
+                          {app.name}
+                          <span className="rounded-full bg-success/15 px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none text-success">
+                            Live
+                          </span>
+                        </span>
+                      </a>
+                    ))}
+                  </div>
                 </div>
                 <a
                   href="#features"

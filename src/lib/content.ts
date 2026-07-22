@@ -56,6 +56,7 @@ export const FEATURED_APPS = [
     tagline: "Возражения",
     category: "Продажи",
     image: "/images/apps/objectionkiller.jpg",
+    href: "/apps/objectionkiller",
     description:
       "Подсказывает, как ответить на возражение клиента в реальном времени",
     result: "Сделки +20%",

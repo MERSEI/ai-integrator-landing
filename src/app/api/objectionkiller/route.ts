@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { checkDailyLimit, clientIp } from "@/lib/rate-limit";
 
 const GEMINI_MODEL = "gemini-3.6-flash";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
@@ -64,10 +65,17 @@ const SYSTEM_PROMPT = `Ты — опытный эксперт по продаж�
 type WireMsg = { role: "user" | "model"; content: string };
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+  const ip = clientIp(req.headers);
   if (rateLimited(ip)) {
     return NextResponse.json(
       { error: "Слишком много запросов. Попробуйте через минуту." },
+      { status: 429 }
+    );
+  }
+  const daily = await checkDailyLimit(ip);
+  if (!daily.ok) {
+    return NextResponse.json(
+      { error: "Дневной лимит 30 запросов исчерпан. Попробуйте завтра." },
       { status: 429 }
     );
   }

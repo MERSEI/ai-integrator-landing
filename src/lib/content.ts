@@ -5,6 +5,7 @@ export const FEATURED_APPS = [
     tagline: "Охота на лидов",
     category: "Привлечение",
     image: "/images/apps/poaching.jpg",
+    href: "/apps/leadradar",
     description:
       "Мониторит конкурентов и находит людей, которые уже ищут твой продукт",
     result: "+30 лидов за неделю",

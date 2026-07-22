@@ -7,7 +7,13 @@ import { HiMenu, HiX } from "react-icons/hi";
 import { FiChevronDown, FiArrowRight } from "react-icons/fi";
 import { TbBrandTelegram } from "react-icons/tb";
 import Logo from "./Logo";
-import { FEATURED_APPS, STANDALONE_APPS, CONTACTS } from "@/lib/content";
+import {
+  FEATURED_APPS,
+  STANDALONE_APPS,
+  SOON_APPS,
+  APP_STATUS_META,
+  CONTACTS,
+} from "@/lib/content";
 
 const NAV_LINKS = [
   { href: "#how-it-works", label: "Как это работает" },
@@ -71,7 +77,7 @@ export default function Header() {
                 <div className="grid grid-cols-2 gap-1">
                   {FEATURED_APPS.map((app) => {
                     const href = "href" in app ? app.href : "#features";
-                    const isLive = "href" in app;
+                    const status = APP_STATUS_META[app.status];
                     return (
                       <a
                         key={app.id}
@@ -85,17 +91,17 @@ export default function Header() {
                             alt=""
                             width={36}
                             height={36}
-                            className="h-full w-full object-cover"
+                            className="h-full w-full object-cover grayscale"
                           />
                         </span>
                         <span>
                           <span className="flex items-center gap-1.5 text-sm font-semibold text-white">
                             {app.name}
-                            {isLive && (
-                              <span className="rounded-full bg-success/15 px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none text-success">
-                                Live
-                              </span>
-                            )}
+                            <span
+                              className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none ${status.className}`}
+                            >
+                              {status.label}
+                            </span>
                           </span>
                           <span className="block text-xs text-slate-400">
                             {app.tagline}
@@ -107,23 +113,51 @@ export default function Header() {
                 </div>
                 <div className="mt-2 border-t border-white/10 pt-2">
                   <p className="px-3 pb-1 pt-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                    Работают уже сейчас
+                    Ещё инструменты
                   </p>
                   <div className="grid grid-cols-2 gap-1">
-                    {STANDALONE_APPS.map((app) => (
-                      <a
+                    {STANDALONE_APPS.map((app) => {
+                      const status = APP_STATUS_META[app.status];
+                      return (
+                        <a
+                          key={app.id}
+                          href={app.href}
+                          onClick={() => setAppsOpen(false)}
+                          className="flex items-center justify-between gap-2 rounded-md p-2.5 transition-colors duration-200 hover:bg-white/5"
+                        >
+                          <span className="min-w-0">
+                            <span className="block truncate text-sm font-semibold text-white">
+                              {app.name}
+                            </span>
+                            <span className="block truncate text-xs text-slate-400">
+                              {app.tagline}
+                            </span>
+                          </span>
+                          <span
+                            className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none ${status.className}`}
+                          >
+                            {status.label}
+                          </span>
+                        </a>
+                      );
+                    })}
+                    {SOON_APPS.map((app) => (
+                      <span
                         key={app.id}
-                        href={app.href}
-                        onClick={() => setAppsOpen(false)}
-                        className="flex items-center gap-2 rounded-md p-2.5 transition-colors duration-200 hover:bg-white/5"
+                        className="flex items-center justify-between gap-2 rounded-md p-2.5 opacity-60"
                       >
-                        <span className="flex items-center gap-1.5 text-sm font-semibold text-white">
-                          {app.name}
-                          <span className="rounded-full bg-success/15 px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none text-success">
-                            Live
+                        <span className="min-w-0">
+                          <span className="block truncate text-sm font-semibold text-slate-300">
+                            {app.name}
+                          </span>
+                          <span className="block truncate text-xs text-slate-500">
+                            {app.tagline}
                           </span>
                         </span>
-                      </a>
+                        <span className="shrink-0 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none text-slate-400">
+                          Скоро
+                        </span>
+                      </span>
                     ))}
                   </div>
                 </div>

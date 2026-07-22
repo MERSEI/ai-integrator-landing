@@ -102,7 +102,7 @@ export default function LeadRadarTool() {
       </div>
 
       {/* Демо-дисклеймер */}
-      <div className="mt-4 flex items-start gap-3 rounded-lg border border-amber-400/20 bg-amber-400/5 p-4 text-sm text-amber-200/90">
+      <div className="mt-4 flex items-start gap-3 rounded-lg border border-white/15 bg-white/5 p-4 text-sm text-slate-300">
         <FiAlertCircle size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
         <p>
           <span className="font-semibold">Демо-режим.</span> Посты ниже

@@ -111,7 +111,7 @@ export default function CommentHunterTool() {
         </div>
       </div>
 
-      <div className="mt-4 flex items-start gap-3 rounded-lg border border-amber-400/20 bg-amber-400/5 p-4 text-sm text-amber-200/90">
+      <div className="mt-4 flex items-start gap-3 rounded-lg border border-white/15 bg-white/5 p-4 text-sm text-slate-300">
         <FiAlertCircle size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
         <p>
           <span className="font-semibold">Демо-режим.</span> Посты и комментарии
@@ -156,7 +156,7 @@ export default function CommentHunterTool() {
             <p className="text-sm text-slate-400">
               По теме «<span className="text-slate-200">{result.keyword}</span>»
               просканировано {result.posts.length} постов, найдено{" "}
-              <span className="font-semibold text-rose-300">{hotCount}</span>{" "}
+              <span className="font-semibold text-white">{hotCount}</span>{" "}
               горячих лидов в комментариях:
             </p>
             {result.posts.map((post, pi) => (

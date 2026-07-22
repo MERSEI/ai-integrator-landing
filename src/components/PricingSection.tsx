@@ -6,7 +6,7 @@ export default function PricingSection() {
   return (
     <section id="pricing" className="relative overflow-hidden bg-dark py-20 sm:py-28">
       <div
-        className="pointer-events-none absolute left-1/2 top-1/4 h-[400px] w-[800px] -translate-x-1/2 rounded-full bg-primary/10 blur-[160px]"
+        className="pointer-events-none absolute left-1/2 top-1/4 h-[400px] w-[800px] -translate-x-1/2 rounded-full bg-white/[0.05] blur-[160px]"
         aria-hidden="true"
       />
       <div className="container-section relative">
@@ -35,7 +35,7 @@ export default function PricingSection() {
                   }`}
                 >
                   {tier.popular && (
-                    <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-primary to-secondary px-4 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-glow-sm">
+                    <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-white px-4 py-1 text-xs font-bold uppercase tracking-wide text-black shadow-glow-sm">
                       Popular
                     </span>
                   )}

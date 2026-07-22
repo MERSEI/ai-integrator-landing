@@ -123,7 +123,7 @@ export default function ObjectionKillerTool() {
         {messages.map((m, i) =>
           m.role === "user" ? (
             <div key={i} className="flex justify-end">
-              <div className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md bg-gradient-to-br from-primary to-secondary px-4 py-3 text-white shadow-glow-sm">
+              <div className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md bg-white px-4 py-3 text-black shadow-glow-sm">
                 {m.text}
               </div>
             </div>

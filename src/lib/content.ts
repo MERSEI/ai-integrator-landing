@@ -1,3 +1,20 @@
+/**
+ * Статусы приложений:
+ * - live: реальный AI-инструмент (работает на данных пользователя)
+ * - demo: интерактивное демо на AI-примерах (реальные данные — в PRO)
+ * - soon: Coming Soon
+ */
+export type AppStatus = "live" | "demo" | "soon";
+
+export const APP_STATUS_META: Record<
+  AppStatus,
+  { label: string; className: string }
+> = {
+  live: { label: "Live", className: "bg-success/15 text-success" },
+  demo: { label: "Демо", className: "bg-warning/15 text-warning" },
+  soon: { label: "Скоро", className: "bg-white/10 text-slate-400" },
+};
+
 export const FEATURED_APPS = [
   {
     id: "poaching",
@@ -6,6 +23,7 @@ export const FEATURED_APPS = [
     category: "Привлечение",
     image: "/images/apps/poaching.jpg",
     href: "/apps/poaching",
+    status: "demo" as AppStatus,
     description:
       "Мониторит конкурентов и находит людей, которые уже ищут твой продукт",
     result: "+30 лидов за неделю",
@@ -16,6 +34,7 @@ export const FEATURED_APPS = [
     tagline: "AI продажник",
     category: "Продажи",
     image: "/images/apps/salesagent.jpg",
+    status: "soon" as AppStatus,
     description:
       "Квалифицирует лидов, работает с возражениями, назначает встречи 24/7",
     result: "Конверсия +25%",
@@ -26,6 +45,8 @@ export const FEATURED_APPS = [
     tagline: "Аналитика",
     category: "Аналитика",
     image: "/images/apps/bizdoctor.jpg",
+    href: "/apps/bizdoctor",
+    status: "live" as AppStatus,
     description:
       "Показывает, где вы теряете деньги и что делать, чтобы вырасти",
     result: "Прибыль +40%",
@@ -37,6 +58,7 @@ export const FEATURED_APPS = [
     category: "Продажи",
     image: "/images/apps/coldmessage.jpg",
     href: "/apps/coldmessage",
+    status: "live" as AppStatus,
     description:
       "Персонализирует каждое письмо через AI — в 3–5 раз выше open rate",
     result: "Open rate +300%",
@@ -47,6 +69,7 @@ export const FEATURED_APPS = [
     tagline: "Контент",
     category: "Контент",
     image: "/images/apps/contentloop.jpg",
+    status: "soon" as AppStatus,
     description:
       "Автоматически создаёт и публикует контент в соцсети",
     result: "Экономия 20+ часов/месяц",
@@ -58,17 +81,28 @@ export const FEATURED_APPS = [
     category: "Продажи",
     image: "/images/apps/objectionkiller.jpg",
     href: "/apps/objectionkiller",
+    status: "live" as AppStatus,
     description:
       "Подсказывает, как ответить на возражение клиента в реальном времени",
     result: "Сделки +20%",
   },
 ] as const;
 
-/** Отдельные работающие приложения (не входят в featured-6, доступны напрямую). */
+/** Отдельные приложения (не входят в featured-6, доступны напрямую). */
 export const STANDALONE_APPS = [
-  { id: "leadradar", name: "LeadRadar", tagline: "Радар горячих запросов", href: "/apps/leadradar" },
-  { id: "commenthunter", name: "Comment Hunter", tagline: "Лиды в комментариях", href: "/apps/commenthunter" },
-  { id: "trendsniper", name: "Trend Sniper", tagline: "Аналитика трендов", href: "/apps/trendsniper" },
+  { id: "personachannel", name: "PersonaChannel", tagline: "Контент под персону", href: "/apps/personachannel", status: "live" as AppStatus },
+  { id: "followupbot", name: "FollowUpBot", tagline: "Дожим лидов", href: "/apps/followupbot", status: "live" as AppStatus },
+  { id: "inboxzero", name: "InboxZero", tagline: "Разбор почты", href: "/apps/inboxzero", status: "live" as AppStatus },
+  { id: "leadradar", name: "LeadRadar", tagline: "Радар горячих запросов", href: "/apps/leadradar", status: "demo" as AppStatus },
+  { id: "commenthunter", name: "Comment Hunter", tagline: "Лиды в комментариях", href: "/apps/commenthunter", status: "demo" as AppStatus },
+  { id: "trendsniper", name: "Trend Sniper", tagline: "Аналитика трендов", href: "/apps/trendsniper", status: "demo" as AppStatus },
+] as const;
+
+/** Coming Soon — есть в каталоге, приложения ещё нет. */
+export const SOON_APPS = [
+  { id: "competitorwatch", name: "CompetitorWatch", tagline: "Мониторинг конкурентов" },
+  { id: "reelfactory", name: "ReelFactory", tagline: "Автомонтаж Reels" },
+  { id: "meetingscribe", name: "MeetingScribe", tagline: "Минуты встреч" },
 ] as const;
 
 export const APP_CATEGORIES = [

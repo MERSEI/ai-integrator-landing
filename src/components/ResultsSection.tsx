@@ -8,7 +8,7 @@ export default function ResultsSection() {
   return (
     <section id="results" className="relative overflow-hidden bg-surface py-20 sm:py-28">
       <div
-        className="pointer-events-none absolute bottom-[-25%] left-[-8%] h-[420px] w-[420px] rounded-full bg-primary/10 blur-[140px]"
+        className="pointer-events-none absolute bottom-[-25%] left-[-8%] h-[420px] w-[420px] rounded-full bg-white/[0.05] blur-[140px]"
         aria-hidden="true"
       />
       <div className="container-section relative">
@@ -40,7 +40,7 @@ export default function ResultsSection() {
                     alt={`Портрет: ${t.name}`}
                     width={48}
                     height={48}
-                    className="h-12 w-12 rounded-full border border-white/10 object-cover"
+                    className="h-12 w-12 rounded-full border border-white/10 object-cover grayscale"
                     loading="lazy"
                   />
                   <div>

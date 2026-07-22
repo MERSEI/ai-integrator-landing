@@ -5,16 +5,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#7C3AED",
-        "primary-light": "#A78BFA",
-        secondary: "#6366F1",
-        accent: "#EC4899",
-        dark: "#0A0A18",
-        surface: "#101024",
-        "surface-2": "#151532",
-        light: "#F1F5F9",
-        success: "#34D399",
-        warning: "#FBBF24",
+        primary: "#FFFFFF",
+        "primary-light": "#D4D4D4",
+        secondary: "#737373",
+        accent: "#FFFFFF",
+        dark: "#050505",
+        surface: "#0A0A0A",
+        "surface-2": "#121212",
+        light: "#F5F5F5",
+        success: "#E5E5E5",
+        warning: "#A3A3A3",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
@@ -30,9 +30,9 @@ const config: Config = {
         premium: "cubic-bezier(0.16, 1, 0.3, 1)",
       },
       boxShadow: {
-        glow: "0 0 40px -8px rgba(124, 58, 237, 0.45)",
-        "glow-sm": "0 0 24px -6px rgba(124, 58, 237, 0.35)",
-        card: "0 8px 32px -12px rgba(0, 0, 0, 0.45)",
+        glow: "0 0 48px -10px rgba(255, 255, 255, 0.22)",
+        "glow-sm": "0 0 28px -8px rgba(255, 255, 255, 0.14)",
+        card: "0 8px 32px -12px rgba(0, 0, 0, 0.55)",
       },
       keyframes: {
         drift: {

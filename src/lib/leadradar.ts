@@ -21,14 +21,14 @@ export const TIER_META: Record<
 > = {
   hot: {
     label: "Горячий",
-    className: "text-rose-300 ring-rose-400/30 bg-rose-400/10",
+    className: "text-black ring-white/60 bg-white",
   },
   warm: {
     label: "Тёплый",
-    className: "text-amber-300 ring-amber-400/30 bg-amber-400/10",
+    className: "text-white ring-white/30 bg-white/15",
   },
   cold: {
     label: "Холодный",
-    className: "text-slate-400 ring-white/15 bg-white/5",
+    className: "text-slate-500 ring-white/10 bg-white/5",
   },
 };

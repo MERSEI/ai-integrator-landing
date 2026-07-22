@@ -6,7 +6,7 @@ import Link from "next/link";
 import { TbTrendingUp } from "react-icons/tb";
 import { FiArrowRight } from "react-icons/fi";
 import Reveal from "./Reveal";
-import { FEATURED_APPS, APP_CATEGORIES } from "@/lib/content";
+import { FEATURED_APPS, APP_CATEGORIES, APP_STATUS_META } from "@/lib/content";
 
 export default function FeaturesSection() {
   const [category, setCategory] = useState<string>("Все");
@@ -19,7 +19,7 @@ export default function FeaturesSection() {
   return (
     <section id="features" className="relative overflow-hidden bg-dark py-20 sm:py-28">
       <div
-        className="pointer-events-none absolute left-[-10%] top-1/4 h-[400px] w-[400px] rounded-full bg-secondary/10 blur-[130px]"
+        className="pointer-events-none absolute left-[-10%] top-1/4 h-[400px] w-[400px] rounded-full bg-white/[0.04] blur-[130px]"
         aria-hidden="true"
       />
       <div className="container-section relative">
@@ -45,7 +45,7 @@ export default function FeaturesSection() {
                 alt="Команда AI-ботов помогает в работе с лидами, аналитикой, письмами и контентом"
                 width={1280}
                 height={714}
-                className="relative rounded-xl border border-white/10 shadow-card"
+                className="relative rounded-xl border border-white/10 shadow-card grayscale"
                 loading="lazy"
               />
             </div>
@@ -64,10 +64,10 @@ export default function FeaturesSection() {
               role="tab"
               aria-selected={category === cat}
               onClick={() => setCategory(cat)}
-              className={`min-h-11 cursor-pointer rounded-full px-5 py-2 text-sm font-medium transition-all duration-300 ease-premium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light ${
+              className={`min-h-11 cursor-pointer rounded-full px-5 py-2 text-sm font-medium transition-all duration-300 ease-premium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
                 category === cat
-                  ? "bg-gradient-to-r from-primary to-secondary text-white shadow-glow-sm"
-                  : "border border-white/10 bg-white/5 text-slate-300 hover:border-primary-light/40 hover:bg-white/10 hover:text-white"
+                  ? "bg-white text-black shadow-glow-sm"
+                  : "border border-white/10 bg-white/5 text-slate-300 hover:border-white/40 hover:bg-white/10 hover:text-white"
               }`}
             >
               {cat}
@@ -78,6 +78,7 @@ export default function FeaturesSection() {
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {apps.map((app, i) => {
             const href = "href" in app ? app.href : undefined;
+            const status = APP_STATUS_META[app.status];
             return (
               <Reveal key={app.id} delay={i * 0.07}>
                 <article className="group flex h-full flex-col card-glass p-6 transition-all duration-300 ease-premium hover:-translate-y-1.5 hover:border-primary-light/40 hover:shadow-glow-sm">
@@ -88,17 +89,19 @@ export default function FeaturesSection() {
                         alt=""
                         width={48}
                         height={48}
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-cover grayscale transition-all duration-500 ease-premium group-hover:grayscale-0"
                       />
                     </div>
-                    {href && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-success/10 px-2.5 py-1 text-xs font-semibold text-success ring-1 ring-inset ring-success/25">
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${status.className}`}
+                    >
+                      {app.status === "live" && (
                         <span className="relative flex h-1.5 w-1.5">
                           <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-success" />
                         </span>
-                        Live
-                      </span>
-                    )}
+                      )}
+                      {status.label}
+                    </span>
                   </div>
                   <h3 className="mt-5 font-heading text-xl font-bold tracking-tight text-white">
                     {app.name}{" "}

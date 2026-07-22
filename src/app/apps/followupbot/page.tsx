@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 import AppHeader from "@/components/AppHeader";
-import PoachingTool from "@/components/poaching/PoachingTool";
+import FollowUpBotTool from "@/components/followupbot/FollowUpBotTool";
 
 export const metadata: Metadata = {
-  title: "Poaching — переманивание клиентов у конкурентов | AI Integrator",
+  title: "FollowUpBot — цепочки дожима лидов | AI Integrator",
   description:
-    "Укажите нишу — Poaching находит людей, которые интересовались у ваших конкурентов, оценивает их и подсказывает тактичный заход в личку.",
+    "Опишите, на чём завис разговор с клиентом — FollowUpBot составит цепочку из 3 follow-up сообщений с разными углами захода.",
 };
 
-export default function PoachingPage() {
+export default function FollowUpBotPage() {
   return (
     <>
-      <AppHeader badge="Poaching" />
+      <AppHeader badge="FollowUpBot" />
       <main className="relative min-h-screen overflow-hidden bg-dark">
         <div
           className="pointer-events-none absolute -top-32 right-[-10%] h-[460px] w-[460px] animate-drift rounded-full bg-white/[0.06] blur-[140px]"
@@ -24,18 +24,16 @@ export default function PoachingPage() {
         <div className="container-section relative py-12 sm:py-16">
           <div className="mx-auto max-w-2xl text-center">
             <h1 className="font-heading text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              Poaching —{" "}
-              <span className="text-gradient">охота на клиентов конкурентов</span>
+              FollowUpBot — <span className="text-gradient">дожим без давления</span>
             </h1>
             <p className="mt-4 text-lg text-slate-400">
-              Люди, которые задают вопросы под постами конкурентов, — уже тёплые
-              лиды. Укажите нишу — движок найдёт их и подскажет, как тактично
-              переманить.
+              Половина сделок умирает от того, что продавец не напомнил о себе.
+              Опишите ситуацию — получите цепочку из 3 сообщений с разными
+              углами.
             </p>
           </div>
-
           <div className="mt-12">
-            <PoachingTool />
+            <FollowUpBotTool />
           </div>
         </div>
       </main>

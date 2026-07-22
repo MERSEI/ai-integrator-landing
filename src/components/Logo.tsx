@@ -1,7 +1,5 @@
 /**
- * Единый SVG-логотип: абстрактный AI-узел (три соединённых ноды) + словесный знак.
- * Текст задан <text>, чтобы логотип оставался одним файлом/элементом, а не
- * картинкой + отдельной HTML-подписью.
+ * Единый SVG-логотип (монохром): белый знак с чёрным AI-узлом + словесный знак.
  */
 export default function Logo({ className = "h-8 w-auto" }: { className?: string }) {
   return (
@@ -13,18 +11,18 @@ export default function Logo({ className = "h-8 w-auto" }: { className?: string 
     >
       <defs>
         <linearGradient id="logo-mark" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#7C3AED" />
-          <stop offset="100%" stopColor="#EC4899" />
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="100%" stopColor="#BFBFBF" />
         </linearGradient>
       </defs>
 
       <rect width="36" height="36" rx="10" fill="url(#logo-mark)" />
-      <g stroke="#fff" strokeWidth="1.5" strokeLinecap="round">
-        <line x1="11" y1="25" x2="18.5" y2="11.5" opacity="0.85" />
-        <line x1="18.5" y1="11.5" x2="26" y2="23" opacity="0.85" />
-        <line x1="11" y1="25" x2="26" y2="23" opacity="0.5" />
+      <g stroke="#0A0A0A" strokeWidth="1.5" strokeLinecap="round">
+        <line x1="11" y1="25" x2="18.5" y2="11.5" opacity="0.9" />
+        <line x1="18.5" y1="11.5" x2="26" y2="23" opacity="0.9" />
+        <line x1="11" y1="25" x2="26" y2="23" opacity="0.55" />
       </g>
-      <g fill="#fff">
+      <g fill="#0A0A0A">
         <circle cx="11" cy="25" r="2.6" />
         <circle cx="18.5" cy="11.5" r="2.8" />
         <circle cx="26" cy="23" r="2.4" />

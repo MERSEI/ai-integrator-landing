@@ -32,15 +32,12 @@ export const TONES = [
   "Экспертный",
 ] as const;
 
-/** Цвет бейджа под категорию сигнала (мягкое сопоставление по ключевым словам). */
+/** Бейдж категории сигнала: монохромная иерархия — важные ярче. */
 export function signalColor(category: string): string {
   const c = category.toLowerCase();
-  if (c.includes("контакт")) return "text-sky-300 ring-sky-400/25 bg-sky-400/10";
-  if (c.includes("достиж") || c.includes("успех"))
-    return "text-success ring-success/25 bg-success/10";
   if (c.includes("боль") || c.includes("проблем") || c.includes("найм"))
-    return "text-rose-300 ring-rose-400/25 bg-rose-400/10";
-  if (c.includes("событ") || c.includes("новост"))
-    return "text-amber-300 ring-amber-400/25 bg-amber-400/10";
-  return "text-primary-light ring-primary-light/25 bg-primary/10";
+    return "text-black ring-white/60 bg-white";
+  if (c.includes("достиж") || c.includes("успех") || c.includes("событ") || c.includes("новост"))
+    return "text-white ring-white/30 bg-white/15";
+  return "text-slate-300 ring-white/15 bg-white/5";
 }

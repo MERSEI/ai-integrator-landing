@@ -6,7 +6,7 @@ export default function HowItWorksSection() {
   return (
     <section id="how-it-works" className="relative overflow-hidden bg-dark py-20 sm:py-28">
       <div
-        className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[700px] -translate-x-1/2 rounded-full bg-secondary/10 blur-[140px]"
+        className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[700px] -translate-x-1/2 rounded-full bg-white/[0.04] blur-[140px]"
         aria-hidden="true"
       />
       <div className="container-section relative">
@@ -26,7 +26,7 @@ export default function HowItWorksSection() {
             <Reveal key={step.number} delay={i * 0.12}>
               <div className="relative h-full card-glass p-8 transition-all duration-300 ease-premium hover:border-primary-light/30">
                 <div className="flex items-center justify-between">
-                  <span className="font-heading text-5xl font-extrabold text-transparent [-webkit-text-stroke:1.5px_rgba(167,139,250,0.45)]">
+                  <span className="font-heading text-5xl font-extrabold text-transparent [-webkit-text-stroke:1.5px_rgba(255,255,255,0.4)]">
                     {step.number}
                   </span>
                   <span className="rounded-full border border-secondary/30 bg-secondary/10 px-3 py-1 text-sm font-semibold text-primary-light">

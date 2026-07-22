@@ -14,11 +14,11 @@ export default function TrendSniperPage() {
       <AppHeader badge="Trend Sniper" />
       <main className="relative min-h-screen overflow-hidden bg-dark">
         <div
-          className="pointer-events-none absolute -top-32 right-[-10%] h-[460px] w-[460px] animate-drift rounded-full bg-primary/15 blur-[140px]"
+          className="pointer-events-none absolute -top-32 right-[-10%] h-[460px] w-[460px] animate-drift rounded-full bg-white/[0.06] blur-[140px]"
           aria-hidden="true"
         />
         <div
-          className="pointer-events-none absolute bottom-0 left-[-8%] h-[380px] w-[380px] animate-drift-alt rounded-full bg-secondary/15 blur-[140px]"
+          className="pointer-events-none absolute bottom-0 left-[-8%] h-[380px] w-[380px] animate-drift-alt rounded-full bg-white/[0.04] blur-[140px]"
           aria-hidden="true"
         />
         <div className="container-section relative py-12 sm:py-16">

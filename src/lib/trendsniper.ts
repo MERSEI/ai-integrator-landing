@@ -20,12 +20,12 @@ export const DIRECTION_META: Record<
 > = {
   rising: {
     label: "Растёт",
-    className: "text-success ring-success/30 bg-success/10",
+    className: "text-black ring-white/60 bg-white",
     arrow: "↑",
   },
   falling: {
     label: "Падает",
-    className: "text-rose-300 ring-rose-400/30 bg-rose-400/10",
+    className: "text-neutral-400 ring-white/15 bg-white/5",
     arrow: "↓",
   },
   stable: {

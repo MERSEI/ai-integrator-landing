@@ -8,7 +8,7 @@ export default function HeroSection() {
     <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-dark pt-[72px]">
       {/* Video background — портретный кадр на мобильных, широкий на десктопе */}
       <video
-        className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
+        className="absolute inset-0 h-full w-full object-cover grayscale motion-reduce:hidden"
         poster="/images/hero.png"
         autoPlay
         muted
@@ -29,7 +29,7 @@ export default function HeroSection() {
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute -top-32 right-[-10%] h-[560px] w-[560px] animate-drift rounded-full bg-primary/20 blur-[140px]"
+        className="pointer-events-none absolute -top-32 right-[-10%] h-[560px] w-[560px] animate-drift rounded-full bg-white/[0.06] blur-[140px]"
         aria-hidden="true"
       />
 

@@ -70,10 +70,12 @@ export default function Header() {
               <div className="absolute left-1/2 top-full mt-3 w-[560px] -translate-x-1/2 card-glass !bg-surface-2/95 p-4 shadow-card">
                 <div className="grid grid-cols-2 gap-1">
                   {FEATURED_APPS.map((app) => {
+                    const href = "href" in app ? app.href : "#features";
+                    const isLive = "href" in app;
                     return (
                       <a
                         key={app.id}
-                        href="#features"
+                        href={href}
                         onClick={() => setAppsOpen(false)}
                         className="flex items-start gap-3 rounded-md p-3 transition-colors duration-200 hover:bg-white/5"
                       >
@@ -87,8 +89,13 @@ export default function Header() {
                           />
                         </span>
                         <span>
-                          <span className="block text-sm font-semibold text-white">
+                          <span className="flex items-center gap-1.5 text-sm font-semibold text-white">
                             {app.name}
+                            {isLive && (
+                              <span className="rounded-full bg-success/15 px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none text-success">
+                                Live
+                              </span>
+                            )}
                           </span>
                           <span className="block text-xs text-slate-400">
                             {app.tagline}

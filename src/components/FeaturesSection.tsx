@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { TbTrendingUp } from "react-icons/tb";
+import { FiArrowRight } from "react-icons/fi";
 import Reveal from "./Reveal";
 import { FEATURED_APPS, APP_CATEGORIES } from "@/lib/content";
 
@@ -75,17 +77,28 @@ export default function FeaturesSection() {
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {apps.map((app, i) => {
+            const href = "href" in app ? app.href : undefined;
             return (
               <Reveal key={app.id} delay={i * 0.07}>
                 <article className="group flex h-full flex-col card-glass p-6 transition-all duration-300 ease-premium hover:-translate-y-1.5 hover:border-primary-light/40 hover:shadow-glow-sm">
-                  <div className="h-12 w-12 overflow-hidden rounded-md ring-1 ring-inset ring-white/10 transition-transform duration-300 ease-premium group-hover:scale-110">
-                    <Image
-                      src={app.image}
-                      alt=""
-                      width={48}
-                      height={48}
-                      className="h-full w-full object-cover"
-                    />
+                  <div className="flex items-start justify-between">
+                    <div className="h-12 w-12 overflow-hidden rounded-md ring-1 ring-inset ring-white/10 transition-transform duration-300 ease-premium group-hover:scale-110">
+                      <Image
+                        src={app.image}
+                        alt=""
+                        width={48}
+                        height={48}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    {href && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-success/10 px-2.5 py-1 text-xs font-semibold text-success ring-1 ring-inset ring-success/25">
+                        <span className="relative flex h-1.5 w-1.5">
+                          <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-success" />
+                        </span>
+                        Live
+                      </span>
+                    )}
                   </div>
                   <h3 className="mt-5 font-heading text-xl font-bold tracking-tight text-white">
                     {app.name}{" "}
@@ -94,10 +107,21 @@ export default function FeaturesSection() {
                   <p className="mt-2 flex-1 leading-relaxed text-slate-400">
                     {app.description}
                   </p>
-                  <p className="chip-result mt-5">
-                    <TbTrendingUp size={16} aria-hidden="true" />
-                    {app.result}
-                  </p>
+                  <div className="mt-5 flex items-center justify-between gap-3">
+                    <p className="chip-result">
+                      <TbTrendingUp size={16} aria-hidden="true" />
+                      {app.result}
+                    </p>
+                    {href && (
+                      <Link
+                        href={href}
+                        className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-primary-light transition-colors hover:text-white"
+                      >
+                        Открыть
+                        <FiArrowRight size={15} aria-hidden="true" />
+                      </Link>
+                    )}
+                  </div>
                 </article>
               </Reveal>
             );

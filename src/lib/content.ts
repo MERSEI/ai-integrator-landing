@@ -35,6 +35,7 @@ export const FEATURED_APPS = [
     tagline: "Письма",
     category: "Продажи",
     image: "/images/apps/coldmessage.jpg",
+    href: "/apps/coldmessage",
     description:
       "Персонализирует каждое письмо через AI — в 3–5 раз выше open rate",
     result: "Open rate +300%",

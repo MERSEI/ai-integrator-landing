@@ -1,8 +1,16 @@
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
 import { FiCheck } from "react-icons/fi";
 import Reveal from "./Reveal";
+import TypewriterText from "./TypewriterText";
 import { STEPS } from "@/lib/content";
 
+const EASE_PREMIUM = [0.16, 1, 0.3, 1] as const;
+
 export default function HowItWorksSection() {
+  const reduced = useReducedMotion();
+
   return (
     <section id="how-it-works" className="relative overflow-hidden bg-dark py-20 sm:py-28">
       <div
@@ -15,20 +23,54 @@ export default function HowItWorksSection() {
       />
       <div className="container-section relative">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <h2 className="section-title">Как это работает</h2>
+          <h2 className="section-title">
+            <TypewriterText text="Как это работает" />
+          </h2>
           <p className="mt-4 text-lg text-slate-400">
-            Три шага от хаоса к работающей системе
+            <TypewriterText
+              text="Три шага от хаоса к работающей системе"
+              speed={28}
+              delay={700}
+              cursor={false}
+            />
           </p>
         </Reveal>
 
-        <div className="relative mt-14 grid gap-8 md:grid-cols-3">
-          <div
-            className="absolute left-[16%] right-[16%] top-14 hidden h-px bg-gradient-to-r from-primary/0 via-primary/40 to-primary/0 md:block"
+        <motion.div
+          className="relative mt-14 grid gap-8 md:grid-cols-3"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.18, delayChildren: 0.2 } },
+          }}
+        >
+          <motion.div
+            className="absolute left-[16%] right-[16%] top-14 hidden h-px origin-left bg-gradient-to-r from-primary/0 via-accent-blue/50 to-primary/0 md:block"
             aria-hidden="true"
+            variants={{
+              hidden: { scaleX: 0, opacity: 0 },
+              visible: {
+                scaleX: 1,
+                opacity: 1,
+                transition: { duration: 1.1, ease: EASE_PREMIUM },
+              },
+            }}
           />
           {STEPS.map((step, i) => (
-            <Reveal key={step.number} delay={i * 0.12}>
-              <div className="relative h-full card-glass p-8 transition-all duration-300 ease-premium hover:border-primary-light/30">
+            <motion.div
+              key={step.number}
+              variants={{
+                hidden: reduced ? { opacity: 0 } : { opacity: 0, x: -56 },
+                visible: {
+                  opacity: 1,
+                  x: 0,
+                  transition: { duration: 0.7, ease: EASE_PREMIUM },
+                },
+              }}
+            >
+              <div className="relative h-full card-glass p-8 transition-all duration-300 ease-premium hover:-translate-y-1 hover:border-accent-blue/50 hover:shadow-glow-accent-sm">
                 <div className="flex items-center justify-between">
                   <span className="font-heading text-5xl font-extrabold text-transparent [-webkit-text-stroke:1.5px_rgba(255,255,255,0.4)]">
                     {step.number}
@@ -38,11 +80,27 @@ export default function HowItWorksSection() {
                   </span>
                 </div>
                 <h3 className="mt-4 font-heading text-2xl font-bold tracking-tight text-white">
-                  {step.title}
+                  <TypewriterText
+                    text={step.title}
+                    speed={55}
+                    delay={500 + i * 320}
+                    cursor={false}
+                  />
                 </h3>
                 <ul className="mt-4 space-y-3">
-                  {step.points.map((point) => (
-                    <li key={point} className="flex items-start gap-2.5 text-slate-400">
+                  {step.points.map((point, j) => (
+                    <motion.li
+                      key={point}
+                      className="flex items-start gap-2.5 text-slate-400"
+                      initial={reduced ? { opacity: 0 } : { opacity: 0, x: -16 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, margin: "-40px" }}
+                      transition={{
+                        duration: 0.5,
+                        delay: 0.6 + i * 0.18 + j * 0.1,
+                        ease: EASE_PREMIUM,
+                      }}
+                    >
                       <span
                         className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/15 text-success"
                         aria-hidden="true"
@@ -50,13 +108,13 @@ export default function HowItWorksSection() {
                         <FiCheck size={12} />
                       </span>
                       {point}
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </div>
-            </Reveal>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         <Reveal className="mt-12 text-center">
           <p className="mx-auto max-w-xl font-heading text-xl font-bold tracking-tight text-white">

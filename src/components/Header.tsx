@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 import { HiMenu, HiX } from "react-icons/hi";
 import { FiChevronDown, FiArrowRight } from "react-icons/fi";
 import { TbBrandTelegram } from "react-icons/tb";
@@ -20,6 +21,8 @@ const NAV_LINKS = [
   { href: "#pricing", label: "Цены" },
   { href: "#faq", label: "FAQ" },
 ];
+
+const EASE_PREMIUM = [0.16, 1, 0.3, 1] as const;
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -45,18 +48,48 @@ export default function Header() {
   }, [appsOpen]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-[72px] border-b border-white/10 bg-black/60 backdrop-blur-[20px]">
-      <div
-        className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary-light/50 to-transparent"
+    <motion.header
+      className="fixed inset-x-0 top-0 z-50 h-[72px] border-b border-white/10 bg-black/60 backdrop-blur-[20px]"
+      initial={{ y: -72, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: EASE_PREMIUM }}
+    >
+      <motion.div
+        className="absolute inset-x-0 bottom-0 h-px origin-left bg-gradient-to-r from-transparent via-accent-blue/60 to-transparent"
         aria-hidden="true"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 0.9, delay: 0.3, ease: EASE_PREMIUM }}
       />
       <div className="container-section flex h-full items-center justify-between">
-        <Link href="/" className="flex cursor-pointer items-center">
-          <Logo className="h-8 w-auto sm:h-9" />
-        </Link>
+        <motion.div
+          initial={{ opacity: 0, x: -16 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.15, ease: EASE_PREMIUM }}
+        >
+          <Link href="/" className="flex cursor-pointer items-center">
+            <Logo className="h-8 w-auto sm:h-9" />
+          </Link>
+        </motion.div>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Основная навигация">
-          <div ref={appsRef} className="relative">
+        <motion.nav
+          className="hidden items-center gap-1 md:flex"
+          aria-label="Основная навигация"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.08, delayChildren: 0.25 } },
+          }}
+        >
+          <motion.div
+            ref={appsRef}
+            className="relative"
+            variants={{
+              hidden: { opacity: 0, y: -10 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: EASE_PREMIUM } },
+            }}
+          >
             <button
               type="button"
               onClick={() => setAppsOpen((v) => !v)}
@@ -72,8 +105,15 @@ export default function Header() {
               />
             </button>
 
+            <AnimatePresence>
             {appsOpen && (
-              <div className="absolute left-1/2 top-full mt-3 w-[560px] -translate-x-1/2 card-glass !bg-surface-2/95 p-4 shadow-card">
+              <motion.div
+                className="absolute left-1/2 top-full mt-3 w-[560px] -translate-x-1/2 card-glass !bg-surface-2/95 p-4 shadow-card"
+                initial={{ opacity: 0, y: -8, scale: 0.97 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.97 }}
+                transition={{ duration: 0.25, ease: EASE_PREMIUM }}
+              >
                 <div className="grid grid-cols-2 gap-1">
                   {FEATURED_APPS.map((app) => {
                     const href = "href" in app ? app.href : "#features";
@@ -169,34 +209,44 @@ export default function Header() {
                   Смотреть все 15 приложений
                   <FiArrowRight size={15} aria-hidden="true" />
                 </a>
-              </div>
+              </motion.div>
             )}
-          </div>
+            </AnimatePresence>
+          </motion.div>
 
           {NAV_LINKS.map((link) => (
-            <a
+            <motion.a
               key={link.href}
               href={link.href}
               className="rounded-md px-4 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:bg-white/5 hover:text-white"
+              variants={{
+                hidden: { opacity: 0, y: -10 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: EASE_PREMIUM } },
+              }}
             >
               {link.label}
-            </a>
+            </motion.a>
           ))}
-        </nav>
+        </motion.nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <motion.div
+          className="hidden items-center gap-3 md:flex"
+          initial={{ opacity: 0, x: 16 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.45, ease: EASE_PREMIUM }}
+        >
           <a
             href={`https://t.me/${CONTACTS.telegram.replace("@", "")}`}
             aria-label="Написать в Telegram"
             title="Написать в Telegram"
-            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-white/5 text-slate-300 transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:border-primary-light/40 hover:text-white"
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-white/5 text-slate-300 transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:border-accent-blue/50 hover:text-white hover:shadow-glow-accent-sm"
           >
             <TbBrandTelegram size={19} />
           </a>
           <a href="#final-cta" className="btn-primary !min-h-10 !px-5 !py-2 text-sm">
             Free Trial
           </a>
-        </div>
+        </motion.div>
 
         <button
           type="button"
@@ -209,45 +259,51 @@ export default function Header() {
         </button>
       </div>
 
-      {open && (
-        <nav
-          className="border-t border-white/5 bg-dark/95 px-4 pb-6 pt-2 backdrop-blur-xl md:hidden"
-          aria-label="Мобильная навигация"
-        >
-          <a
-            href="#features"
-            onClick={() => setOpen(false)}
-            className="block rounded-md px-2 py-3 text-base font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+      <AnimatePresence>
+        {open && (
+          <motion.nav
+            className="overflow-hidden border-t border-white/5 bg-dark/95 px-4 pb-6 pt-2 backdrop-blur-xl md:hidden"
+            aria-label="Мобильная навигация"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.32, ease: EASE_PREMIUM }}
           >
-            Приложения
-          </a>
-          {NAV_LINKS.map((link) => (
             <a
-              key={link.href}
-              href={link.href}
+              href="#features"
               onClick={() => setOpen(false)}
               className="block rounded-md px-2 py-3 text-base font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
             >
-              {link.label}
+              Приложения
             </a>
-          ))}
-          <a
-            href={`https://t.me/${CONTACTS.telegram.replace("@", "")}`}
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-2 rounded-md px-2 py-3 text-base font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
-          >
-            <TbBrandTelegram size={20} aria-hidden="true" />
-            Написать в Telegram
-          </a>
-          <a
-            href="#final-cta"
-            onClick={() => setOpen(false)}
-            className="btn-primary mt-3 w-full"
-          >
-            Free Trial
-          </a>
-        </nav>
-      )}
-    </header>
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className="block rounded-md px-2 py-3 text-base font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+              >
+                {link.label}
+              </a>
+            ))}
+            <a
+              href={`https://t.me/${CONTACTS.telegram.replace("@", "")}`}
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 rounded-md px-2 py-3 text-base font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+            >
+              <TbBrandTelegram size={20} aria-hidden="true" />
+              Написать в Telegram
+            </a>
+            <a
+              href="#final-cta"
+              onClick={() => setOpen(false)}
+              className="btn-primary mt-3 w-full"
+            >
+              Free Trial
+            </a>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+    </motion.header>
   );
 }

@@ -17,7 +17,8 @@ export default function PricingSection() {
         <Reveal className="mx-auto max-w-2xl text-center">
           <h2 className="section-title">Простые цены без скрытых платежей</h2>
           <p className="mt-4 text-lg text-slate-400">
-            Бесплатный анализ под клиента — созвон после обратной связи по почте
+            Демо инструментов и консультация — бесплатно. Платите только за
+            сборку под вашу нишу и поддержку.
           </p>
         </Reveal>
 
@@ -49,9 +50,16 @@ export default function PricingSection() {
                   <p className="mt-1 text-sm text-slate-500">{tier.audience}</p>
                   <p className="mt-6">
                     <span className="font-heading text-5xl font-extrabold tracking-tight text-white">
-                      ${tier.price}
+                      ${tier.setup}
                     </span>
-                    <span className="text-slate-400">/месяц</span>
+                    <span className="text-slate-400"> за сборку</span>
+                  </p>
+                  <p className="mt-1.5 text-sm text-slate-400">
+                    далее{" "}
+                    <span className="font-semibold text-primary-light">
+                      ${tier.price}/месяц
+                    </span>{" "}
+                    — поддержка и обновления
                   </p>
                   <ul className="mt-6 flex-1 space-y-3">
                     {tier.features.map((feature) => (
@@ -80,8 +88,8 @@ export default function PricingSection() {
 
         <Reveal className="mt-10 text-center text-slate-500">
           <p>
-            Бесплатный анализ под клиента (созвон после обратной связи по почте):
-            если увидишь результаты — продолжаешь, если нет — ничего не платишь.
+            Сначала — бесплатное демо инструментов и консультация. Сборка
+            оплачивается один раз, подписка — только за поддержку и обновления.
           </p>
         </Reveal>
       </div>

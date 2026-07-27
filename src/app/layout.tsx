@@ -47,7 +47,7 @@ const jsonLd = {
     "15 готовых AI-приложений для автоматизации продаж, маркетинга и операционки.",
   offers: {
     "@type": "Offer",
-    price: "149",
+    price: "30",
     priceCurrency: "USD",
   },
   aggregateRating: {

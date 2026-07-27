@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
+import CustomCursor from "@/components/CustomCursor";
 import "./globals.css";
 
 const inter = Inter({
@@ -67,6 +68,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
+        <CustomCursor />
       </body>
     </html>
   );

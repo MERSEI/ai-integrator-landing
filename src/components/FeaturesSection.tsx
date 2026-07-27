@@ -113,18 +113,18 @@ export default function FeaturesSection() {
               <Reveal key={app.id} delay={i * 0.07}>
                 <article className="group flex h-full flex-col card-glass p-6 transition-all duration-300 ease-premium hover:-translate-y-1 hover:border-accent-blue hover:shadow-glow-accent">
                   <div className="flex items-start justify-between">
-                    <div className="h-16 w-16 overflow-hidden rounded-md ring-1 ring-inset ring-white/10 transition-transform duration-300 ease-premium group-hover:scale-110">
+                    <div className="h-32 w-32 overflow-hidden rounded-xl ring-1 ring-inset ring-white/10 transition-transform duration-300 ease-premium group-hover:scale-110">
                       {"image" in app ? (
                         <Image
                           src={app.image}
                           alt=""
-                          width={64}
-                          height={64}
+                          width={128}
+                          height={128}
                           className="h-full w-full object-cover"
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-accent-blue/20 to-accent-violet/20 text-accent-blue">
-                          {Icon && <Icon size={28} aria-hidden="true" />}
+                          {Icon && <Icon size={56} aria-hidden="true" />}
                         </div>
                       )}
                     </div>

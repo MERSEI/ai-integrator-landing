@@ -57,7 +57,9 @@ body {
   }
 }
 
-/* Custom cursor — unlayered so it wins over Tailwind's cursor-pointer utility */
+/* Custom cursor — unlayered so it wins over Tailwind's cursor-pointer utility.
+   SVG arrow is the fallback (touch devices, reduced motion, no-JS); once
+   CustomCursor mounts on a fine pointer it hides this and takes over. */
 body {
   cursor: url("/cursors/default.svg") 3 2, auto;
 }
@@ -75,4 +77,49 @@ input[type="button"] {
 button:disabled,
 [aria-disabled="true"] {
   cursor: url("/cursors/default.svg") 3 2, not-allowed;
+}
+
+body.cc-active,
+body.cc-active * {
+  cursor: none !important;
+}
+
+.cc-dot,
+.cc-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 9999px;
+  opacity: 0;
+  transition: opacity 0.2s ease, width 0.25s ease, height 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform;
+}
+
+.cc-dot {
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  box-shadow: 0 0 10px 2px rgba(59, 130, 246, 0.7);
+}
+
+.cc-dot.cc-dot-hover {
+  width: 6px;
+  height: 6px;
+}
+
+.cc-ring {
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid rgba(59, 130, 246, 0.55);
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.12), transparent 70%);
+}
+
+.cc-ring.cc-ring-hover {
+  width: 56px;
+  height: 56px;
+  border-color: rgba(139, 92, 246, 0.85);
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.22), transparent 70%);
+  box-shadow: 0 0 26px 4px rgba(139, 92, 246, 0.4);
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AppHeader from "@/components/AppHeader";
+import ProBlock from "@/components/ProBlock";
 import InboxZeroTool from "@/components/inboxzero/InboxZeroTool";
 
 export const metadata: Metadata = {
@@ -34,6 +35,18 @@ export default function InboxZeroPage() {
           <div className="mt-12">
             <InboxZeroTool />
           </div>
+
+          <ProBlock
+            title="InboxZero PRO — реальная интеграция с почтой"
+            intro="В PRO-версии InboxZero подключается напрямую к вашему ящику и разбирает почту сам, в реальном времени:"
+            features={[
+              "Прямое подключение Gmail/Outlook — без копирования писем вручную",
+              "Автоматический разбор всех входящих сразу по мере поступления",
+              "AI-рекомендации ответа на каждое письмо — одобрил и отправил",
+              "Приоритизация: важное наверх, рассылки и спам — в архив",
+            ]}
+          />
+
           <p className="mx-auto mt-10 max-w-2xl text-center text-xs text-slate-600">
             Письма обрабатываются только для генерации ответа и не сохраняются.
           </p>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AppHeader from "@/components/AppHeader";
+import ProBlock from "@/components/ProBlock";
 import FollowUpBotTool from "@/components/followupbot/FollowUpBotTool";
 
 export const metadata: Metadata = {
@@ -35,6 +36,17 @@ export default function FollowUpBotPage() {
           <div className="mt-12">
             <FollowUpBotTool />
           </div>
+
+          <ProBlock
+            title="FollowUpBot PRO — реальная интеграция с почтой"
+            intro="В PRO-версии бот подключается напрямую к вашему почтовому ящику и работает сам, без копипаста:"
+            features={[
+              "Прямое подключение Gmail/Outlook по OAuth — доступ к переписке",
+              "Автоматический разбор входящих: бот сам видит, где клиент замолчал",
+              "Follow-up уходят по расписанию — без ручного запуска",
+              "AI-рекомендации ответа на каждое входящее письмо клиента",
+            ]}
+          />
         </div>
       </main>
     </>

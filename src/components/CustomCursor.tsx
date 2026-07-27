@@ -41,6 +41,9 @@ export default function CustomCursor() {
         "transform",
         `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`
       );
+      // Мышь уже могла быть внутри окна на момент загрузки — mouseenter тогда
+      // не сработает, поэтому показываем курсор при любом первом движении.
+      show();
     };
 
     const onOver = (e: MouseEvent) => {
@@ -59,18 +62,24 @@ export default function CustomCursor() {
       raf = requestAnimationFrame(tick);
     };
 
+    // mouseout/mouseover на document ловят и переходы между дочерними узлами;
+    // relatedTarget === null означает, что курсор реально покинул окно.
+    const onWindowOut = (e: MouseEvent) => {
+      if (!e.relatedTarget) hide();
+    };
+
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseover", onOver);
-    document.addEventListener("mouseleave", hide);
-    document.addEventListener("mouseenter", show);
+    document.addEventListener("mouseout", onWindowOut);
+    window.addEventListener("blur", hide);
     raf = requestAnimationFrame(tick);
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseover", onOver);
-      document.removeEventListener("mouseleave", hide);
-      document.removeEventListener("mouseenter", show);
+      document.removeEventListener("mouseout", onWindowOut);
+      window.removeEventListener("blur", hide);
       document.body.classList.remove("cc-active");
     };
   }, []);

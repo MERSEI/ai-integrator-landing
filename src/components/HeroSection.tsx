@@ -6,9 +6,11 @@ export default function HeroSection() {
   return (
     <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-dark pt-[72px]">
       {/* Video background — портретный кадр на мобильных, широкий на десктопе */}
+      {/* Без poster: 1.75 МБ PNG успевал отрисоваться раньше видео и давал вспышку.
+          Под видео — тёмный фон секции, поэтому до старта воспроизведения пусто, но не пусто-белo. */}
       <video
         className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
-        poster="/images/hero.png"
+        preload="auto"
         autoPlay
         muted
         loop

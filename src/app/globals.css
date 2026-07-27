@@ -56,3 +56,23 @@ body {
     @apply inline-flex w-fit items-center gap-1.5 rounded-full bg-success/10 px-3 py-1 text-sm font-semibold text-success ring-1 ring-inset ring-success/20;
   }
 }
+
+/* Custom cursor — unlayered so it wins over Tailwind's cursor-pointer utility */
+body {
+  cursor: url("/cursors/default.svg") 3 2, auto;
+}
+
+a,
+button,
+select,
+[role="button"],
+.cursor-pointer,
+input[type="submit"],
+input[type="button"] {
+  cursor: url("/cursors/pointer.svg") 3 2, pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: url("/cursors/default.svg") 3 2, not-allowed;
+}

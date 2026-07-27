@@ -30,9 +30,17 @@ export async function saveLead(lead: Omit<Lead, "ts">): Promise<void> {
     } catch (e) {
       console.error("[leads] не удалось сохранить лид в Upstash:", e, record);
     }
-  } else {
-    console.log("[leads] Upstash не настроен, лид не сохранён в Redis:", record);
   }
 
   await appendLeadRow(record);
+
+  // Ни одно хранилище не настроено — лид существует только в этой строке лога
+  // и пропадёт вместе с ней. Кричим громко, чтобы это не прошло незамеченным.
+  if (!creds && !process.env.GOOGLE_SHEETS_WEBHOOK_URL) {
+    console.error(
+      "[leads] ЛИД НИГДЕ НЕ СОХРАНЁН: не настроены ни Upstash, ни Google Sheets. " +
+        "См. docs/google-sheets-setup.md. Данные:",
+      record
+    );
+  }
 }

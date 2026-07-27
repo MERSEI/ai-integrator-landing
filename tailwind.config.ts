@@ -66,6 +66,14 @@ const config: Config = {
           "30%": { opacity: "0" },
           "100%": { opacity: "0" },
         },
+        twinkle: {
+          "0%, 100%": { opacity: "0.15", transform: "scale(0.85)" },
+          "50%": { opacity: "1", transform: "scale(1)" },
+        },
+        "float-slow": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-18px)" },
+        },
       },
       animation: {
         drift: "drift 18s ease-in-out infinite",
@@ -74,6 +82,8 @@ const config: Config = {
         shimmer: "shimmer 8s linear infinite",
         blink: "blink 0.9s step-end infinite",
         "blink-fade": "blink-fade 2.4s ease-out forwards",
+        twinkle: "twinkle 4s ease-in-out infinite",
+        "float-slow": "float-slow 9s ease-in-out infinite",
       },
     },
   },

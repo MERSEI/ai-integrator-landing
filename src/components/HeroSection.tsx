@@ -38,7 +38,7 @@ export default function HeroSection() {
             <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-success shadow-[0_0_12px_4px_rgba(34,197,94,0.7)]" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-success shadow-[0_0_6px_1px_rgba(34,197,94,0.9)]" />
           </span>
-          Запуск за 48 часов, без разработчиков
+          Запуск за 72 часа, без разработчиков
         </p>
         <div className="rounded-3xl border border-white/10 bg-black/30 px-6 py-8 shadow-card backdrop-blur-md sm:px-10 sm:py-10">
           <TypewriterHeading
@@ -53,7 +53,7 @@ export default function HeroSection() {
           />
           <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-200 [text-shadow:0_1px_12px_rgba(0,0,0,0.8)]">
             15 готовых приложений для автоматизации продаж, маркетинга и
-            операционки. Работают за 48 часов без разработчиков.
+            операционки. Работают за 72 часа без разработчиков.
           </p>
         </div>
 

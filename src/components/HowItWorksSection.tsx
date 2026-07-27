@@ -60,7 +60,7 @@ export default function HowItWorksSection() {
 
         <Reveal className="mt-12 text-center">
           <p className="mx-auto max-w-xl font-heading text-xl font-bold tracking-tight text-white">
-            Через 48 часов у вас работающий инструмент —{" "}
+            Через 72 часа у вас работающий инструмент —{" "}
             <span className="text-gradient">без разработчиков, без хаоса.</span>
           </p>
         </Reveal>

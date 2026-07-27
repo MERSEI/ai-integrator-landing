@@ -58,7 +58,7 @@ export default function HeroSection() {
         </div>
 
         <div className="mt-8 flex w-full justify-center">
-          <EmailForm cta="Получить доступ (бесплатно)" source="hero" />
+          <EmailForm cta="Получить аудит (бесплатно)" source="hero" />
         </div>
 
         <ul className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-slate-400">

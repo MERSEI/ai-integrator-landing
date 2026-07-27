@@ -4,15 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { TbTrendingUp } from "react-icons/tb";
-import {
-  FiArrowRight,
-  FiEdit3,
-  FiSend,
-  FiInbox,
-  FiWifi,
-  FiMessageSquare,
-  FiTrendingUp,
-} from "react-icons/fi";
+import { FiArrowRight } from "react-icons/fi";
 import Reveal from "./Reveal";
 import {
   FEATURED_APPS,
@@ -21,15 +13,6 @@ import {
   APP_CATEGORIES,
   APP_STATUS_META,
 } from "@/lib/content";
-
-const ICONS: Record<string, React.ComponentType<{ size?: number; className?: string; "aria-hidden"?: boolean | "true" | "false" }>> = {
-  persona: FiEdit3,
-  followup: FiSend,
-  inbox: FiInbox,
-  radar: FiWifi,
-  comment: FiMessageSquare,
-  trend: FiTrendingUp,
-};
 
 const ALL_APPS = [...FEATURED_APPS, ...STANDALONE_APPS];
 
@@ -108,25 +91,18 @@ export default function FeaturesSection() {
           {apps.map((app, i) => {
             const href = "href" in app ? app.href : undefined;
             const status = APP_STATUS_META[app.status];
-            const Icon = "icon" in app ? ICONS[app.icon] : null;
             return (
               <Reveal key={app.id} delay={i * 0.07}>
                 <article className="group flex h-full flex-col card-glass p-6 transition-all duration-300 ease-premium hover:-translate-y-1 hover:border-accent-blue hover:shadow-glow-accent">
                   <div className="flex items-start justify-between">
                     <div className="h-32 w-32 overflow-hidden rounded-xl ring-1 ring-inset ring-white/10 transition-transform duration-300 ease-premium group-hover:scale-110">
-                      {"image" in app ? (
-                        <Image
-                          src={app.image}
-                          alt=""
-                          width={128}
-                          height={128}
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-accent-blue/20 to-accent-violet/20 text-accent-blue">
-                          {Icon && <Icon size={56} aria-hidden="true" />}
-                        </div>
-                      )}
+                      <Image
+                        src={app.image}
+                        alt=""
+                        width={128}
+                        height={128}
+                        className="h-full w-full object-cover"
+                      />
                     </div>
                     <span
                       className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${status.className}`}

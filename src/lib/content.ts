@@ -88,17 +88,14 @@ export const FEATURED_APPS = [
   },
 ] as const;
 
-/**
- * Отдельные приложения (не входят в featured-6, но имеют рабочую страницу).
- * icon — ключ для маппинга на react-icon в FeaturesSection (у этих приложений нет фото).
- */
+/** Отдельные приложения (не входят в featured-6, но имеют рабочую страницу). */
 export const STANDALONE_APPS = [
   {
     id: "personachannel",
     name: "PersonaChannel",
     tagline: "Контент под персону",
     category: "Контент",
-    icon: "persona",
+    image: "/images/apps/personachannel.jpg",
     href: "/apps/personachannel",
     status: "live" as AppStatus,
     description:
@@ -110,7 +107,7 @@ export const STANDALONE_APPS = [
     name: "FollowUpBot",
     tagline: "Дожим лидов",
     category: "Продажи",
-    icon: "followup",
+    image: "/images/apps/followupbot.jpg",
     href: "/apps/followupbot",
     status: "live" as AppStatus,
     description:
@@ -122,7 +119,7 @@ export const STANDALONE_APPS = [
     name: "InboxZero",
     tagline: "Разбор почты",
     category: "Продажи",
-    icon: "inbox",
+    image: "/images/apps/inboxzero.jpg",
     href: "/apps/inboxzero",
     status: "live" as AppStatus,
     description:
@@ -134,7 +131,7 @@ export const STANDALONE_APPS = [
     name: "LeadRadar",
     tagline: "Радар горячих запросов",
     category: "Привлечение",
-    icon: "radar",
+    image: "/images/apps/leadradar.jpg",
     href: "/apps/leadradar",
     status: "demo" as AppStatus,
     description:
@@ -146,7 +143,7 @@ export const STANDALONE_APPS = [
     name: "Comment Hunter",
     tagline: "Лиды в комментариях",
     category: "Привлечение",
-    icon: "comment",
+    image: "/images/apps/commenthunter.jpg",
     href: "/apps/commenthunter",
     status: "demo" as AppStatus,
     description:
@@ -158,7 +155,7 @@ export const STANDALONE_APPS = [
     name: "Trend Sniper",
     tagline: "Аналитика трендов",
     category: "Аналитика",
-    icon: "trend",
+    image: "/images/apps/trendsniper.jpg",
     href: "/apps/trendsniper",
     status: "demo" as AppStatus,
     description:

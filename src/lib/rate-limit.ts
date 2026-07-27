@@ -8,7 +8,7 @@
 const DAILY_LIMIT = 30;
 const DAY_SECONDS = 86_400;
 
-function upstashCreds(): { url: string; token: string } | null {
+export function upstashCreds(): { url: string; token: string } | null {
   const url =
     process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL ?? "";
   const token =
@@ -30,7 +30,7 @@ function memCheck(key: string, day: string): { ok: boolean; remaining: number } 
 }
 
 // ── Upstash REST ─────────────────────────────────────────────────────
-async function upstash(
+export async function upstash(
   creds: { url: string; token: string },
   command: (string | number)[]
 ): Promise<unknown> {

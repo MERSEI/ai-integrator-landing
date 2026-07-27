@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkDailyLimit, clientIp } from "@/lib/rate-limit";
+import { saveLead } from "@/lib/leads";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -33,7 +34,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let body: { email?: string; name?: string; company?: string; website?: string };
+  let body: { email?: string; name?: string; company?: string; website?: string; source?: string };
   try {
     body = await req.json();
   } catch {
@@ -52,6 +53,15 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
+
+  // Всегда сохраняем лид в постоянное хранилище (Upstash), чтобы он не терялся,
+  // даже если Mailchimp не настроен или временно недоступен.
+  await saveLead({
+    email,
+    name: body.name,
+    company: body.company,
+    source: body.source,
+  });
 
   const { MAILCHIMP_API_KEY, MAILCHIMP_LIST_ID, MAILCHIMP_SERVER_PREFIX } =
     process.env;
@@ -86,8 +96,6 @@ export async function POST(req: NextRequest) {
     } catch (e) {
       console.error("Mailchimp request failed:", e);
     }
-  } else {
-    console.log("[subscribe] new lead:", { email, name: body.name, company: body.company });
   }
 
   return NextResponse.json({ ok: true });

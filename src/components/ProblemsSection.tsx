@@ -55,7 +55,7 @@ export default function ProblemsSection() {
               alt="Предприниматель, перегруженный хаосом ручных процессов"
               width={1280}
               height={714}
-              className="relative rounded-xl border border-white/10 shadow-card grayscale"
+              className="relative rounded-xl border border-white/10 shadow-card"
               loading="lazy"
             />
           </div>

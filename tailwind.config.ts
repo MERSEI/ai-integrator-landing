@@ -13,7 +13,7 @@ const config: Config = {
         surface: "#0A0A0A",
         "surface-2": "#121212",
         light: "#F5F5F5",
-        success: "#E5E5E5",
+        success: "#22c55e",
         warning: "#A3A3A3",
         "accent-blue": "#3b82f6",
         "accent-violet": "#8b5cf6",
@@ -51,7 +51,7 @@ const config: Config = {
         },
         "pulse-dot": {
           "0%, 100%": { opacity: "1", transform: "scale(1)" },
-          "50%": { opacity: "0.55", transform: "scale(0.8)" },
+          "50%": { opacity: "0.2", transform: "scale(0.75)" },
         },
         shimmer: {
           "0%": { backgroundPosition: "200% 0" },

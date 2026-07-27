@@ -49,7 +49,7 @@ export default function FeaturesSection() {
                 alt="Команда AI-ботов помогает в работе с лидами, аналитикой, письмами и контентом"
                 width={1280}
                 height={714}
-                className="relative rounded-xl border border-white/10 shadow-card grayscale"
+                className="relative rounded-xl border border-white/10 shadow-card"
                 loading="lazy"
               />
             </div>
@@ -93,7 +93,7 @@ export default function FeaturesSection() {
                         alt=""
                         width={48}
                         height={48}
-                        className="h-full w-full object-cover grayscale transition-all duration-500 ease-premium group-hover:grayscale-0"
+                        className="h-full w-full object-cover"
                       />
                     </div>
                     <span

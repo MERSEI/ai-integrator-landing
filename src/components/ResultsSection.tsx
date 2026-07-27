@@ -44,7 +44,7 @@ export default function ResultsSection() {
                     alt={`Портрет: ${t.name}`}
                     width={48}
                     height={48}
-                    className="h-12 w-12 rounded-full border border-white/10 object-cover grayscale"
+                    className="h-12 w-12 rounded-full border border-white/10 object-cover"
                     loading="lazy"
                   />
                   <div>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { FiCheck } from "react-icons/fi";
 import Reveal from "./Reveal";
 import { PRICING_TIERS } from "@/lib/content";
@@ -20,6 +21,24 @@ export default function PricingSection() {
             Демо инструментов и консультация — бесплатно. Платите только за
             сборку под вашу нишу и поддержку.
           </p>
+        </Reveal>
+
+        <Reveal delay={0.1} className="mx-auto mt-12 max-w-4xl">
+          <div className="relative">
+            <div
+              className="absolute -inset-6 rounded-2xl bg-accent-blue/10 blur-3xl"
+              aria-hidden="true"
+            />
+            {/* Иллюстрация светлая — маска растворяет её края в тёмном фоне секции. */}
+            <Image
+              src="/images/pricing.jpg"
+              alt="Три тарифа: от одного инструмента до полного набора приложений платформы"
+              width={1280}
+              height={714}
+              className="relative w-full rounded-2xl [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_92%)]"
+              loading="lazy"
+            />
+          </div>
         </Reveal>
 
         <div className="mt-14 grid items-stretch gap-8 lg:grid-cols-3">

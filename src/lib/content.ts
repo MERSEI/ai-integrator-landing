@@ -279,7 +279,7 @@ export const STATS = [
  */
 export const PRICING_TIERS = [
   {
-    name: "Solo",
+    name: "Starter",
     setup: 155,
     price: 30,
     popular: false,
@@ -307,7 +307,7 @@ export const PRICING_TIERS = [
     cta: "Самый популярный",
   },
   {
-    name: "Full Stack",
+    name: "Enterprise",
     setup: 1175,
     price: 500,
     popular: false,

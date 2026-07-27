@@ -88,14 +88,83 @@ export const FEATURED_APPS = [
   },
 ] as const;
 
-/** Отдельные приложения (не входят в featured-6, доступны напрямую). */
+/**
+ * Отдельные приложения (не входят в featured-6, но имеют рабочую страницу).
+ * icon — ключ для маппинга на react-icon в FeaturesSection (у этих приложений нет фото).
+ */
 export const STANDALONE_APPS = [
-  { id: "personachannel", name: "PersonaChannel", tagline: "Контент под персону", href: "/apps/personachannel", status: "live" as AppStatus },
-  { id: "followupbot", name: "FollowUpBot", tagline: "Дожим лидов", href: "/apps/followupbot", status: "live" as AppStatus },
-  { id: "inboxzero", name: "InboxZero", tagline: "Разбор почты", href: "/apps/inboxzero", status: "live" as AppStatus },
-  { id: "leadradar", name: "LeadRadar", tagline: "Радар горячих запросов", href: "/apps/leadradar", status: "demo" as AppStatus },
-  { id: "commenthunter", name: "Comment Hunter", tagline: "Лиды в комментариях", href: "/apps/commenthunter", status: "demo" as AppStatus },
-  { id: "trendsniper", name: "Trend Sniper", tagline: "Аналитика трендов", href: "/apps/trendsniper", status: "demo" as AppStatus },
+  {
+    id: "personachannel",
+    name: "PersonaChannel",
+    tagline: "Контент под персону",
+    category: "Контент",
+    icon: "persona",
+    href: "/apps/personachannel",
+    status: "live" as AppStatus,
+    description:
+      "Пишет контент в вашем уникальном тоне и стиле — под конкретную персону и аудиторию",
+    result: "Контент за 5 минут",
+  },
+  {
+    id: "followupbot",
+    name: "FollowUpBot",
+    tagline: "Дожим лидов",
+    category: "Продажи",
+    icon: "followup",
+    href: "/apps/followupbot",
+    status: "live" as AppStatus,
+    description:
+      "Составляет цепочки follow-up сообщений, чтобы дожимать зависшие сделки без давления",
+    result: "+35% ответов на дожим",
+  },
+  {
+    id: "inboxzero",
+    name: "InboxZero",
+    tagline: "Разбор почты",
+    category: "Продажи",
+    icon: "inbox",
+    href: "/apps/inboxzero",
+    status: "live" as AppStatus,
+    description:
+      "Разбирает входящие письма, выделяет задачи и готовит ответ в нужном тоне",
+    result: "−80% времени на почту",
+  },
+  {
+    id: "leadradar",
+    name: "LeadRadar",
+    tagline: "Радар горячих запросов",
+    category: "Привлечение",
+    icon: "radar",
+    href: "/apps/leadradar",
+    status: "demo" as AppStatus,
+    description:
+      "Находит горячие запросы в реальном времени и подсказывает, кому писать первым",
+    result: "Лиды в реальном времени",
+  },
+  {
+    id: "commenthunter",
+    name: "Comment Hunter",
+    tagline: "Лиды в комментариях",
+    category: "Привлечение",
+    icon: "comment",
+    href: "/apps/commenthunter",
+    status: "demo" as AppStatus,
+    description:
+      "Вычисляет потенциальных клиентов среди комментариев в постах конкурентов",
+    result: "Лиды из комментариев",
+  },
+  {
+    id: "trendsniper",
+    name: "Trend Sniper",
+    tagline: "Аналитика трендов",
+    category: "Аналитика",
+    icon: "trend",
+    href: "/apps/trendsniper",
+    status: "demo" as AppStatus,
+    description:
+      "Показывает, какие темы набирают обороты, пока конкуренты ещё не заметили",
+    result: "Тренды на 2 шага вперёд",
+  },
 ] as const;
 
 /** Coming Soon — есть в каталоге, приложения ещё нет. */

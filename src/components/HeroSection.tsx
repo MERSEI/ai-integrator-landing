@@ -35,8 +35,8 @@ export default function HeroSection() {
       <div className="container-section relative flex flex-col items-center py-16 text-center">
         <p className="mb-5 inline-flex items-center gap-2.5 rounded-full border border-primary-light/30 bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary-light backdrop-blur-sm">
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-success" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
+            <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-success shadow-[0_0_12px_4px_rgba(34,197,94,0.7)]" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-success shadow-[0_0_6px_1px_rgba(34,197,94,0.9)]" />
           </span>
           Запуск за 48 часов, без разработчиков
         </p>

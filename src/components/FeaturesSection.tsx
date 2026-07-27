@@ -4,17 +4,42 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { TbTrendingUp } from "react-icons/tb";
-import { FiArrowRight } from "react-icons/fi";
+import {
+  FiArrowRight,
+  FiEdit3,
+  FiSend,
+  FiInbox,
+  FiWifi,
+  FiMessageSquare,
+  FiTrendingUp,
+} from "react-icons/fi";
 import Reveal from "./Reveal";
-import { FEATURED_APPS, APP_CATEGORIES, APP_STATUS_META } from "@/lib/content";
+import {
+  FEATURED_APPS,
+  STANDALONE_APPS,
+  SOON_APPS,
+  APP_CATEGORIES,
+  APP_STATUS_META,
+} from "@/lib/content";
+
+const ICONS: Record<string, React.ComponentType<{ size?: number; className?: string; "aria-hidden"?: boolean | "true" | "false" }>> = {
+  persona: FiEdit3,
+  followup: FiSend,
+  inbox: FiInbox,
+  radar: FiWifi,
+  comment: FiMessageSquare,
+  trend: FiTrendingUp,
+};
+
+const ALL_APPS = [...FEATURED_APPS, ...STANDALONE_APPS];
 
 export default function FeaturesSection() {
   const [category, setCategory] = useState<string>("Все");
 
   const apps =
     category === "Все"
-      ? FEATURED_APPS
-      : FEATURED_APPS.filter((app) => app.category === category);
+      ? ALL_APPS
+      : ALL_APPS.filter((app) => app.category === category);
 
   return (
     <section id="features" className="relative overflow-hidden bg-dark py-20 sm:py-28">
@@ -83,18 +108,25 @@ export default function FeaturesSection() {
           {apps.map((app, i) => {
             const href = "href" in app ? app.href : undefined;
             const status = APP_STATUS_META[app.status];
+            const Icon = "icon" in app ? ICONS[app.icon] : null;
             return (
               <Reveal key={app.id} delay={i * 0.07}>
                 <article className="group flex h-full flex-col card-glass p-6 transition-all duration-300 ease-premium hover:-translate-y-1 hover:border-accent-blue hover:shadow-glow-accent">
                   <div className="flex items-start justify-between">
-                    <div className="h-12 w-12 overflow-hidden rounded-md ring-1 ring-inset ring-white/10 transition-transform duration-300 ease-premium group-hover:scale-110">
-                      <Image
-                        src={app.image}
-                        alt=""
-                        width={48}
-                        height={48}
-                        className="h-full w-full object-cover"
-                      />
+                    <div className="h-16 w-16 overflow-hidden rounded-md ring-1 ring-inset ring-white/10 transition-transform duration-300 ease-premium group-hover:scale-110">
+                      {"image" in app ? (
+                        <Image
+                          src={app.image}
+                          alt=""
+                          width={64}
+                          height={64}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-accent-blue/20 to-accent-violet/20 text-accent-blue">
+                          {Icon && <Icon size={28} aria-hidden="true" />}
+                        </div>
+                      )}
                     </div>
                     <span
                       className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${status.className}`}
@@ -134,6 +166,27 @@ export default function FeaturesSection() {
             );
           })}
         </div>
+
+        {category === "Все" && (
+          <Reveal delay={0.1} className="mt-8">
+            <div className="card-glass flex flex-wrap items-center justify-center gap-3 p-5 text-center sm:justify-between sm:text-left">
+              <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                Скоро в каталоге
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                {SOON_APPS.map((app) => (
+                  <span
+                    key={app.id}
+                    className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-sm text-slate-300 opacity-70"
+                  >
+                    <span className="font-semibold text-white">{app.name}</span>
+                    <span className="text-slate-500">— {app.tagline}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        )}
       </div>
     </section>
   );

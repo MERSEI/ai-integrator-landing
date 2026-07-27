@@ -19,14 +19,18 @@ export function upstashCreds(): { url: string; token: string } | null {
 
 // ── in-memory fallback ───────────────────────────────────────────────
 const mem = new Map<string, { count: number; day: string }>();
-function memCheck(key: string, day: string): { ok: boolean; remaining: number } {
+function memCheck(
+  key: string,
+  day: string,
+  limit: number
+): { ok: boolean; remaining: number } {
   const entry = mem.get(key);
   if (!entry || entry.day !== day) {
     mem.set(key, { count: 1, day });
-    return { ok: true, remaining: DAILY_LIMIT - 1 };
+    return { ok: true, remaining: limit - 1 };
   }
   entry.count += 1;
-  return { ok: entry.count <= DAILY_LIMIT, remaining: Math.max(0, DAILY_LIMIT - entry.count) };
+  return { ok: entry.count <= limit, remaining: Math.max(0, limit - entry.count) };
 }
 
 // ── Upstash REST ─────────────────────────────────────────────────────
@@ -60,7 +64,7 @@ export async function checkDailyLimit(
 
   const creds = upstashCreds();
   if (!creds) {
-    return { ...memCheck(key, day), limit: DAILY_LIMIT };
+    return { ...memCheck(key, day, DAILY_LIMIT), limit: DAILY_LIMIT };
   }
 
   try {
@@ -77,7 +81,42 @@ export async function checkDailyLimit(
   } catch (e) {
     // Redis недоступен — не блокируем пользователя, падаем в fallback
     console.error("rate-limit upstash error, using memory fallback:", e);
-    return { ...memCheck(key, day), limit: DAILY_LIMIT };
+    return { ...memCheck(key, day, DAILY_LIMIT), limit: DAILY_LIMIT };
+  }
+}
+
+const TOOL_DEMO_LIMIT = 2;
+
+/**
+ * Лимит демо-запросов на конкретный инструмент: 2 запроса/сутки на IP,
+ * отдельно от общего дневного бюджета по всем эндпоинтам. Демо бесплатное
+ * (см. Pricing), но не безлимитное — дальше клиент подключает инструмент.
+ */
+export async function checkToolLimit(
+  ip: string,
+  tool: string
+): Promise<{ ok: boolean; remaining: number; limit: number }> {
+  const day = new Date().toISOString().slice(0, 10);
+  const key = `rl:tool:${tool}:${ip}:${day}`;
+
+  const creds = upstashCreds();
+  if (!creds) {
+    return { ...memCheck(key, day, TOOL_DEMO_LIMIT), limit: TOOL_DEMO_LIMIT };
+  }
+
+  try {
+    const count = Number(await upstash(creds, ["INCR", key]));
+    if (count === 1) {
+      await upstash(creds, ["EXPIRE", key, DAY_SECONDS]).catch(() => {});
+    }
+    return {
+      ok: count <= TOOL_DEMO_LIMIT,
+      remaining: Math.max(0, TOOL_DEMO_LIMIT - count),
+      limit: TOOL_DEMO_LIMIT,
+    };
+  } catch (e) {
+    console.error("tool-limit upstash error, using memory fallback:", e);
+    return { ...memCheck(key, day, TOOL_DEMO_LIMIT), limit: TOOL_DEMO_LIMIT };
   }
 }
 

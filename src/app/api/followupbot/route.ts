@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { checkDailyLimit, clientIp } from "@/lib/rate-limit";
+import { checkDailyLimit, checkToolLimit, clientIp } from "@/lib/rate-limit";
 import { callGemini, burstLimited } from "@/lib/gemini";
 
 const RESPONSE_SCHEMA = {
@@ -49,6 +49,14 @@ export async function POST(req: NextRequest) {
   if (!daily.ok) {
     return NextResponse.json(
       { error: "Дневной лимит 30 запросов исчерпан. Попробуйте завтра." },
+      { status: 429 }
+    );
+  }
+
+  const toolLimit = await checkToolLimit(ip, "followupbot");
+  if (!toolLimit.ok) {
+    return NextResponse.json(
+      { error: "Демо-лимит этого инструмента — 2 запроса в день. Оформите доступ, чтобы использовать без ограничений." },
       { status: 429 }
     );
   }

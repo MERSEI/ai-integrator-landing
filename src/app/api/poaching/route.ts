@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { checkDailyLimit, clientIp } from "@/lib/rate-limit";
+import { checkDailyLimit, checkToolLimit, clientIp } from "@/lib/rate-limit";
 
 const GEMINI_MODEL = "gemini-3.6-flash";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
@@ -71,6 +71,14 @@ export async function POST(req: NextRequest) {
   if (!daily.ok) {
     return NextResponse.json(
       { error: "Дневной лимит 30 запросов исчерпан. Попробуйте завтра." },
+      { status: 429 }
+    );
+  }
+
+  const toolLimit = await checkToolLimit(ip, "poaching");
+  if (!toolLimit.ok) {
+    return NextResponse.json(
+      { error: "Демо-лимит этого инструмента — 2 запроса в день. Оформите доступ, чтобы использовать без ограничений." },
       { status: 429 }
     );
   }

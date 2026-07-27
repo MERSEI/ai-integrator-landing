@@ -16,6 +16,10 @@ export default function FinalCTASection() {
       className="relative overflow-hidden bg-dark py-20 sm:py-28"
     >
       <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
+        aria-hidden="true"
+      />
+      <div
         className="pointer-events-none absolute left-1/2 top-[-30%] h-[420px] w-[720px] -translate-x-1/2 animate-drift rounded-full bg-white/[0.07] blur-[150px]"
         aria-hidden="true"
       />

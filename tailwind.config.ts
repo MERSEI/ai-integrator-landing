@@ -15,6 +15,8 @@ const config: Config = {
         light: "#F5F5F5",
         success: "#E5E5E5",
         warning: "#A3A3A3",
+        "accent-blue": "#3b82f6",
+        "accent-violet": "#8b5cf6",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
@@ -33,6 +35,8 @@ const config: Config = {
         glow: "0 0 48px -10px rgba(255, 255, 255, 0.22)",
         "glow-sm": "0 0 28px -8px rgba(255, 255, 255, 0.14)",
         card: "0 8px 32px -12px rgba(0, 0, 0, 0.55)",
+        "glow-accent": "0 0 32px -6px rgba(59, 130, 246, 0.55), 0 0 12px -4px rgba(139, 92, 246, 0.4)",
+        "glow-accent-sm": "0 0 20px -8px rgba(59, 130, 246, 0.4)",
       },
       keyframes: {
         drift: {

@@ -33,7 +33,7 @@ body {
   }
 
   .btn-primary {
-    @apply inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-md bg-white px-6 py-3 font-semibold text-black shadow-glow-sm transition-all duration-300 ease-premium hover:bg-neutral-200 hover:shadow-glow active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-dark disabled:opacity-60 disabled:hover:bg-white;
+    @apply inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-md bg-gradient-to-r from-accent-blue to-accent-violet bg-[length:160%_100%] bg-left px-6 py-3 font-semibold text-white shadow-glow-accent-sm transition-all duration-300 ease-premium hover:bg-right hover:shadow-glow-accent active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue focus-visible:ring-offset-2 focus-visible:ring-offset-dark disabled:opacity-60 disabled:hover:bg-left disabled:hover:shadow-glow-accent-sm;
   }
 
   .btn-secondary {

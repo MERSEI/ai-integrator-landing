@@ -8,6 +8,10 @@ export default function ResultsSection() {
   return (
     <section id="results" className="relative overflow-hidden bg-surface py-20 sm:py-28">
       <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
+        aria-hidden="true"
+      />
+      <div
         className="pointer-events-none absolute bottom-[-25%] left-[-8%] h-[420px] w-[420px] rounded-full bg-white/[0.05] blur-[140px]"
         aria-hidden="true"
       />

@@ -11,7 +11,11 @@ const PRODUCT_LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-dark py-14">
+    <footer className="relative bg-dark py-14">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
+        aria-hidden="true"
+      />
       <div className="container-section grid gap-10 md:grid-cols-3">
         <div>
           <Logo className="h-8 w-auto" />

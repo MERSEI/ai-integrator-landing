@@ -6,6 +6,10 @@ export default function PricingSection() {
   return (
     <section id="pricing" className="relative overflow-hidden bg-dark py-20 sm:py-28">
       <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
+        aria-hidden="true"
+      />
+      <div
         className="pointer-events-none absolute left-1/2 top-1/4 h-[400px] w-[800px] -translate-x-1/2 rounded-full bg-white/[0.05] blur-[160px]"
         aria-hidden="true"
       />
@@ -64,7 +68,7 @@ export default function PricingSection() {
                   </ul>
                   <a
                     href="#final-cta"
-                    className={`mt-8 ${tier.popular ? "btn-primary" : "btn-secondary"} w-full`}
+                    className="mt-8 btn-primary w-full"
                   >
                     {tier.cta}
                   </a>

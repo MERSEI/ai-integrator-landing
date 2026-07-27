@@ -12,7 +12,11 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="bg-surface py-20 sm:py-28">
+    <section id="faq" className="relative bg-surface py-20 sm:py-28">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
+        aria-hidden="true"
+      />
       <div className="container-section max-w-3xl">
         <Reveal className="text-center">
           <h2 className="section-title">Часто задаваемые вопросы</h2>

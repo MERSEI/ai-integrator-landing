@@ -19,6 +19,10 @@ export default function FeaturesSection() {
   return (
     <section id="features" className="relative overflow-hidden bg-dark py-20 sm:py-28">
       <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
+        aria-hidden="true"
+      />
+      <div
         className="pointer-events-none absolute left-[-10%] top-1/4 h-[400px] w-[400px] rounded-full bg-white/[0.04] blur-[130px]"
         aria-hidden="true"
       />
@@ -81,7 +85,7 @@ export default function FeaturesSection() {
             const status = APP_STATUS_META[app.status];
             return (
               <Reveal key={app.id} delay={i * 0.07}>
-                <article className="group flex h-full flex-col card-glass p-6 transition-all duration-300 ease-premium hover:-translate-y-1.5 hover:border-primary-light/40 hover:shadow-glow-sm">
+                <article className="group flex h-full flex-col card-glass p-6 transition-all duration-300 ease-premium hover:-translate-y-1 hover:border-accent-blue hover:shadow-glow-accent">
                   <div className="flex items-start justify-between">
                     <div className="h-12 w-12 overflow-hidden rounded-md ring-1 ring-inset ring-white/10 transition-transform duration-300 ease-premium group-hover:scale-110">
                       <Image

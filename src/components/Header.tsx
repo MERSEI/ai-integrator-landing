@@ -45,7 +45,7 @@ export default function Header() {
   }, [appsOpen]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-[72px] border-b border-white/10 bg-dark/95 backdrop-blur-lg">
+    <header className="fixed inset-x-0 top-0 z-50 h-[72px] border-b border-white/10 bg-black/60 backdrop-blur-[20px]">
       <div
         className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary-light/50 to-transparent"
         aria-hidden="true"

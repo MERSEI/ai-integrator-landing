@@ -41,20 +41,22 @@ export default function HeroSection() {
             </span>
             Запуск за 48 часов, без разработчиков
           </p>
-          <TypewriterHeading
-            className="mx-auto max-w-4xl font-heading text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[60px]"
-            segments={[
-              { text: "Ваш AI-маркетплейс для " },
-              {
-                text: "продаж и привлечения клиентов",
-                className: "text-gradient",
-              },
-            ]}
-          />
-          <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-300">
-            15 готовых приложений для автоматизации продаж, маркетинга и
-            операционки. Работают за 48 часов без разработчиков.
-          </p>
+          <div className="rounded-3xl border border-white/10 bg-black/30 px-6 py-8 shadow-card backdrop-blur-md sm:px-10 sm:py-10">
+            <TypewriterHeading
+              className="mx-auto max-w-4xl font-heading text-4xl font-extrabold leading-[1.1] tracking-tight text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.7)] sm:text-5xl lg:text-[60px]"
+              segments={[
+                { text: "Ваш AI-маркетплейс для " },
+                {
+                  text: "продаж и привлечения клиентов",
+                  className: "text-gradient",
+                },
+              ]}
+            />
+            <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-200 [text-shadow:0_1px_12px_rgba(0,0,0,0.8)]">
+              15 готовых приложений для автоматизации продаж, маркетинга и
+              операционки. Работают за 48 часов без разработчиков.
+            </p>
+          </div>
         </Reveal>
 
         <Reveal delay={0.12} className="mt-8 flex w-full justify-center">

@@ -4,7 +4,7 @@ import Logo from "./Logo";
 
 export default function AppHeader({ badge }: { badge?: string }) {
   return (
-    <header className="sticky top-0 z-50 h-16 border-b border-white/10 bg-dark/95 backdrop-blur-lg">
+    <header className="sticky top-0 z-50 h-16 border-b border-white/10 bg-black/60 backdrop-blur-[20px]">
       <div
         className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary-light/50 to-transparent"
         aria-hidden="true"

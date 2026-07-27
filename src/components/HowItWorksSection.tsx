@@ -6,6 +6,10 @@ export default function HowItWorksSection() {
   return (
     <section id="how-it-works" className="relative overflow-hidden bg-dark py-20 sm:py-28">
       <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
+        aria-hidden="true"
+      />
+      <div
         className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[700px] -translate-x-1/2 rounded-full bg-white/[0.04] blur-[140px]"
         aria-hidden="true"
       />

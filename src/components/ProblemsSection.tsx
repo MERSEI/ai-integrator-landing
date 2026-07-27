@@ -7,6 +7,10 @@ export default function ProblemsSection() {
   return (
     <section id="problems" className="relative overflow-hidden bg-surface py-20 sm:py-28">
       <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
+        aria-hidden="true"
+      />
+      <div
         className="pointer-events-none absolute right-[-10%] top-[-20%] h-[400px] w-[400px] rounded-full bg-white/[0.05] blur-[130px]"
         aria-hidden="true"
       />

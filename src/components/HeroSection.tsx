@@ -8,7 +8,7 @@ export default function HeroSection() {
     <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-dark pt-[72px]">
       {/* Video background — портретный кадр на мобильных, широкий на десктопе */}
       <video
-        className="absolute inset-0 h-full w-full object-cover grayscale motion-reduce:hidden"
+        className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
         poster="/images/hero.png"
         autoPlay
         muted

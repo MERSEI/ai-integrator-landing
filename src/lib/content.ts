@@ -267,8 +267,8 @@ export const FAQ_ITEMS = [
 ] as const;
 
 export const CONTACTS = {
-  email: "hello@aiintegrator.pp.ua",
-  telegram: "@v_market16",
+  email: "aiintegrator.hello@gmail.com",
+  telegram: "@f1_owe",
   phone: "+38 063 472 71 47",
   address: "Kyiv, Ukraine",
 } as const;

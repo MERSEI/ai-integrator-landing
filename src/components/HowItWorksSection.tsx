@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { FiCheck } from "react-icons/fi";
 import Reveal from "./Reveal";
@@ -87,6 +88,16 @@ export default function HowItWorksSection() {
                     cursor={false}
                   />
                 </h3>
+
+                {/* Иллюстрации светлые — маска растворяет края в тёмной карточке. */}
+                <Image
+                  src={step.image}
+                  alt={step.imageAlt}
+                  width={960}
+                  height={536}
+                  className="mt-5 w-full rounded-lg [mask-image:radial-gradient(ellipse_at_center,black_58%,transparent_94%)]"
+                  loading="lazy"
+                />
                 <ul className="mt-4 space-y-3">
                   {step.points.map((point, j) => (
                     <motion.li

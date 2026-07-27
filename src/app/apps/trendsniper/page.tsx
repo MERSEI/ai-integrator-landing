@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AppHeader from "@/components/AppHeader";
+import ProBlock from "@/components/ProBlock";
 import TrendSniperTool from "@/components/trendsniper/TrendSniperTool";
 
 export const metadata: Metadata = {
@@ -36,6 +37,17 @@ export default function TrendSniperPage() {
           <div className="mt-12">
             <TrendSniperTool />
           </div>
+
+          <ProBlock
+            title="Trend Sniper PRO — парсинг сообществ по теме"
+            intro="В PRO-версии движок сам находит и мониторит живые обсуждения по вашей теме — не только цифры, но и реальные сообщества:"
+            features={[
+              "Автопоиск групп и сообществ по теме в Telegram, VK, Facebook, Reddit",
+              "Постоянный мониторинг новых постов и обсуждений — без ручного поиска",
+              "Список активных сообществ с охватом и уровнем вовлечённости",
+              "Алерты о всплесках активности вокруг темы в реальном времени",
+            ]}
+          />
         </div>
       </main>
     </>

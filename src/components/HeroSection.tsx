@@ -68,7 +68,7 @@ export default function HeroSection() {
           </li>
           <li className="flex items-center gap-1.5">
             <FiCheck className="text-success" aria-hidden="true" />
-            Первый месяц бесплатно
+            Бесплатный анализ под клиента (созвон после обратной связи по почте)
           </li>
         </ul>
       </div>

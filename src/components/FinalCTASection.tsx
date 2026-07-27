@@ -6,7 +6,7 @@ import { CONTACTS } from "@/lib/content";
 const TRUST_SIGNALS = [
   "Не нужна кредитная карта",
   "Результаты за 48 часов гарантированы",
-  "Первый месяц бесплатно",
+  "Бесплатный анализ под клиента (созвон после обратной связи по почте)",
 ];
 
 export default function FinalCTASection() {

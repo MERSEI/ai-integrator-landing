@@ -17,7 +17,7 @@ export default function PricingSection() {
         <Reveal className="mx-auto max-w-2xl text-center">
           <h2 className="section-title">Простые цены без скрытых платежей</h2>
           <p className="mt-4 text-lg text-slate-400">
-            Первый месяц для новых клиентов — бесплатно
+            Бесплатный анализ под клиента — созвон после обратной связи по почте
           </p>
         </Reveal>
 
@@ -80,8 +80,8 @@ export default function PricingSection() {
 
         <Reveal className="mt-10 text-center text-slate-500">
           <p>
-            Первый месяц бесплатно: если увидишь результаты — продолжаешь,
-            если нет — ничего не платишь.
+            Бесплатный анализ под клиента (созвон после обратной связи по почте):
+            если увидишь результаты — продолжаешь, если нет — ничего не платишь.
           </p>
         </Reveal>
       </div>

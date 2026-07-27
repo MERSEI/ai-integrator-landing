@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AppHeader from "@/components/AppHeader";
+import ProBlock from "@/components/ProBlock";
 import BizDoctorTool from "@/components/bizdoctor/BizDoctorTool";
 
 export const metadata: Metadata = {
@@ -34,6 +35,18 @@ export default function BizDoctorPage() {
           <div className="mt-12">
             <BizDoctorTool />
           </div>
+
+          <ProBlock
+            title="BizDoctor PRO — от диагноза до лечения"
+            intro="В PRO-версии доктор не просто ставит диагноз, а подключается к вашим метрикам и доводит каждую проблему до решения:"
+            features={[
+              "Интеграция с Grafana — дашборды и метрики подтягиваются напрямую",
+              "По каждой проблеме — ресёрч решений и практик из открытых источников",
+              "Подбор подходящего эксперта или подрядчика под конкретную задачу",
+              "Отслеживание динамики метрик после внедрения рекомендаций",
+            ]}
+          />
+
           <p className="mx-auto mt-10 max-w-2xl text-center text-xs text-slate-600">
             Диагностика — аналитическая оценка, а не финансовая консультация.
             Данные не сохраняются.

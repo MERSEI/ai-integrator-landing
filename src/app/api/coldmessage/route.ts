@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkDailyLimit, checkToolLimit, clientIp } from "@/lib/rate-limit";
+import { apiMessage } from "@/lib/apiMessages";
+import { outputLanguage, requestLocale } from "@/lib/gemini";
 
 const GEMINI_MODEL = "gemini-3.6-flash";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
@@ -66,17 +68,20 @@ const SYSTEM_PROMPT = `Ты — эксперт по холодному аутр�
 Верни строго JSON по схеме.`;
 
 export async function POST(req: NextRequest) {
+  // Тело читаем сразу: локаль нужна уже для сообщений о лимитах.
+  const rawBody: unknown = await req.json().catch(() => null);
+  const locale = requestLocale(rawBody);
   const ip = clientIp(req.headers);
   if (rateLimited(ip)) {
     return NextResponse.json(
-      { error: "Слишком много запросов. Попробуйте через минуту." },
+      { error: apiMessage(locale, "tooManyRequests") },
       { status: 429 }
     );
   }
   const daily = await checkDailyLimit(ip);
   if (!daily.ok) {
     return NextResponse.json(
-      { error: "Дневной лимит 30 запросов исчерпан. Попробуйте завтра." },
+      { error: apiMessage(locale, "dailyLimit") },
       { status: 429 }
     );
   }
@@ -84,7 +89,7 @@ export async function POST(req: NextRequest) {
   const toolLimit = await checkToolLimit(ip, "coldmessage");
   if (!toolLimit.ok) {
     return NextResponse.json(
-      { error: "Демо-лимит этого инструмента — 2 запроса в день. Оформите доступ, чтобы использовать без ограничений." },
+      { error: apiMessage(locale, "toolLimit") },
       { status: 429 }
     );
   }
@@ -92,23 +97,21 @@ export async function POST(req: NextRequest) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) {
     return NextResponse.json(
-      { error: "Сервис временно недоступен: не настроен ключ модели." },
+      { error: apiMessage(locale, "noModelKey") },
       { status: 500 }
     );
   }
 
-  let body: {
+  if (rawBody === null) {
+    return NextResponse.json({ error: apiMessage(locale, "badRequest") }, { status: 400 });
+  }
+  const body = rawBody as {
     profileText?: string;
     offerTemplate?: string;
     channel?: string;
     tone?: string;
     sourceLink?: string;
   };
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Некорректный запрос" }, { status: 400 });
-  }
 
   const profileText = body.profileText?.trim() ?? "";
   const offerTemplate = body.offerTemplate?.trim() ?? "";
@@ -118,13 +121,13 @@ export async function POST(req: NextRequest) {
 
   if (profileText.length < 20) {
     return NextResponse.json(
-      { error: "Вставьте больше текста профиля (минимум пара предложений)." },
+      { error: apiMessage(locale, "needProfile") },
       { status: 400 }
     );
   }
   if (offerTemplate.length < 10) {
     return NextResponse.json(
-      { error: "Добавьте шаблон вашего предложения." },
+      { error: apiMessage(locale, "needOffer") },
       { status: 400 }
     );
   }
@@ -147,7 +150,9 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        system_instruction: {
+          parts: [{ text: SYSTEM_PROMPT + outputLanguage(locale) }],
+        },
         contents: [{ parts: [{ text: userText }] }],
         generationConfig: {
           responseMimeType: "application/json",
@@ -161,7 +166,7 @@ export async function POST(req: NextRequest) {
       const errText = await res.text().catch(() => "");
       console.error("Gemini error:", res.status, errText.slice(0, 500));
       return NextResponse.json(
-        { error: "Модель не ответила. Попробуйте ещё раз." },
+        { error: apiMessage(locale, "modelSilent") },
         { status: 502 }
       );
     }
@@ -174,7 +179,7 @@ export async function POST(req: NextRequest) {
       const reason = data?.candidates?.[0]?.finishReason ?? "unknown";
       console.error("Gemini empty response, finishReason:", reason);
       return NextResponse.json(
-        { error: "Модель вернула пустой ответ. Уточните текст профиля." },
+        { error: apiMessage(locale, "modelEmptyProfile") },
         { status: 502 }
       );
     }
@@ -184,7 +189,7 @@ export async function POST(req: NextRequest) {
   } catch (e) {
     console.error("coldmessage generation failed:", e);
     return NextResponse.json(
-      { error: "Ошибка генерации. Попробуйте ещё раз." },
+      { error: apiMessage(locale, "generationFailed") },
       { status: 500 }
     );
   }

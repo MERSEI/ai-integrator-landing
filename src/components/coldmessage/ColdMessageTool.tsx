@@ -2,23 +2,25 @@
 
 import { useState } from "react";
 import { FiCopy, FiCheck, FiZap, FiAlertCircle } from "react-icons/fi";
+import { getTools } from "@/lib/content/tools";
+import type { Locale } from "@/lib/i18n";
 import {
   CHANNELS,
-  TONES,
   signalColor,
   type ColdMessageResult,
 } from "@/lib/coldmessage";
 
-const EXAMPLE_PROFILE = `Антон Кравец — Head of Growth в SaaS для логистики (TrackFlow). Пишу про B2B-маркетинг и когортный анализ. На прошлой неделе выступал на конференции SaaS Nova про удержание. Люблю бег и спешелти-кофе. Ищем сильного перформанс-маркетолога. Telegram: @anton_growth, почта anton@trackflow.io`;
 
-const EXAMPLE_OFFER = `Здравствуйте! Мы делаем сервис для автоматизации холодных рассылок с AI-персонализацией. Хотим предложить пилот. Удобно созвониться?`;
 
-export default function ColdMessageTool() {
+export default function ColdMessageTool({ locale }: { locale: Locale }) {
+  const t = getTools(locale).coldmessage;
+  const c = getTools(locale).common;
+  const tones = getTools(locale).tones;
   const [profileText, setProfileText] = useState("");
   const [sourceLink, setSourceLink] = useState("");
   const [offerTemplate, setOfferTemplate] = useState("");
   const [channel, setChannel] = useState<string>("Telegram");
-  const [tone, setTone] = useState<string>(TONES[0]);
+  const [tone, setTone] = useState<string>(tones[0]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,10 +28,10 @@ export default function ColdMessageTool() {
   const [copied, setCopied] = useState(false);
 
   const fillExample = () => {
-    setProfileText(EXAMPLE_PROFILE);
-    setOfferTemplate(EXAMPLE_OFFER);
+    setProfileText(t.exampleProfile);
+    setOfferTemplate(t.exampleOffer);
     setChannel("Telegram");
-    setTone(TONES[0]);
+    setTone(tones[0]);
   };
 
   const generate = async () => {
@@ -41,16 +43,16 @@ export default function ColdMessageTool() {
       const res = await fetch("/api/coldmessage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profileText, offerTemplate, channel, tone, sourceLink }),
+        body: JSON.stringify({ profileText, offerTemplate, channel, tone, sourceLink, locale }),
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error ?? "Что-то пошло не так. Попробуйте ещё раз.");
+        setError(json.error ?? c.genericErrorRetry);
         return;
       }
       setResult(json as ColdMessageResult);
     } catch {
-      setError("Ошибка сети. Попробуйте ещё раз.");
+      setError(c.networkError);
     } finally {
       setLoading(false);
     }
@@ -59,7 +61,7 @@ export default function ColdMessageTool() {
   const copyMessage = async () => {
     if (!result) return;
     const text = result.subject
-      ? `Тема: ${result.subject}\n\n${result.message}`
+      ? `${c.subject} ${result.subject}\n\n${result.message}`
       : result.message;
     try {
       await navigator.clipboard.writeText(text);
@@ -77,34 +79,34 @@ export default function ColdMessageTool() {
       {/* ---- Ввод ---- */}
       <div className="card-glass p-6 sm:p-8">
         <div className="flex items-center justify-between">
-          <h2 className="font-heading text-lg font-bold text-white">Входные данные</h2>
+          <h2 className="font-heading text-lg font-bold text-white">{t.formTitle}</h2>
           <button
             type="button"
             onClick={fillExample}
             className="cursor-pointer text-sm font-medium text-primary-light transition-colors hover:text-white"
           >
-            Заполнить примером
+            {t.fillExample}
           </button>
         </div>
 
         <div className="mt-6 space-y-5">
           <div>
             <label htmlFor="profile" className="mb-1.5 block text-sm font-medium text-slate-300">
-              Текст профиля <span className="text-rose-400">*</span>
+              {t.profileLabel} <span className="text-rose-400">*</span>
             </label>
             <textarea
               id="profile"
               rows={6}
               value={profileText}
               onChange={(e) => setProfileText(e.target.value)}
-              placeholder="Вставьте About / Bio, пару постов или комментариев человека…"
+              placeholder={t.profilePlaceholder}
               className="w-full resize-y rounded-md border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-slate-500 transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
 
           <div>
             <label htmlFor="link" className="mb-1.5 block text-sm font-medium text-slate-300">
-              Ссылка на профиль <span className="text-slate-500">(необязательно)</span>
+              {t.linkLabel} <span className="text-slate-500">{t.linkHint}</span>
             </label>
             <input
               id="link"
@@ -118,14 +120,14 @@ export default function ColdMessageTool() {
 
           <div>
             <label htmlFor="offer" className="mb-1.5 block text-sm font-medium text-slate-300">
-              Ваше шаблонное предложение <span className="text-rose-400">*</span>
+              {t.offerLabel} <span className="text-rose-400">*</span>
             </label>
             <textarea
               id="offer"
               rows={3}
               value={offerTemplate}
               onChange={(e) => setOfferTemplate(e.target.value)}
-              placeholder="Что вы предлагаете — как написали бы всем одинаково…"
+              placeholder={t.offerPlaceholder}
               className="w-full resize-y rounded-md border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-slate-500 transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
@@ -133,7 +135,7 @@ export default function ColdMessageTool() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="channel" className="mb-1.5 block text-sm font-medium text-slate-300">
-                Канал
+                {t.channelLabel}
               </label>
               <select
                 id="channel"
@@ -150,7 +152,7 @@ export default function ColdMessageTool() {
             </div>
             <div>
               <label htmlFor="tone" className="mb-1.5 block text-sm font-medium text-slate-300">
-                Тон
+                {t.toneLabel}
               </label>
               <select
                 id="tone"
@@ -158,9 +160,9 @@ export default function ColdMessageTool() {
                 onChange={(e) => setTone(e.target.value)}
                 className="min-h-11 w-full cursor-pointer rounded-md border border-white/15 bg-white/5 px-3 py-2.5 text-white transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
               >
-                {TONES.map((t) => (
-                  <option key={t} value={t} className="bg-surface-2 text-white">
-                    {t}
+                {tones.map((option) => (
+                  <option key={option} value={option} className="bg-surface-2 text-white">
+                    {option}
                   </option>
                 ))}
               </select>
@@ -174,17 +176,17 @@ export default function ColdMessageTool() {
             className="btn-primary w-full"
           >
             {loading ? (
-              "Генерируем…"
+              t.submitting
             ) : (
               <>
                 <FiZap size={18} aria-hidden="true" />
-                Сгенерировать письмо
+                {t.submit}
               </>
             )}
           </button>
           {!canSubmit && (
             <p className="text-center text-xs text-slate-500">
-              Заполните текст профиля и шаблон предложения
+              {t.hint}
             </p>
           )}
         </div>
@@ -205,7 +207,7 @@ export default function ColdMessageTool() {
               className="h-10 w-10 animate-spin rounded-full border-2 border-white/15 border-t-primary-light"
               aria-hidden="true"
             />
-            <p className="text-slate-400">Анализируем профиль и пишем сообщение…</p>
+            <p className="text-slate-400">{t.loading}</p>
           </div>
         )}
 
@@ -215,8 +217,7 @@ export default function ColdMessageTool() {
               <FiZap size={26} aria-hidden="true" />
             </div>
             <p className="max-w-xs text-slate-400">
-              Здесь появятся извлечённые данные и готовое персонализированное
-              сообщение
+              {t.empty}
             </p>
           </div>
         )}
@@ -226,7 +227,7 @@ export default function ColdMessageTool() {
             {result.contacts.length > 0 && (
               <div className="card-glass p-5">
                 <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-                  Контакты
+                  {t.contactsTitle}
                 </h3>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {result.contacts.map((c, i) => (
@@ -245,7 +246,7 @@ export default function ColdMessageTool() {
             {result.signals.length > 0 && (
               <div className="card-glass p-5">
                 <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-                  Сигналы для зацепки
+                  {t.signalsTitle}
                 </h3>
                 <ul className="mt-3 space-y-2.5">
                   {result.signals.map((s, i) => (
@@ -265,7 +266,7 @@ export default function ColdMessageTool() {
             {result.approach && (
               <div className="card-glass p-5">
                 <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-                  Подход
+                  {t.approachTitle}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-slate-300">
                   {result.approach}
@@ -277,7 +278,7 @@ export default function ColdMessageTool() {
               <div className="rounded-[15px] bg-surface-2 p-5">
                 <div className="flex items-center justify-between">
                   <h3 className="font-heading font-bold text-white">
-                    Персонализированное сообщение
+                    {t.messageTitle}
                   </h3>
                   <button
                     type="button"
@@ -287,19 +288,19 @@ export default function ColdMessageTool() {
                     {copied ? (
                       <>
                         <FiCheck size={15} className="text-success" aria-hidden="true" />
-                        Скопировано
+                        {c.copied}
                       </>
                     ) : (
                       <>
                         <FiCopy size={15} aria-hidden="true" />
-                        Копировать
+                        {c.copy}
                       </>
                     )}
                   </button>
                 </div>
                 {result.subject && (
                   <p className="mt-4 text-sm text-slate-400">
-                    <span className="text-slate-500">Тема:</span> {result.subject}
+                    <span className="text-slate-500">{c.subject}</span> {result.subject}
                   </p>
                 )}
                 <p className="mt-3 whitespace-pre-wrap leading-relaxed text-slate-100">

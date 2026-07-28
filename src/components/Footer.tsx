@@ -1,15 +1,11 @@
 import { FaLinkedin, FaTwitter, FaFacebook } from "react-icons/fa";
 import Logo from "./Logo";
-import { CONTACTS } from "@/lib/content";
+import { CONTACTS, getContent } from "@/lib/content";
+import type { Locale } from "@/lib/i18n";
 
-const PRODUCT_LINKS = [
-  { href: "#features", label: "Приложения" },
-  { href: "#pricing", label: "Цены" },
-  { href: "#how-it-works", label: "Как это работает" },
-  { href: "#results", label: "Результаты" },
-];
+export default function Footer({ locale }: { locale: Locale }) {
+  const t = getContent(locale).footer;
 
-export default function Footer() {
   return (
     <footer className="relative bg-dark py-14">
       <div
@@ -19,18 +15,16 @@ export default function Footer() {
       <div className="container-section grid gap-10 md:grid-cols-3">
         <div>
           <Logo className="h-8 w-auto" />
-          <p className="mt-3 text-sm text-slate-500">
-            Making AI work for everyone
-          </p>
+          <p className="mt-3 text-sm text-slate-500">{t.tagline}</p>
           <p className="mt-6 text-sm text-slate-600">
             © {new Date().getFullYear()} AI Integrator
           </p>
         </div>
 
-        <nav aria-label="Продукт">
-          <p className="font-semibold text-white">Продукт</p>
+        <nav aria-label={t.productTitle}>
+          <p className="font-semibold text-white">{t.productTitle}</p>
           <ul className="mt-4 space-y-2">
-            {PRODUCT_LINKS.map((link) => (
+            {t.links.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
@@ -44,7 +38,7 @@ export default function Footer() {
         </nav>
 
         <div>
-          <p className="font-semibold text-white">Контакты</p>
+          <p className="font-semibold text-white">{t.contactsTitle}</p>
           <ul className="mt-4 space-y-2 text-sm text-slate-400">
             <li>
               <a href={`mailto:${CONTACTS.email}`} className="hover:text-white">

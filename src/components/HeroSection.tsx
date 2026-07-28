@@ -1,16 +1,18 @@
 import EmailForm from "./EmailForm";
 import TypewriterHeading from "./TypewriterHeading";
 import { FiCheck } from "react-icons/fi";
+import { getContent } from "@/lib/content";
+import type { Locale } from "@/lib/i18n";
 
-export default function HeroSection() {
+export default function HeroSection({ locale }: { locale: Locale }) {
+  const t = getContent(locale).hero;
+
   return (
     <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-dark pt-[72px]">
       {/* Video background — портретный кадр на мобильных, широкий на десктопе */}
-      {/* Без poster: 1.75 МБ PNG успевал отрисоваться раньше видео и давал вспышку.
-          Под видео — тёмный фон секции, поэтому до старта воспроизведения пусто, но не пусто-белo. */}
       <video
         className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
-        preload="auto"
+        poster="/images/hero.png"
         autoPlay
         muted
         loop
@@ -40,38 +42,35 @@ export default function HeroSection() {
             <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-success shadow-[0_0_12px_4px_rgba(34,197,94,0.7)]" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-success shadow-[0_0_6px_1px_rgba(34,197,94,0.9)]" />
           </span>
-          Запуск за 72 часа, без разработчиков
+          {t.badge}
         </p>
         <div className="rounded-3xl border border-white/10 bg-black/30 px-6 py-8 shadow-card backdrop-blur-md sm:px-10 sm:py-10">
           <TypewriterHeading
             className="mx-auto max-w-4xl font-heading text-4xl font-extrabold leading-[1.1] tracking-tight text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.7)] sm:text-5xl lg:text-[60px]"
             segments={[
-              { text: "Ваш AI-маркетплейс для " },
+              { text: t.headingLead },
               {
-                text: "продаж и привлечения клиентов",
+                text: t.headingAccent,
                 className: "text-gradient",
               },
             ]}
           />
           <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-200 [text-shadow:0_1px_12px_rgba(0,0,0,0.8)]">
-            15 готовых приложений для автоматизации продаж, маркетинга и
-            операционки. Работают за 72 часа без разработчиков.
+            {t.subtitle}
           </p>
         </div>
 
         <div className="mt-8 flex w-full justify-center">
-          <EmailForm cta="Получить аудит (бесплатно)" source="hero" />
+          <EmailForm locale={locale} cta={t.cta} source="hero" />
         </div>
 
         <ul className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-slate-400">
-          <li className="flex items-center gap-1.5">
-            <FiCheck className="text-success" aria-hidden="true" />
-            Не нужна кредитная карта
-          </li>
-          <li className="flex items-center gap-1.5">
-            <FiCheck className="text-success" aria-hidden="true" />
-            Демо и консультация — бесплатно
-          </li>
+          {t.trust.map((item) => (
+            <li key={item} className="flex items-center gap-1.5">
+              <FiCheck className="text-success" aria-hidden="true" />
+              {item}
+            </li>
+          ))}
         </ul>
       </div>
     </section>

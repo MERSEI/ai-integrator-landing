@@ -1,8 +1,19 @@
 import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
 import Logo from "./Logo";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { getContent } from "@/lib/content";
+import { localePath, type Locale } from "@/lib/i18n";
 
-export default function AppHeader({ badge }: { badge?: string }) {
+export default function AppHeader({
+  locale,
+  badge,
+}: {
+  locale: Locale;
+  badge?: string;
+}) {
+  const t = getContent(locale).nav;
+
   return (
     <header className="sticky top-0 z-50 h-16 border-b border-white/10 bg-black/60 backdrop-blur-[20px]">
       <div
@@ -11,7 +22,7 @@ export default function AppHeader({ badge }: { badge?: string }) {
       />
       <div className="container-section flex h-full items-center justify-between">
         <div className="flex items-center gap-3">
-          <Link href="/" className="flex cursor-pointer items-center">
+          <Link href={localePath(locale, "/")} className="flex cursor-pointer items-center">
             <Logo className="h-8 w-auto" />
           </Link>
           {badge && (
@@ -20,14 +31,17 @@ export default function AppHeader({ badge }: { badge?: string }) {
             </span>
           )}
         </div>
-        <Link
-          href="/#features"
-          className="flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:bg-white/5 hover:text-white"
-        >
-          <FiArrowLeft size={16} aria-hidden="true" />
-          <span className="hidden sm:inline">Все приложения</span>
-          <span className="sm:hidden">Назад</span>
-        </Link>
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher locale={locale} />
+          <Link
+            href={`${localePath(locale, "/")}#features`}
+            className="flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:bg-white/5 hover:text-white"
+          >
+            <FiArrowLeft size={16} aria-hidden="true" />
+            <span className="hidden sm:inline">{t.allApps}</span>
+            <span className="sm:hidden">{t.back}</span>
+          </Link>
+        </div>
       </div>
     </header>
   );

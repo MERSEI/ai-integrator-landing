@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkDailyLimit, checkToolLimit, clientIp } from "@/lib/rate-limit";
+import { apiMessage } from "@/lib/apiMessages";
+import { outputLanguage, requestLocale } from "@/lib/gemini";
 
 const GEMINI_MODEL = "gemini-3.6-flash";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
@@ -65,17 +67,20 @@ const SYSTEM_PROMPT = `Ты — опытный эксперт по продаж�
 type WireMsg = { role: "user" | "model"; content: string };
 
 export async function POST(req: NextRequest) {
+  // Тело читаем сразу: локаль нужна уже для сообщений о лимитах.
+  const rawBody: unknown = await req.json().catch(() => null);
+  const locale = requestLocale(rawBody);
   const ip = clientIp(req.headers);
   if (rateLimited(ip)) {
     return NextResponse.json(
-      { error: "Слишком много запросов. Попробуйте через минуту." },
+      { error: apiMessage(locale, "tooManyRequests") },
       { status: 429 }
     );
   }
   const daily = await checkDailyLimit(ip);
   if (!daily.ok) {
     return NextResponse.json(
-      { error: "Дневной лимит 30 запросов исчерпан. Попробуйте завтра." },
+      { error: apiMessage(locale, "dailyLimit") },
       { status: 429 }
     );
   }
@@ -83,7 +88,7 @@ export async function POST(req: NextRequest) {
   const toolLimit = await checkToolLimit(ip, "objectionkiller");
   if (!toolLimit.ok) {
     return NextResponse.json(
-      { error: "Демо-лимит этого инструмента — 2 запроса в день. Оформите доступ, чтобы использовать без ограничений." },
+      { error: apiMessage(locale, "toolLimit") },
       { status: 429 }
     );
   }
@@ -91,30 +96,28 @@ export async function POST(req: NextRequest) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) {
     return NextResponse.json(
-      { error: "Сервис временно недоступен: не настроен ключ модели." },
+      { error: apiMessage(locale, "noModelKey") },
       { status: 500 }
     );
   }
 
-  let body: { messages?: WireMsg[] };
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Некорректный запрос" }, { status: 400 });
+  if (rawBody === null) {
+    return NextResponse.json({ error: apiMessage(locale, "badRequest") }, { status: 400 });
   }
+  const body = rawBody as { messages?: WireMsg[] };
 
   const messages = Array.isArray(body.messages) ? body.messages : [];
   const firstUser = messages.find((m) => m.role === "user");
   if (!firstUser || firstUser.content.trim().length < 5) {
     return NextResponse.json(
-      { error: "Опишите ситуацию и возражение клиента." },
+      { error: apiMessage(locale, "needObjection") },
       { status: 400 }
     );
   }
   // защита от переполнения контекста
   if (messages.length > 24) {
     return NextResponse.json(
-      { error: "Диалог слишком длинный. Начните новую ситуацию." },
+      { error: apiMessage(locale, "chatTooLongSituation") },
       { status: 400 }
     );
   }
@@ -132,7 +135,9 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        system_instruction: {
+          parts: [{ text: SYSTEM_PROMPT + outputLanguage(locale) }],
+        },
         contents,
         generationConfig: {
           responseMimeType: "application/json",
@@ -146,7 +151,7 @@ export async function POST(req: NextRequest) {
       const errText = await res.text().catch(() => "");
       console.error("Gemini error:", res.status, errText.slice(0, 500));
       return NextResponse.json(
-        { error: "Модель не ответила. Попробуйте ещё раз." },
+        { error: apiMessage(locale, "modelSilent") },
         { status: 502 }
       );
     }
@@ -159,7 +164,7 @@ export async function POST(req: NextRequest) {
       const reason = data?.candidates?.[0]?.finishReason ?? "unknown";
       console.error("Gemini empty response, finishReason:", reason);
       return NextResponse.json(
-        { error: "Модель вернула пустой ответ. Уточните описание." },
+        { error: apiMessage(locale, "modelEmptyDescription") },
         { status: 502 }
       );
     }
@@ -173,7 +178,7 @@ export async function POST(req: NextRequest) {
   } catch (e) {
     console.error("objectionkiller generation failed:", e);
     return NextResponse.json(
-      { error: "Ошибка генерации. Попробуйте ещё раз." },
+      { error: apiMessage(locale, "generationFailed") },
       { status: 500 }
     );
   }

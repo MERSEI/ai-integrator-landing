@@ -10,12 +10,17 @@ import {
   FiCalendar,
 } from "react-icons/fi";
 import { TbBolt } from "react-icons/tb";
+import { getTools } from "@/lib/content/tools";
+import { localePath, type Locale } from "@/lib/i18n";
 import {
   DIRECTION_META,
   type TrendSniperResult,
 } from "@/lib/trendsniper";
 
-export default function TrendSniperTool() {
+export default function TrendSniperTool({ locale }: { locale: Locale }) {
+  const t = getTools(locale).trendsniper;
+  const c = getTools(locale).common;
+  const dirLabels = getTools(locale).direction;
   const [keyword, setKeyword] = useState("");
   const [region, setRegion] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,22 +36,22 @@ export default function TrendSniperTool() {
       const res = await fetch("/api/trendsniper", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ keyword, region }),
+        body: JSON.stringify({ keyword, region, locale }),
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error ?? "Что-то пошло не так. Попробуйте ещё раз.");
+        setError(json.error ?? c.genericErrorRetry);
         return;
       }
       setResult(json as TrendSniperResult);
     } catch {
-      setError("Ошибка сети. Попробуйте ещё раз.");
+      setError(c.networkError);
     } finally {
       setLoading(false);
     }
   };
 
-  const dir = result ? DIRECTION_META[result.direction] : null;
+  const dirMeta = result ? DIRECTION_META[result.direction] : null;
   const maxRegion = result?.top_regions?.[0]?.score || 100;
 
   return (
@@ -55,14 +60,14 @@ export default function TrendSniperTool() {
         <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
           <div>
             <label htmlFor="kw" className="mb-1.5 block text-sm font-medium text-slate-300">
-              Ключевое слово или тема <span className="text-rose-400">*</span>
+              {t.keywordLabel} <span className="text-rose-400">*</span>
             </label>
             <input
               id="kw"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && run()}
-              placeholder="например: нейросети для бизнеса, доставка суши, курсы Python…"
+              placeholder={t.keywordPlaceholder}
               className="min-h-12 w-full rounded-md border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-slate-500 transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
@@ -73,24 +78,24 @@ export default function TrendSniperTool() {
             className="btn-primary !min-h-12 sm:w-auto"
           >
             {loading ? (
-              "Анализируем…"
+              t.submitting
             ) : (
               <>
                 <FiSearch size={18} aria-hidden="true" />
-                Анализ тренда
+                {t.submit}
               </>
             )}
           </button>
         </div>
         <div className="mt-4">
           <label htmlFor="reg" className="mb-1.5 block text-sm font-medium text-slate-300">
-            Регион фокуса <span className="text-slate-500">(необязательно)</span>
+            {t.regionLabel} <span className="text-slate-500">{t.regionHint}</span>
           </label>
           <input
             id="reg"
             value={region}
             onChange={(e) => setRegion(e.target.value)}
-            placeholder="например: Украина, Казахстан, СНГ"
+            placeholder={t.regionPlaceholder}
             className="min-h-11 w-full rounded-md border border-white/15 bg-white/5 px-4 py-2.5 text-white placeholder-slate-500 transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
           />
         </div>
@@ -99,9 +104,7 @@ export default function TrendSniperTool() {
       <div className="mt-4 flex items-start gap-3 rounded-lg border border-white/15 bg-white/5 p-4 text-sm text-slate-300">
         <FiAlertCircle size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
         <p>
-          <span className="font-semibold">Демо-режим.</span> Оценки ниже —
-          правдоподобная AI-аналитика на основе знаний модели, а не метрики
-          Google Trends в реальном времени. Реальные данные — в PRO.
+          <span className="font-semibold">{c.demoLabel}</span>  {t.demoNote}
         </p>
       </div>
 
@@ -119,7 +122,7 @@ export default function TrendSniperTool() {
               className="h-10 w-10 animate-spin rounded-full border-2 border-white/15 border-t-primary-light"
               aria-hidden="true"
             />
-            <p className="text-slate-400">Считаем интерес по регионам…</p>
+            <p className="text-slate-400">{t.loading}</p>
           </div>
         )}
 
@@ -129,29 +132,28 @@ export default function TrendSniperTool() {
               <FiTrendingUp size={26} aria-hidden="true" />
             </div>
             <p className="max-w-xs text-slate-400">
-              Введите тему — движок оценит интерес, направление тренда, топ-регионы
-              и связанные запросы
+              {t.empty}
             </p>
           </div>
         )}
 
-        {!loading && result && dir && (
+        {!loading && result && dirMeta && (
           <div className="space-y-5">
             {/* Сводка */}
             <div className="card-glass p-6">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <p className="text-sm text-slate-400">Уровень интереса</p>
+                  <p className="text-sm text-slate-400">{t.interestLevel}</p>
                   <p className="font-heading text-5xl font-extrabold text-gradient">
                     {Math.round(result.interest_level)}
                     <span className="text-2xl text-slate-500">/100</span>
                   </p>
                 </div>
                 <span
-                  className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold ring-1 ring-inset ${dir.className}`}
+                  className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold ring-1 ring-inset ${dirMeta.className}`}
                 >
-                  <span aria-hidden="true">{dir.arrow}</span>
-                  {dir.label}
+                  <span aria-hidden="true">{dirMeta.arrow}</span>
+                  {dirLabels[result.direction]}
                 </span>
               </div>
               <p className="mt-4 leading-relaxed text-slate-300">{result.summary}</p>
@@ -162,7 +164,7 @@ export default function TrendSniperTool() {
               <div className="card-glass p-6">
                 <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-400">
                   <FiMapPin size={15} aria-hidden="true" />
-                  Топ регионов по интересу
+                  {t.regionsTitle}
                 </h3>
                 <ul className="mt-4 space-y-3">
                   {result.top_regions.map((r, i) => (
@@ -189,11 +191,11 @@ export default function TrendSniperTool() {
             {result.related_queries.length > 0 && (
               <div className="card-glass p-6">
                 <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-                  Связанные запросы
+                  {t.relatedTitle}
                 </h3>
                 <div className="mt-4 grid gap-5 sm:grid-cols-2">
                   <div>
-                    <p className="mb-2 text-xs font-semibold text-slate-500">ПОПУЛЯРНЫЕ</p>
+                    <p className="mb-2 text-xs font-semibold text-slate-500">{t.topQueries}</p>
                     <div className="flex flex-wrap gap-2">
                       {result.related_queries
                         .filter((q) => q.kind !== "rising")
@@ -209,7 +211,7 @@ export default function TrendSniperTool() {
                   </div>
                   <div>
                     <p className="mb-2 flex items-center gap-1 text-xs font-semibold text-success">
-                      РАСТУЩИЕ <span aria-hidden="true">↑</span>
+                      {t.risingQueries} <span aria-hidden="true">↑</span>
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {result.related_queries
@@ -233,7 +235,7 @@ export default function TrendSniperTool() {
               <div className="card-glass p-5">
                 <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-300">
                   <FiCalendar size={15} className="text-primary-light" aria-hidden="true" />
-                  Сезонность
+                  {t.seasonalityTitle}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-slate-400">
                   {result.seasonality}
@@ -243,7 +245,7 @@ export default function TrendSniperTool() {
                 <div className="h-full rounded-[11px] bg-surface-2 p-5">
                   <h3 className="flex items-center gap-2 text-sm font-semibold text-white">
                     <FiZap size={15} className="text-warning" aria-hidden="true" />
-                    Как использовать
+                    {t.insightTitle}
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-slate-300">
                     {result.insight}
@@ -260,27 +262,22 @@ export default function TrendSniperTool() {
           <div className="flex items-center gap-2">
             <TbBolt size={20} className="text-primary-light" aria-hidden="true" />
             <h3 className="font-heading text-lg font-bold text-white">
-              Trend Sniper PRO — реальные данные Google Trends
+              {t.proTitle}
             </h3>
           </div>
           <p className="mt-3 text-slate-400">
-            В боевой версии Trend Sniper работает на реальных данных Google Trends:
+            {t.proIntro}
           </p>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-            {[
-              "Реальная динамика интереса из Google Trends за выбранный период",
-              "Точная разбивка по странам, регионам и городам",
-              "Растущие запросы (breakout) с процентом роста в реальном времени",
-              "Отслеживание тем и авто-алерты о всплесках спроса в Telegram",
-            ].map((f) => (
+            {t.proFeatures.map((f) => (
               <li key={f} className="flex items-start gap-2.5 text-sm text-slate-300">
                 <FiTrendingUp className="mt-0.5 shrink-0 text-success" aria-hidden="true" />
                 {f}
               </li>
             ))}
           </ul>
-          <a href="/#final-cta" className="btn-primary mt-6">
-            Подключить PRO
+          <a href={`${localePath(locale, "/")}#final-cta`} className="btn-primary mt-6">
+            {c.proCta}
           </a>
         </div>
       </div>

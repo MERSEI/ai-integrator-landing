@@ -25,13 +25,6 @@ export const CHANNELS = [
   "WhatsApp",
 ] as const;
 
-export const TONES = [
-  "Дружелюбный (на ты)",
-  "Деловой (на вы)",
-  "Нейтральный",
-  "Экспертный",
-] as const;
-
 /** Бейдж категории сигнала: монохромная иерархия — важные ярче. */
 export function signalColor(category: string): string {
   const c = category.toLowerCase();

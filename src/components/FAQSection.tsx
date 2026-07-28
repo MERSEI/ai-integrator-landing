@@ -5,11 +5,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FiChevronDown } from "react-icons/fi";
 import Reveal from "./Reveal";
 import Starfield from "./Starfield";
-import { FAQ_ITEMS } from "@/lib/content";
+import { getContent } from "@/lib/content";
+import type { Locale } from "@/lib/i18n";
 
 const EASE_PREMIUM = [0.16, 1, 0.3, 1] as const;
 
-export default function FAQSection() {
+export default function FAQSection({ locale }: { locale: Locale }) {
+  const t = getContent(locale).faq;
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
@@ -36,11 +38,11 @@ export default function FAQSection() {
 
       <div className="container-section relative max-w-3xl">
         <Reveal className="text-center">
-          <h2 className="section-title">Часто задаваемые вопросы</h2>
+          <h2 className="section-title">{t.title}</h2>
         </Reveal>
 
         <div className="mt-12 space-y-4">
-          {FAQ_ITEMS.map((item, i) => {
+          {t.items.map((item, i) => {
             const isOpen = openIndex === i;
             return (
               <Reveal key={item.question} delay={i * 0.05}>

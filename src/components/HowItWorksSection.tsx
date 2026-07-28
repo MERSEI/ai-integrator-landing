@@ -5,12 +5,14 @@ import { motion, useReducedMotion } from "framer-motion";
 import { FiCheck } from "react-icons/fi";
 import Reveal from "./Reveal";
 import TypewriterText from "./TypewriterText";
-import { STEPS } from "@/lib/content";
+import { getContent } from "@/lib/content";
+import type { Locale } from "@/lib/i18n";
 
 const EASE_PREMIUM = [0.16, 1, 0.3, 1] as const;
 
-export default function HowItWorksSection() {
+export default function HowItWorksSection({ locale }: { locale: Locale }) {
   const reduced = useReducedMotion();
+  const t = getContent(locale).howItWorks;
 
   return (
     <section id="how-it-works" className="relative overflow-hidden bg-dark py-20 sm:py-28">
@@ -25,11 +27,11 @@ export default function HowItWorksSection() {
       <div className="container-section relative">
         <Reveal className="mx-auto max-w-2xl text-center">
           <h2 className="section-title">
-            <TypewriterText text="Как это работает" />
+            <TypewriterText text={t.title} />
           </h2>
           <p className="mt-4 text-lg text-slate-400">
             <TypewriterText
-              text="Три шага от хаоса к работающей системе"
+              text={t.subtitle}
               speed={28}
               delay={700}
               cursor={false}
@@ -59,7 +61,7 @@ export default function HowItWorksSection() {
               },
             }}
           />
-          {STEPS.map((step, i) => (
+          {t.steps.map((step, i) => (
             <motion.div
               key={step.number}
               variants={{
@@ -129,8 +131,8 @@ export default function HowItWorksSection() {
 
         <Reveal className="mt-12 text-center">
           <p className="mx-auto max-w-xl font-heading text-xl font-bold tracking-tight text-white">
-            Через 72 часа у вас работающий инструмент —{" "}
-            <span className="text-gradient">без разработчиков, без хаоса.</span>
+            {t.outroLead}
+            <span className="text-gradient">{t.outroAccent}</span>
           </p>
         </Reveal>
       </div>

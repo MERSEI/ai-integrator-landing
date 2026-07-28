@@ -1,9 +1,12 @@
 import Image from "next/image";
 import { FiX } from "react-icons/fi";
 import Reveal from "./Reveal";
-import { PROBLEMS } from "@/lib/content";
+import { getContent } from "@/lib/content";
+import type { Locale } from "@/lib/i18n";
 
-export default function ProblemsSection() {
+export default function ProblemsSection({ locale }: { locale: Locale }) {
+  const t = getContent(locale).problems;
+
   return (
     <section id="problems" className="relative overflow-hidden bg-surface py-20 sm:py-28">
       <div
@@ -17,11 +20,11 @@ export default function ProblemsSection() {
       <div className="container-section relative grid items-center gap-12 lg:grid-cols-2">
         <Reveal>
           <h2 className="section-title">
-            Вы теряете клиентов{" "}
-            <span className="text-gradient">без автоматизации</span>
+            {t.titleLead}
+            <span className="text-gradient">{t.titleAccent}</span>
           </h2>
           <ul className="mt-8 space-y-4">
-            {PROBLEMS.map((problem) => (
+            {t.items.map((problem) => (
               <li key={problem} className="flex items-start gap-3 text-lg">
                 <span
                   className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-inset ring-white/20"
@@ -34,13 +37,11 @@ export default function ProblemsSection() {
             ))}
           </ul>
           <div className="mt-8 card-glass p-6 text-slate-400">
-            <p className="font-heading font-bold text-white">
-              Большинству нужны инструменты, но:
-            </p>
+            <p className="font-heading font-bold text-white">{t.boxTitle}</p>
             <ul className="mt-3 space-y-2 text-base">
-              <li>— Zapier/Make слишком сложные (нужен разработчик)</li>
-              <li>— HubSpot дорогой (от $45/месяц за место)</li>
-              <li>— Кустарные решения не масштабируются</li>
+              {t.boxItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
             </ul>
           </div>
         </Reveal>
@@ -52,7 +53,7 @@ export default function ProblemsSection() {
             />
             <Image
               src="/images/problems.jpg"
-              alt="Предприниматель, перегруженный хаосом ручных процессов"
+              alt={t.imageAlt}
               width={1280}
               height={714}
               className="relative rounded-xl border border-white/10 shadow-card"

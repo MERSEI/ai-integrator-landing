@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkDailyLimit, clientIp } from "@/lib/rate-limit";
 import { saveLead } from "@/lib/leads";
+import { apiMessage } from "@/lib/apiMessages";
+import { requestLocale } from "@/lib/gemini";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -19,27 +21,34 @@ function rateLimited(ip: string): boolean {
 }
 
 export async function POST(req: NextRequest) {
+  // Тело читаем сразу: локаль нужна уже для сообщений о лимитах.
+  const rawBody: unknown = await req.json().catch(() => null);
+  const locale = requestLocale(rawBody);
   const ip = clientIp(req.headers);
   if (rateLimited(ip)) {
     return NextResponse.json(
-      { error: "Слишком много запросов. Попробуйте через минуту." },
+      { error: apiMessage(locale, "tooManyRequests") },
       { status: 429 }
     );
   }
   const daily = await checkDailyLimit(ip);
   if (!daily.ok) {
     return NextResponse.json(
-      { error: "Дневной лимит 30 запросов исчерпан. Попробуйте завтра." },
+      { error: apiMessage(locale, "dailyLimit") },
       { status: 429 }
     );
   }
 
-  let body: { email?: string; name?: string; company?: string; website?: string; source?: string };
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Некорректный запрос" }, { status: 400 });
+  if (rawBody === null) {
+    return NextResponse.json({ error: apiMessage(locale, "badRequest") }, { status: 400 });
   }
+  const body = rawBody as {
+    email?: string;
+    name?: string;
+    company?: string;
+    website?: string;
+    source?: string;
+  };
 
   // Honeypot: боты заполняют скрытое поле "website".
   if (body.website) {
@@ -49,7 +58,7 @@ export async function POST(req: NextRequest) {
   const email = body.email?.trim().toLowerCase() ?? "";
   if (!EMAIL_RE.test(email)) {
     return NextResponse.json(
-      { error: "Введите корректный email" },
+      { error: apiMessage(locale, "invalidEmail") },
       { status: 400 }
     );
   }

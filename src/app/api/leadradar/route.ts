@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkDailyLimit, checkToolLimit, clientIp } from "@/lib/rate-limit";
+import { apiMessage } from "@/lib/apiMessages";
+import { outputLanguage, requestLocale } from "@/lib/gemini";
 
 const GEMINI_MODEL = "gemini-3.6-flash";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
@@ -61,17 +63,20 @@ const SYSTEM_PROMPT = `Ты — демо-движок LeadRadar: показыв�
 Пиши живо, без канцелярита. Заполняй все поля JSON.`;
 
 export async function POST(req: NextRequest) {
+  // Тело читаем сразу: локаль нужна уже для сообщений о лимитах.
+  const rawBody: unknown = await req.json().catch(() => null);
+  const locale = requestLocale(rawBody);
   const ip = clientIp(req.headers);
   if (rateLimited(ip)) {
     return NextResponse.json(
-      { error: "Слишком много запросов. Попробуйте через минуту." },
+      { error: apiMessage(locale, "tooManyRequests") },
       { status: 429 }
     );
   }
   const daily = await checkDailyLimit(ip);
   if (!daily.ok) {
     return NextResponse.json(
-      { error: "Дневной лимит 30 запросов исчерпан. Попробуйте завтра." },
+      { error: apiMessage(locale, "dailyLimit") },
       { status: 429 }
     );
   }
@@ -79,7 +84,7 @@ export async function POST(req: NextRequest) {
   const toolLimit = await checkToolLimit(ip, "leadradar");
   if (!toolLimit.ok) {
     return NextResponse.json(
-      { error: "Демо-лимит этого инструмента — 2 запроса в день. Оформите доступ, чтобы использовать без ограничений." },
+      { error: apiMessage(locale, "toolLimit") },
       { status: 429 }
     );
   }
@@ -87,23 +92,21 @@ export async function POST(req: NextRequest) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) {
     return NextResponse.json(
-      { error: "Сервис временно недоступен: не настроен ключ модели." },
+      { error: apiMessage(locale, "noModelKey") },
       { status: 500 }
     );
   }
 
-  let body: { keyword?: string; product?: string };
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Некорректный запрос" }, { status: 400 });
+  if (rawBody === null) {
+    return NextResponse.json({ error: apiMessage(locale, "badRequest") }, { status: 400 });
   }
+  const body = rawBody as { keyword?: string; product?: string };
 
   const keyword = body.keyword?.trim() ?? "";
   const product = body.product?.trim() ?? "";
   if (keyword.length < 2) {
     return NextResponse.json(
-      { error: "Введите ключевое слово или нишу." },
+      { error: apiMessage(locale, "needKeywordNiche") },
       { status: 400 }
     );
   }
@@ -118,7 +121,9 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: { "x-goog-api-key": key, "Content-Type": "application/json" },
       body: JSON.stringify({
-        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        system_instruction: {
+          parts: [{ text: SYSTEM_PROMPT + outputLanguage(locale) }],
+        },
         contents: [{ parts: [{ text: userText }] }],
         generationConfig: {
           responseMimeType: "application/json",
@@ -132,7 +137,7 @@ export async function POST(req: NextRequest) {
       const errText = await res.text().catch(() => "");
       console.error("Gemini error:", res.status, errText.slice(0, 500));
       return NextResponse.json(
-        { error: "Модель не ответила. Попробуйте ещё раз." },
+        { error: apiMessage(locale, "modelSilent") },
         { status: 502 }
       );
     }
@@ -142,7 +147,7 @@ export async function POST(req: NextRequest) {
       data?.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!text) {
       return NextResponse.json(
-        { error: "Модель вернула пустой ответ. Попробуйте ещё раз." },
+        { error: apiMessage(locale, "modelEmpty") },
         { status: 502 }
       );
     }
@@ -158,7 +163,7 @@ export async function POST(req: NextRequest) {
   } catch (e) {
     console.error("leadradar generation failed:", e);
     return NextResponse.json(
-      { error: "Ошибка генерации. Попробуйте ещё раз." },
+      { error: apiMessage(locale, "generationFailed") },
       { status: 500 }
     );
   }

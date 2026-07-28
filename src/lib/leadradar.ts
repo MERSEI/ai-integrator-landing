@@ -15,20 +15,9 @@ export type LeadRadarResult = {
   leads: Lead[];
 };
 
-export const TIER_META: Record<
-  LeadTier,
-  { label: string; className: string }
-> = {
-  hot: {
-    label: "Горячий",
-    className: "text-black ring-white/60 bg-white",
-  },
-  warm: {
-    label: "Тёплый",
-    className: "text-white ring-white/30 bg-white/15",
-  },
-  cold: {
-    label: "Холодный",
-    className: "text-slate-500 ring-white/10 bg-white/5",
-  },
+/** Только оформление — подписи переводятся, см. getTools(locale).tiers. */
+export const TIER_CLASSES: Record<LeadTier, string> = {
+  hot: "text-black ring-white/60 bg-white",
+  warm: "text-white ring-white/30 bg-white/15",
+  cold: "text-slate-500 ring-white/10 bg-white/5",
 };

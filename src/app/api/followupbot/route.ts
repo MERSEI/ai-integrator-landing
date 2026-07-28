@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkDailyLimit, checkToolLimit, clientIp } from "@/lib/rate-limit";
-import { callGemini, burstLimited } from "@/lib/gemini";
+import { apiMessage } from "@/lib/apiMessages";
+import { callGemini, burstLimited, outputLanguage, requestLocale } from "@/lib/gemini";
 
 const RESPONSE_SCHEMA = {
   type: "object",
@@ -38,17 +39,20 @@ const SYSTEM_PROMPT = `Ты — FollowUpBot, эксперт по дожиму с
 Правила: без пассивной агрессии («вы так и не ответили»), без вины, без манипуляций. Каждое сообщение — короткое, живое, даёт ценность или упрощает ответ. Учитывай канал и тон. Пиши по-русски.`;
 
 export async function POST(req: NextRequest) {
+  // Тело читаем сразу: локаль нужна уже для сообщений о лимитах.
+  const rawBody: unknown = await req.json().catch(() => null);
+  const locale = requestLocale(rawBody);
   const ip = clientIp(req.headers);
   if (burstLimited("followupbot", ip)) {
     return NextResponse.json(
-      { error: "Слишком много запросов. Попробуйте через минуту." },
+      { error: apiMessage(locale, "tooManyRequests") },
       { status: 429 }
     );
   }
   const daily = await checkDailyLimit(ip);
   if (!daily.ok) {
     return NextResponse.json(
-      { error: "Дневной лимит 30 запросов исчерпан. Попробуйте завтра." },
+      { error: apiMessage(locale, "dailyLimit") },
       { status: 429 }
     );
   }
@@ -56,30 +60,28 @@ export async function POST(req: NextRequest) {
   const toolLimit = await checkToolLimit(ip, "followupbot");
   if (!toolLimit.ok) {
     return NextResponse.json(
-      { error: "Демо-лимит этого инструмента — 2 запроса в день. Оформите доступ, чтобы использовать без ограничений." },
+      { error: apiMessage(locale, "toolLimit") },
       { status: 429 }
     );
   }
 
-  let body: { context?: string; channel?: string; tone?: string };
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Некорректный запрос" }, { status: 400 });
+  if (rawBody === null) {
+    return NextResponse.json({ error: apiMessage(locale, "badRequest") }, { status: 400 });
   }
+  const body = rawBody as { context?: string; channel?: string; tone?: string };
 
   const context = body.context?.trim() ?? "";
   const channel = body.channel?.trim() || "Email";
   const tone = body.tone?.trim() || "Деловой (на вы)";
   if (context.length < 20) {
     return NextResponse.json(
-      { error: "Опишите ситуацию подробнее: что предлагали, на чём зависло." },
+      { error: apiMessage(locale, "needFollowupContext") },
       { status: 400 }
     );
   }
 
   const result = await callGemini({
-    system: SYSTEM_PROMPT,
+    system: SYSTEM_PROMPT + outputLanguage(locale),
     contents: [
       {
         parts: [

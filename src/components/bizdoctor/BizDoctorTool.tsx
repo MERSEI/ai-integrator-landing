@@ -10,6 +10,8 @@ import {
   FiTrendingDown,
 } from "react-icons/fi";
 import { TbStethoscope } from "react-icons/tb";
+import { getTools } from "@/lib/content/tools";
+import type { Locale } from "@/lib/i18n";
 
 type Leak = { area: string; problem: string; impact: string; severity: string };
 type Rec = { action: string; effect: string; effort: string };
@@ -26,16 +28,16 @@ type ChatMsg =
   | { role: "user"; text: string }
   | { role: "assistant"; data: BizResponse };
 
-const EXAMPLE =
-  "Интернет-магазин косметики, выручка ~800 тыс грн/мес, маржа 35%. Трафик из Instagram-рекламы, тратим 120 тыс/мес. Конверсия сайта 1.2%, средний чек 950 грн, повторных покупок мало.";
-
 const SEVERITY_CLASS: Record<string, string> = {
   high: "text-black ring-white/60 bg-white",
   medium: "text-white ring-white/30 bg-white/15",
   low: "text-slate-300 ring-white/15 bg-white/5",
 };
 
-export default function BizDoctorTool() {
+export default function BizDoctorTool({ locale }: { locale: Locale }) {
+  const t = getTools(locale).bizdoctor;
+  const c = getTools(locale).common;
+  const sev = getTools(locale).severity;
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -63,16 +65,16 @@ export default function BizDoctorTool() {
       const res = await fetch("/api/bizdoctor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: wire }),
+        body: JSON.stringify({ messages: wire, locale }),
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error ?? "Что-то пошло не так.");
+        setError(json.error ?? c.genericError);
         return;
       }
       setMessages((prev) => [...prev, { role: "assistant", data: json }]);
     } catch {
-      setError("Ошибка сети. Попробуйте ещё раз.");
+      setError(c.networkError);
     } finally {
       setLoading(false);
     }
@@ -89,15 +91,14 @@ export default function BizDoctorTool() {
               <TbStethoscope size={28} aria-hidden="true" />
             </div>
             <p className="max-w-md text-slate-400">
-              Расскажите о бизнесе: ниша, выручка, откуда клиенты, что с
-              конверсией. Доктор уточнит метрики и покажет, где вы теряете деньги.
+              {t.intro}
             </p>
             <button
               type="button"
-              onClick={() => setInput(EXAMPLE)}
+              onClick={() => setInput(t.example)}
               className="cursor-pointer text-sm font-medium text-primary-light transition-colors hover:text-white"
             >
-              Подставить пример
+              {t.fillExample}
             </button>
           </div>
         )}
@@ -110,14 +111,14 @@ export default function BizDoctorTool() {
               </div>
             </div>
           ) : (
-            <Assistant key={i} data={m.data} />
+            <Assistant key={i} data={m.data} locale={locale} />
           )
         )}
 
         {loading && (
           <div className="flex items-center gap-3 text-slate-400">
             <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/15 border-t-primary-light" aria-hidden="true" />
-            Доктор анализирует…
+            {t.thinking}
           </div>
         )}
         {error && (
@@ -142,7 +143,7 @@ export default function BizDoctorTool() {
                   send();
                 }
               }}
-              placeholder={empty ? "Опишите ваш бизнес и цифры…" : "Ваш ответ…"}
+              placeholder={empty ? t.inputPlaceholderEmpty : t.inputPlaceholderReply}
               className="max-h-40 min-h-[44px] flex-1 resize-none bg-transparent px-2 py-2.5 text-white placeholder-slate-500 focus:outline-none"
             />
             <button
@@ -150,7 +151,7 @@ export default function BizDoctorTool() {
               onClick={send}
               disabled={input.trim().length < 3 || loading}
               className="btn-primary !min-h-11 !px-4"
-              aria-label="Отправить"
+              aria-label={c.send}
             >
               <FiSend size={18} aria-hidden="true" />
             </button>
@@ -167,7 +168,7 @@ export default function BizDoctorTool() {
             className="mx-auto mt-3 flex cursor-pointer items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-300"
           >
             <FiRefreshCw size={14} aria-hidden="true" />
-            Новая диагностика
+            {t.restart}
           </button>
         )}
       </div>
@@ -175,7 +176,9 @@ export default function BizDoctorTool() {
   );
 }
 
-function Assistant({ data }: { data: BizResponse }) {
+function Assistant({ data, locale }: { data: BizResponse; locale: Locale }) {
+  const t = getTools(locale).bizdoctor;
+  const sev = getTools(locale).severity;
   if (data.status === "clarifying") {
     return (
       <div className="flex justify-start">
@@ -203,7 +206,7 @@ function Assistant({ data }: { data: BizResponse }) {
       {data.diagnosis && (
         <div className="card-glass p-5">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-            Диагноз
+            {t.diagnosisTitle}
           </h3>
           <p className="mt-2 leading-relaxed text-slate-200">{data.diagnosis}</p>
         </div>
@@ -213,7 +216,7 @@ function Assistant({ data }: { data: BizResponse }) {
         <div className="card-glass p-5">
           <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-400">
             <FiTrendingDown size={15} aria-hidden="true" />
-            Где теряются деньги
+            {t.leaksTitle}
           </h3>
           <ul className="mt-3 space-y-4">
             {data.leaks.map((l, i) => (
@@ -223,7 +226,7 @@ function Assistant({ data }: { data: BizResponse }) {
                   <span
                     className={`rounded-full px-2 py-0.5 text-xs font-semibold ring-1 ring-inset ${SEVERITY_CLASS[l.severity] ?? SEVERITY_CLASS.low}`}
                   >
-                    {l.severity === "high" ? "критично" : l.severity === "medium" ? "заметно" : "умеренно"}
+                    {l.severity === "high" ? sev.high : l.severity === "medium" ? sev.medium : sev.low}
                   </span>
                 </div>
                 <p className="mt-1 text-sm text-slate-300">{l.problem}</p>
@@ -237,7 +240,7 @@ function Assistant({ data }: { data: BizResponse }) {
       {data.recommendations.length > 0 && (
         <div className="card-glass p-5">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-            Рекомендации
+            {t.recommendationsTitle}
           </h3>
           <ul className="mt-3 space-y-3">
             {data.recommendations.map((r, i) => (
@@ -260,7 +263,7 @@ function Assistant({ data }: { data: BizResponse }) {
           <div className="flex items-start gap-3 rounded-[15px] bg-surface-2 p-5">
             <FiZap size={20} className="mt-0.5 shrink-0 text-warning" aria-hidden="true" />
             <div>
-              <h3 className="font-heading font-bold text-white">Quick win на эту неделю</h3>
+              <h3 className="font-heading font-bold text-white">{t.quickWinTitle}</h3>
               <p className="mt-1.5 leading-relaxed text-slate-200">{data.quick_win}</p>
             </div>
           </div>

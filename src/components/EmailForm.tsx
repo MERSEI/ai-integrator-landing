@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { getContent } from "@/lib/content";
+import { localePath, type Locale } from "@/lib/i18n";
 
 type FormValues = {
   email: string;
@@ -10,12 +12,15 @@ type FormValues = {
 };
 
 export default function EmailForm({
-  cta = "Получить бесплатный audit",
+  locale,
+  cta,
   source,
 }: {
+  locale: Locale;
   cta?: string;
   source: string;
 }) {
+  const t = getContent(locale).form;
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const {
@@ -30,16 +35,16 @@ export default function EmailForm({
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, source }),
+        body: JSON.stringify({ ...data, source, locale }),
       });
       const json = await res.json();
       if (!res.ok) {
-        setServerError(json.error ?? "Что-то пошло не так. Попробуйте ещё раз.");
+        setServerError(json.error ?? t.genericError);
         return;
       }
-      router.push("/thank-you");
+      router.push(localePath(locale, "/thank-you"));
     } catch {
-      setServerError("Ошибка сети. Попробуйте ещё раз.");
+      setServerError(t.networkError);
     }
   };
 
@@ -51,20 +56,20 @@ export default function EmailForm({
     >
       <div className="flex-1">
         <label htmlFor={`email-${source}`} className="sr-only">
-          Email
+          {t.emailLabel}
         </label>
         <input
           id={`email-${source}`}
           type="email"
-          placeholder="Ваш email"
+          placeholder={t.placeholder}
           autoComplete="email"
           className="min-h-12 w-full rounded-md border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-slate-500 backdrop-blur-sm transition-all duration-300 ease-premium hover:border-white/25 focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
           aria-invalid={!!errors.email}
           {...register("email", {
-            required: "Введите email",
+            required: t.required,
             pattern: {
               value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
-              message: "Введите корректный email",
+              message: t.invalid,
             },
           })}
         />
@@ -84,7 +89,7 @@ export default function EmailForm({
         {...register("website")}
       />
       <button type="submit" className="btn-primary" disabled={isSubmitting}>
-        {isSubmitting ? "Отправляем…" : cta}
+        {isSubmitting ? t.submitting : cta}
       </button>
     </form>
   );

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkDailyLimit, checkToolLimit, clientIp } from "@/lib/rate-limit";
-import { callGemini, burstLimited } from "@/lib/gemini";
+import { apiMessage } from "@/lib/apiMessages";
+import { callGemini, burstLimited, outputLanguage, requestLocale } from "@/lib/gemini";
 
 const RESPONSE_SCHEMA = {
   type: "object",
@@ -57,17 +58,20 @@ const SYSTEM_PROMPT = `Ты — BizDoctor, опытный бизнес-анал�
 type WireMsg = { role: "user" | "model"; content: string };
 
 export async function POST(req: NextRequest) {
+  // Тело читаем сразу: локаль нужна уже для сообщений о лимитах.
+  const rawBody: unknown = await req.json().catch(() => null);
+  const locale = requestLocale(rawBody);
   const ip = clientIp(req.headers);
   if (burstLimited("bizdoctor", ip, 15)) {
     return NextResponse.json(
-      { error: "Слишком много запросов. Попробуйте через минуту." },
+      { error: apiMessage(locale, "tooManyRequests") },
       { status: 429 }
     );
   }
   const daily = await checkDailyLimit(ip);
   if (!daily.ok) {
     return NextResponse.json(
-      { error: "Дневной лимит 30 запросов исчерпан. Попробуйте завтра." },
+      { error: apiMessage(locale, "dailyLimit") },
       { status: 429 }
     );
   }
@@ -75,29 +79,27 @@ export async function POST(req: NextRequest) {
   const toolLimit = await checkToolLimit(ip, "bizdoctor");
   if (!toolLimit.ok) {
     return NextResponse.json(
-      { error: "Демо-лимит этого инструмента — 2 запроса в день. Оформите доступ, чтобы использовать без ограничений." },
+      { error: apiMessage(locale, "toolLimit") },
       { status: 429 }
     );
   }
 
-  let body: { messages?: WireMsg[] };
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Некорректный запрос" }, { status: 400 });
+  if (rawBody === null) {
+    return NextResponse.json({ error: apiMessage(locale, "badRequest") }, { status: 400 });
   }
+  const body = rawBody as { messages?: WireMsg[] };
 
   const messages = Array.isArray(body.messages) ? body.messages : [];
   const firstUser = messages.find((m) => m.role === "user");
   if (!firstUser || firstUser.content.trim().length < 10) {
     return NextResponse.json(
-      { error: "Расскажите о вашем бизнесе." },
+      { error: apiMessage(locale, "needBusiness") },
       { status: 400 }
     );
   }
   if (messages.length > 24) {
     return NextResponse.json(
-      { error: "Диалог слишком длинный. Начните заново." },
+      { error: apiMessage(locale, "chatTooLong") },
       { status: 400 }
     );
   }
@@ -108,7 +110,7 @@ export async function POST(req: NextRequest) {
   }));
 
   const result = await callGemini({
-    system: SYSTEM_PROMPT,
+    system: SYSTEM_PROMPT + outputLanguage(locale),
     contents,
     schema: RESPONSE_SCHEMA,
     temperature: 0.6,

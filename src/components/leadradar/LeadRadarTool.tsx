@@ -9,9 +9,14 @@ import {
   FiRadio,
 } from "react-icons/fi";
 import { TbBrandTelegram, TbBolt } from "react-icons/tb";
-import { TIER_META, type LeadRadarResult, type Lead } from "@/lib/leadradar";
+import { getTools } from "@/lib/content/tools";
+import { localePath, type Locale } from "@/lib/i18n";
+import { TIER_CLASSES, type LeadRadarResult, type Lead } from "@/lib/leadradar";
 
-export default function LeadRadarTool() {
+export default function LeadRadarTool({ locale }: { locale: Locale }) {
+  const t = getTools(locale).leadradar;
+  const c = getTools(locale).common;
+  const tierLabels = getTools(locale).tiers;
   const [keyword, setKeyword] = useState("");
   const [product, setProduct] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,16 +33,16 @@ export default function LeadRadarTool() {
       const res = await fetch("/api/leadradar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ keyword, product }),
+        body: JSON.stringify({ keyword, product, locale }),
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error ?? "Что-то пошло не так. Попробуйте ещё раз.");
+        setError(json.error ?? c.genericErrorRetry);
         return;
       }
       setResult(json as LeadRadarResult);
     } catch {
-      setError("Ошибка сети. Попробуйте ещё раз.");
+      setError(c.networkError);
     } finally {
       setLoading(false);
     }
@@ -60,14 +65,14 @@ export default function LeadRadarTool() {
         <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
           <div>
             <label htmlFor="kw" className="mb-1.5 block text-sm font-medium text-slate-300">
-              Ключевое слово или ниша <span className="text-rose-400">*</span>
+              {t.keywordLabel} <span className="text-rose-400">*</span>
             </label>
             <input
               id="kw"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && scan()}
-              placeholder="например: ищу таргетолога, нужен сайт, автоматизация продаж…"
+              placeholder={t.keywordPlaceholder}
               className="min-h-12 w-full rounded-md border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-slate-500 transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
@@ -78,24 +83,24 @@ export default function LeadRadarTool() {
             className="btn-primary !min-h-12 sm:w-auto"
           >
             {loading ? (
-              "Сканируем…"
+              t.submitting
             ) : (
               <>
                 <FiSearch size={18} aria-hidden="true" />
-                Найти лидов
+                {t.submit}
               </>
             )}
           </button>
         </div>
         <div className="mt-4">
           <label htmlFor="prod" className="mb-1.5 block text-sm font-medium text-slate-300">
-            Что вы продаёте <span className="text-slate-500">(необязательно, точнее скоринг)</span>
+            {t.offerLabel} <span className="text-slate-500">{t.offerHint}</span>
           </label>
           <input
             id="prod"
             value={product}
             onChange={(e) => setProduct(e.target.value)}
-            placeholder="например: услуги по настройке таргета в Meta для малого бизнеса"
+            placeholder={t.offerPlaceholder}
             className="min-h-11 w-full rounded-md border border-white/15 bg-white/5 px-4 py-2.5 text-white placeholder-slate-500 transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
           />
         </div>
@@ -105,10 +110,7 @@ export default function LeadRadarTool() {
       <div className="mt-4 flex items-start gap-3 rounded-lg border border-white/15 bg-white/5 p-4 text-sm text-slate-300">
         <FiAlertCircle size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
         <p>
-          <span className="font-semibold">Демо-режим.</span> Посты ниже
-          сгенерированы AI как реалистичные примеры — это не реальные люди из
-          Threads. Демо показывает, как движок квалифицирует лидов. Реальный
-          мониторинг — в PRO (см. ниже).
+          <span className="font-semibold">{c.demoLabel}</span>  {t.demoNote}
         </p>
       </div>
 
@@ -127,7 +129,7 @@ export default function LeadRadarTool() {
               className="h-10 w-10 animate-spin rounded-full border-2 border-white/15 border-t-primary-light"
               aria-hidden="true"
             />
-            <p className="text-slate-400">Сканируем Threads по запросу…</p>
+            <p className="text-slate-400">{t.loading}</p>
           </div>
         )}
 
@@ -137,8 +139,7 @@ export default function LeadRadarTool() {
               <FiRadio size={26} aria-hidden="true" />
             </div>
             <p className="max-w-xs text-slate-400">
-              Введите ключевое слово — движок найдёт и оценит потенциальных
-              клиентов, которые пишут об этом в Threads
+              {t.empty}
             </p>
           </div>
         )}
@@ -146,12 +147,11 @@ export default function LeadRadarTool() {
         {!loading && result && (
           <div className="space-y-4">
             <p className="text-sm text-slate-400">
-              Найдено {result.leads.length} упоминаний по запросу «
-              <span className="text-slate-200">{result.keyword}</span>», отсортировано
-              по «теплоте»:
+              {t.summary(result.keyword, result.leads.length)}
             </p>
             {result.leads.map((lead, i) => (
               <LeadCard
+                locale={locale}
                 key={i}
                 lead={lead}
                 copied={copied === i}
@@ -168,29 +168,23 @@ export default function LeadRadarTool() {
           <div className="flex items-center gap-2">
             <TbBolt size={20} className="text-primary-light" aria-hidden="true" />
             <h3 className="font-heading text-lg font-bold text-white">
-              LeadRadar PRO — реальный мониторинг
+              {t.proTitle}
             </h3>
           </div>
           <p className="mt-3 text-slate-400">
-            В боевой версии LeadRadar работает на реальных данных Threads и
-            приносит горячих лидов сам:
+            {t.proIntro}
           </p>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-            {[
-              "Круглосуточный мониторинг Threads по вашим ключевым словам",
-              "AI-классификация каждого поста: горячий / тёплый / не лид",
-              "Мгновенные уведомления о горячих лидах в Telegram",
-              "Дедупликация и фильтр по свежести — только новые упоминания",
-            ].map((f) => (
+            {t.proFeatures.map((f) => (
               <li key={f} className="flex items-start gap-2.5 text-sm text-slate-300">
                 <FiCheck className="mt-0.5 shrink-0 text-success" aria-hidden="true" />
                 {f}
               </li>
             ))}
           </ul>
-          <a href="/#final-cta" className="btn-primary mt-6">
+          <a href={`${localePath(locale, "/")}#final-cta`} className="btn-primary mt-6">
             <TbBrandTelegram size={18} aria-hidden="true" />
-            Подключить PRO
+            {c.proCta}
           </a>
         </div>
       </div>
@@ -202,12 +196,17 @@ function LeadCard({
   lead,
   copied,
   onCopy,
+  locale,
 }: {
   lead: Lead;
   copied: boolean;
   onCopy: () => void;
+  locale: Locale;
 }) {
-  const tier = TIER_META[lead.tier] ?? TIER_META.cold;
+  const t = getTools(locale).leadradar;
+  const c = getTools(locale).common;
+  const tierLabels = getTools(locale).tiers;
+  const tierClass = TIER_CLASSES[lead.tier] ?? TIER_CLASSES.cold;
   const score = Math.max(0, Math.min(100, Math.round(lead.score)));
   return (
     <article className="card-glass p-5">
@@ -217,9 +216,9 @@ function LeadCard({
           <p className="text-xs text-slate-500">{lead.posted}</p>
         </div>
         <span
-          className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${tier.className}`}
+          className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${tierClass}`}
         >
-          {tier.label}
+          {tierLabels[lead.tier] ?? tierLabels.cold}
         </span>
       </div>
 
@@ -238,14 +237,14 @@ function LeadCard({
       </div>
 
       <p className="mt-3 text-sm text-slate-400">
-        <span className="text-slate-500">Оценка:</span> {lead.reason}
+        <span className="text-slate-500">{t.scoreLabel}</span> {lead.reason}
       </p>
 
       {lead.reply && (
         <div className="mt-4 rounded-md border border-white/10 bg-white/[0.03] p-3">
           <div className="flex items-center justify-between gap-2">
             <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              Черновик захода
+              {t.draftTitle}
             </span>
             <button
               type="button"
@@ -255,12 +254,12 @@ function LeadCard({
               {copied ? (
                 <>
                   <FiCheck size={13} className="text-success" aria-hidden="true" />
-                  Скопировано
+                  {c.copied}
                 </>
               ) : (
                 <>
                   <FiCopy size={13} aria-hidden="true" />
-                  Копировать
+                  {c.copy}
                 </>
               )}
             </button>

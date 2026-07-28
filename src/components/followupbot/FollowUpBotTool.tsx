@@ -2,15 +2,20 @@
 
 import { useState } from "react";
 import { FiCopy, FiCheck, FiAlertCircle, FiZap, FiClock } from "react-icons/fi";
-import { CHANNELS, TONES } from "@/lib/coldmessage";
+import { getTools } from "@/lib/content/tools";
+import type { Locale } from "@/lib/i18n";
+import { CHANNELS } from "@/lib/coldmessage";
 
 type FollowUp = { day: string; angle: string; subject: string; message: string };
 type Result = { situation_read: string; followups: FollowUp[]; stop_signal: string };
 
-export default function FollowUpBotTool() {
+export default function FollowUpBotTool({ locale }: { locale: Locale }) {
+  const t = getTools(locale).followupbot;
+  const c = getTools(locale).common;
+  const tones = getTools(locale).tones;
   const [context, setContext] = useState("");
   const [channel, setChannel] = useState<string>("Email");
-  const [tone, setTone] = useState<string>(TONES[1]);
+  const [tone, setTone] = useState<string>(tones[1]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<Result | null>(null);
@@ -25,16 +30,16 @@ export default function FollowUpBotTool() {
       const res = await fetch("/api/followupbot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ context, channel, tone }),
+        body: JSON.stringify({ context, channel, tone, locale }),
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error ?? "Что-то пошло не так.");
+        setError(json.error ?? c.genericError);
         return;
       }
       setResult(json as Result);
     } catch {
-      setError("Ошибка сети. Попробуйте ещё раз.");
+      setError(c.networkError);
     } finally {
       setLoading(false);
     }
@@ -43,7 +48,7 @@ export default function FollowUpBotTool() {
   const copy = async (i: number, f: FollowUp) => {
     try {
       await navigator.clipboard.writeText(
-        f.subject ? `Тема: ${f.subject}\n\n${f.message}` : f.message
+        f.subject ? `${c.subject} ${f.subject}\n\n${f.message}` : f.message
       );
       setCopied(i);
       setTimeout(() => setCopied(null), 2000);
@@ -58,21 +63,21 @@ export default function FollowUpBotTool() {
         <div className="space-y-4">
           <div>
             <label htmlFor="ctx" className="mb-1.5 block text-sm font-medium text-slate-300">
-              Контекст сделки <span className="text-rose-400">*</span>
+              {t.contextLabel} <span className="text-rose-400">*</span>
             </label>
             <textarea
               id="ctx"
               rows={4}
               value={context}
               onChange={(e) => setContext(e.target.value)}
-              placeholder="Что предлагали, как отреагировал клиент, на чём разговор завис, сколько времени прошло…"
+              placeholder={t.contextPlaceholder}
               className="w-full resize-y rounded-md border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-slate-500 transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="fch" className="mb-1.5 block text-sm font-medium text-slate-300">
-                Канал
+                {t.channelLabel}
               </label>
               <select
                 id="fch"
@@ -89,7 +94,7 @@ export default function FollowUpBotTool() {
             </div>
             <div>
               <label htmlFor="fto" className="mb-1.5 block text-sm font-medium text-slate-300">
-                Тон
+                {t.toneLabel}
               </label>
               <select
                 id="fto"
@@ -97,9 +102,9 @@ export default function FollowUpBotTool() {
                 onChange={(e) => setTone(e.target.value)}
                 className="min-h-11 w-full cursor-pointer rounded-md border border-white/15 bg-white/5 px-3 py-2.5 text-white transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
               >
-                {TONES.map((t) => (
-                  <option key={t} value={t} className="bg-surface-2 text-white">
-                    {t}
+                {tones.map((option) => (
+                  <option key={option} value={option} className="bg-surface-2 text-white">
+                    {option}
                   </option>
                 ))}
               </select>
@@ -112,11 +117,11 @@ export default function FollowUpBotTool() {
             className="btn-primary w-full"
           >
             {loading ? (
-              "Готовим цепочку…"
+              t.submitting
             ) : (
               <>
                 <FiZap size={18} aria-hidden="true" />
-                Создать цепочку дожима
+                {t.submit}
               </>
             )}
           </button>
@@ -133,7 +138,7 @@ export default function FollowUpBotTool() {
         {loading && (
           <div className="card-glass flex flex-col items-center justify-center gap-4 p-12 text-center">
             <div className="h-10 w-10 animate-spin rounded-full border-2 border-white/15 border-t-primary-light" aria-hidden="true" />
-            <p className="text-slate-400">Анализируем ситуацию и пишем цепочку…</p>
+            <p className="text-slate-400">{t.loading}</p>
           </div>
         )}
         {!loading && !error && !result && (
@@ -142,8 +147,7 @@ export default function FollowUpBotTool() {
               <FiClock size={26} aria-hidden="true" />
             </div>
             <p className="max-w-xs text-slate-400">
-              Здесь появится цепочка из 3 follow-up сообщений с разными углами
-              захода
+              {t.empty}
             </p>
           </div>
         )}
@@ -151,7 +155,7 @@ export default function FollowUpBotTool() {
           <div className="space-y-5">
             <div className="card-glass p-5">
               <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-                Чтение ситуации
+                {t.situationTitle}
               </h3>
               <p className="mt-2 leading-relaxed text-slate-200">{result.situation_read}</p>
             </div>
@@ -174,19 +178,19 @@ export default function FollowUpBotTool() {
                     {copied === i ? (
                       <>
                         <FiCheck size={13} className="text-success" aria-hidden="true" />
-                        Скопировано
+                        {c.copied}
                       </>
                     ) : (
                       <>
                         <FiCopy size={13} aria-hidden="true" />
-                        Копировать
+                        {c.copy}
                       </>
                     )}
                   </button>
                 </div>
                 {f.subject && (
                   <p className="mt-3 text-sm text-slate-400">
-                    <span className="text-slate-500">Тема:</span> {f.subject}
+                    <span className="text-slate-500">{c.subject}</span> {f.subject}
                   </p>
                 )}
                 <p className="mt-2 whitespace-pre-wrap leading-relaxed text-slate-200">

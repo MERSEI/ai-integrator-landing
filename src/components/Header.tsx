@@ -8,23 +8,23 @@ import { HiMenu, HiX } from "react-icons/hi";
 import { FiChevronDown, FiArrowRight } from "react-icons/fi";
 import { TbBrandTelegram } from "react-icons/tb";
 import Logo from "./Logo";
-import {
-  FEATURED_APPS,
-  STANDALONE_APPS,
-  SOON_APPS,
-  APP_STATUS_META,
-  CONTACTS,
-} from "@/lib/content";
-
-const NAV_LINKS = [
-  { href: "#how-it-works", label: "Как это работает" },
-  { href: "#pricing", label: "Цены" },
-  { href: "#faq", label: "FAQ" },
-];
+import LanguageSwitcher from "./LanguageSwitcher";
+import { APP_STATUS_CLASSES, CONTACTS, getContent } from "@/lib/content";
+import { localePath, type Locale } from "@/lib/i18n";
 
 const EASE_PREMIUM = [0.16, 1, 0.3, 1] as const;
 
-export default function Header() {
+export default function Header({ locale }: { locale: Locale }) {
+  const content = getContent(locale);
+  const t = content.nav;
+  const home = localePath(locale, "/");
+
+  const navLinks = [
+    { href: "#how-it-works", label: t.howItWorks },
+    { href: "#pricing", label: t.pricing },
+    { href: "#faq", label: t.faq },
+  ];
+
   const [open, setOpen] = useState(false);
   const [appsOpen, setAppsOpen] = useState(false);
   const appsRef = useRef<HTMLDivElement>(null);
@@ -67,14 +67,14 @@ export default function Header() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.15, ease: EASE_PREMIUM }}
         >
-          <Link href="/" className="flex cursor-pointer items-center">
+          <Link href={home} className="flex cursor-pointer items-center">
             <Logo className="h-8 w-auto sm:h-9" />
           </Link>
         </motion.div>
 
         <motion.nav
           className="hidden items-center gap-1 md:flex"
-          aria-label="Основная навигация"
+          aria-label={t.mainNavLabel}
           initial="hidden"
           animate="visible"
           variants={{
@@ -97,7 +97,7 @@ export default function Header() {
               aria-expanded={appsOpen}
               className="flex cursor-pointer items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:bg-white/5 hover:text-white"
             >
-              Приложения
+              {t.apps}
               <FiChevronDown
                 size={15}
                 className={`transition-transform duration-300 ease-premium ${appsOpen ? "rotate-180" : ""}`}
@@ -115,73 +115,66 @@ export default function Header() {
                 transition={{ duration: 0.25, ease: EASE_PREMIUM }}
               >
                 <div className="grid grid-cols-2 gap-1">
-                  {FEATURED_APPS.map((app) => {
-                    const href = "href" in app ? app.href : "#features";
-                    const status = APP_STATUS_META[app.status];
-                    return (
-                      <a
-                        key={app.id}
-                        href={href}
-                        onClick={() => setAppsOpen(false)}
-                        className="flex items-start gap-3 rounded-md p-3 transition-colors duration-200 hover:bg-white/5"
-                      >
-                        <span className="h-9 w-9 shrink-0 overflow-hidden rounded-md ring-1 ring-inset ring-white/10">
-                          <Image
-                            src={app.image}
-                            alt=""
-                            width={36}
-                            height={36}
-                            className="h-full w-full object-cover"
-                          />
-                        </span>
-                        <span>
-                          <span className="flex items-center gap-1.5 text-sm font-semibold text-white">
-                            {app.name}
-                            <span
-                              className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none ${status.className}`}
-                            >
-                              {status.label}
-                            </span>
-                          </span>
-                          <span className="block text-xs text-slate-400">
-                            {app.tagline}
+                  {content.featuredApps.map((app) => (
+                    <a
+                      key={app.id}
+                      href={app.href ? localePath(locale, app.href) : `${home}#features`}
+                      onClick={() => setAppsOpen(false)}
+                      className="flex items-start gap-3 rounded-md p-3 transition-colors duration-200 hover:bg-white/5"
+                    >
+                      <span className="h-9 w-9 shrink-0 overflow-hidden rounded-md ring-1 ring-inset ring-white/10">
+                        <Image
+                          src={app.image}
+                          alt=""
+                          width={36}
+                          height={36}
+                          className="h-full w-full object-cover"
+                        />
+                      </span>
+                      <span>
+                        <span className="flex items-center gap-1.5 text-sm font-semibold text-white">
+                          {app.name}
+                          <span
+                            className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none ${APP_STATUS_CLASSES[app.status]}`}
+                          >
+                            {content.statusLabels[app.status]}
                           </span>
                         </span>
-                      </a>
-                    );
-                  })}
+                        <span className="block text-xs text-slate-400">
+                          {app.tagline}
+                        </span>
+                      </span>
+                    </a>
+                  ))}
                 </div>
                 <div className="mt-2 border-t border-white/10 pt-2">
                   <p className="px-3 pb-1 pt-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                    Ещё инструменты
+                    {t.moreTools}
                   </p>
                   <div className="grid grid-cols-2 gap-1">
-                    {STANDALONE_APPS.map((app) => {
-                      const status = APP_STATUS_META[app.status];
-                      return (
-                        <a
-                          key={app.id}
-                          href={app.href}
-                          onClick={() => setAppsOpen(false)}
-                          className="flex items-center justify-between gap-2 rounded-md p-2.5 transition-colors duration-200 hover:bg-white/5"
+                    {content.standaloneApps.map((app) => (
+                      <a
+                        key={app.id}
+                        href={app.href ? localePath(locale, app.href) : `${home}#features`}
+                        onClick={() => setAppsOpen(false)}
+                        className="flex items-center justify-between gap-2 rounded-md p-2.5 transition-colors duration-200 hover:bg-white/5"
+                      >
+                        <span className="min-w-0">
+                          <span className="block truncate text-sm font-semibold text-white">
+                            {app.name}
+                          </span>
+                          <span className="block truncate text-xs text-slate-400">
+                            {app.tagline}
+                          </span>
+                        </span>
+                        <span
+                          className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none ${APP_STATUS_CLASSES[app.status]}`}
                         >
-                          <span className="min-w-0">
-                            <span className="block truncate text-sm font-semibold text-white">
-                              {app.name}
-                            </span>
-                            <span className="block truncate text-xs text-slate-400">
-                              {app.tagline}
-                            </span>
-                          </span>
-                          <span
-                            className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none ${status.className}`}
-                          >
-                            {status.label}
-                          </span>
-                        </a>
-                      );
-                    })}
-                    {SOON_APPS.map((app) => (
+                          {content.statusLabels[app.status]}
+                        </span>
+                      </a>
+                    ))}
+                    {content.soonApps.map((app) => (
                       <span
                         key={app.id}
                         className="flex items-center justify-between gap-2 rounded-md p-2.5 opacity-60"
@@ -195,18 +188,18 @@ export default function Header() {
                           </span>
                         </span>
                         <span className="shrink-0 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none text-slate-400">
-                          Скоро
+                          {t.soonBadge}
                         </span>
                       </span>
                     ))}
                   </div>
                 </div>
                 <a
-                  href="#features"
+                  href={`${home}#features`}
                   onClick={() => setAppsOpen(false)}
                   className="mt-2 flex items-center justify-center gap-1.5 rounded-md py-2.5 text-sm font-semibold text-primary-light transition-colors duration-200 hover:bg-white/5"
                 >
-                  Смотреть все 15 приложений
+                  {t.seeAllApps}
                   <FiArrowRight size={15} aria-hidden="true" />
                 </a>
               </motion.div>
@@ -214,7 +207,7 @@ export default function Header() {
             </AnimatePresence>
           </motion.div>
 
-          {NAV_LINKS.map((link) => (
+          {navLinks.map((link) => (
             <motion.a
               key={link.href}
               href={link.href}
@@ -235,35 +228,39 @@ export default function Header() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.45, ease: EASE_PREMIUM }}
         >
+          <LanguageSwitcher locale={locale} />
           <a
             href={`https://t.me/${CONTACTS.telegram.replace("@", "")}`}
-            aria-label="Написать в Telegram"
-            title="Написать в Telegram"
+            aria-label={t.telegram}
+            title={t.telegram}
             className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-white/5 text-slate-300 transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:border-accent-blue/50 hover:text-white hover:shadow-glow-accent-sm"
           >
             <TbBrandTelegram size={19} />
           </a>
           <a href="#final-cta" className="btn-primary !min-h-10 !px-5 !py-2 text-sm">
-            Free Trial
+            {t.cta}
           </a>
         </motion.div>
 
-        <button
-          type="button"
-          className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-md text-slate-200 transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light md:hidden"
-          aria-label={open ? "Закрыть меню" : "Открыть меню"}
-          aria-expanded={open}
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <HiX size={26} /> : <HiMenu size={26} />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <LanguageSwitcher locale={locale} />
+          <button
+            type="button"
+            className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-md text-slate-200 transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light"
+            aria-label={open ? t.closeMenu : t.openMenu}
+            aria-expanded={open}
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <HiX size={26} /> : <HiMenu size={26} />}
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
         {open && (
           <motion.nav
             className="overflow-hidden border-t border-white/5 bg-dark/95 px-4 pb-6 pt-2 backdrop-blur-xl md:hidden"
-            aria-label="Мобильная навигация"
+            aria-label={t.mobileNavLabel}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -274,9 +271,9 @@ export default function Header() {
               onClick={() => setOpen(false)}
               className="block rounded-md px-2 py-3 text-base font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
             >
-              Приложения
+              {t.apps}
             </a>
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
@@ -292,14 +289,14 @@ export default function Header() {
               className="flex items-center gap-2 rounded-md px-2 py-3 text-base font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
             >
               <TbBrandTelegram size={20} aria-hidden="true" />
-              Написать в Telegram
+              {t.telegram}
             </a>
             <a
               href="#final-cta"
               onClick={() => setOpen(false)}
               className="btn-primary mt-3 w-full"
             >
-              Free Trial
+              {t.cta}
             </a>
           </motion.nav>
         )}

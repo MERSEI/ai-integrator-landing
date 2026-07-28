@@ -16,4 +16,4 @@ export type PoachingResult = {
 };
 
 export type { LeadTier };
-export { TIER_META } from "@/lib/leadradar";
+export { TIER_CLASSES } from "@/lib/leadradar";

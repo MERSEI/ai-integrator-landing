@@ -11,15 +11,14 @@ import {
   FiRefreshCw,
 } from "react-icons/fi";
 import { TbShieldCheck } from "react-icons/tb";
+import { getTools } from "@/lib/content/tools";
+import type { Locale } from "@/lib/i18n";
 import type {
   ChatMsg,
   ObjectionResponse,
   WireMsg,
 } from "@/lib/objectionkiller";
 
-const PLACEHOLDER =
-  "Опишите ситуацию: что за клиент, что продаёте и какое возражение услышали…";
-const EXAMPLE = "Клиент говорит «дорого» и уходит подумать.";
 
 function toWire(messages: ChatMsg[]): WireMsg[] {
   return messages.map((m) =>
@@ -29,7 +28,9 @@ function toWire(messages: ChatMsg[]): WireMsg[] {
   );
 }
 
-export default function ObjectionKillerTool() {
+export default function ObjectionKillerTool({ locale }: { locale: Locale }) {
+  const t = getTools(locale).objectionkiller;
+  const c = getTools(locale).common;
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -54,11 +55,11 @@ export default function ObjectionKillerTool() {
       const res = await fetch("/api/objectionkiller", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: toWire(next) }),
+        body: JSON.stringify({ messages: toWire(next), locale }),
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error ?? "Что-то пошло не так. Попробуйте ещё раз.");
+        setError(json.error ?? c.genericErrorRetry);
         return;
       }
       setMessages((prev) => [
@@ -66,7 +67,7 @@ export default function ObjectionKillerTool() {
         { role: "assistant", data: json as ObjectionResponse },
       ]);
     } catch {
-      setError("Ошибка сети. Попробуйте ещё раз.");
+      setError(c.networkError);
     } finally {
       setLoading(false);
     }
@@ -107,15 +108,14 @@ export default function ObjectionKillerTool() {
               <TbShieldCheck size={28} aria-hidden="true" />
             </div>
             <p className="max-w-md text-slate-400">
-              Опишите ситуацию с клиентом и возражение. Ассистент уточнит детали,
-              а затем разберёт скрытую причину и даст готовые ответы.
+              {t.intro}
             </p>
             <button
               type="button"
-              onClick={() => setInput(EXAMPLE)}
+              onClick={() => setInput(t.example)}
               className="cursor-pointer text-sm font-medium text-primary-light transition-colors hover:text-white"
             >
-              Подставить пример
+              {t.fillExample}
             </button>
           </div>
         )}
@@ -129,6 +129,7 @@ export default function ObjectionKillerTool() {
             </div>
           ) : (
             <AssistantMessage
+              locale={locale}
               key={i}
               data={m.data}
               copied={copied}
@@ -144,7 +145,7 @@ export default function ObjectionKillerTool() {
               className="h-5 w-5 animate-spin rounded-full border-2 border-white/15 border-t-primary-light"
               aria-hidden="true"
             />
-            Ассистент думает…
+            {t.thinking}
           </div>
         )}
 
@@ -166,7 +167,7 @@ export default function ObjectionKillerTool() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKeyDown}
-              placeholder={empty ? PLACEHOLDER : "Ваш ответ ассистенту…"}
+              placeholder={empty ? t.placeholder : t.inputPlaceholderReply}
               className="max-h-40 min-h-[44px] flex-1 resize-none bg-transparent px-2 py-2.5 text-white placeholder-slate-500 focus:outline-none"
             />
             <button
@@ -174,7 +175,7 @@ export default function ObjectionKillerTool() {
               onClick={send}
               disabled={input.trim().length < 3 || loading}
               className="btn-primary !min-h-11 !px-4"
-              aria-label="Отправить"
+              aria-label={c.send}
             >
               <FiSend size={18} aria-hidden="true" />
             </button>
@@ -187,7 +188,7 @@ export default function ObjectionKillerTool() {
             className="mx-auto mt-3 flex cursor-pointer items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-300"
           >
             <FiRefreshCw size={14} aria-hidden="true" />
-            Новая ситуация
+            {t.restart}
           </button>
         )}
       </div>
@@ -200,12 +201,16 @@ function AssistantMessage({
   copied,
   onCopy,
   msgIndex,
+  locale,
 }: {
   data: ObjectionResponse;
   copied: string | null;
   onCopy: (id: string, text: string) => void;
   msgIndex: number;
+  locale: Locale;
 }) {
+  const t = getTools(locale).objectionkiller;
+  const c = getTools(locale).common;
   if (data.status === "clarifying") {
     return (
       <div className="flex justify-start">
@@ -238,7 +243,7 @@ function AssistantMessage({
       {data.hidden_reason && (
         <div className="card-glass p-5">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-            Что стоит за возражением
+            {t.hiddenReasonTitle}
           </h3>
           <p className="mt-2 leading-relaxed text-slate-200">
             {data.hidden_reason}
@@ -248,39 +253,39 @@ function AssistantMessage({
 
       {data.tactics.length > 0 && (
         <div className="space-y-3">
-          {data.tactics.map((t, i) => {
+          {data.tactics.map((tactic, i) => {
             const id = `${msgIndex}-${i}`;
             return (
               <div key={i} className="card-glass p-5">
                 <div className="flex items-start justify-between gap-3">
                   <h4 className="font-heading font-bold text-white">
                     <span className="mr-2 text-primary-light">{i + 1}.</span>
-                    {t.name}
+                    {tactic.name}
                   </h4>
                   <button
                     type="button"
-                    onClick={() => onCopy(id, t.script)}
+                    onClick={() => onCopy(id, tactic.script)}
                     className="flex shrink-0 cursor-pointer items-center gap-1.5 rounded-md border border-white/15 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-slate-200 transition-colors hover:border-primary-light/40 hover:text-white"
                   >
                     {copied === id ? (
                       <>
                         <FiCheck size={13} className="text-success" aria-hidden="true" />
-                        Скопировано
+                        {c.copied}
                       </>
                     ) : (
                       <>
                         <FiCopy size={13} aria-hidden="true" />
-                        Копировать
+                        {c.copy}
                       </>
                     )}
                   </button>
                 </div>
                 <blockquote className="mt-3 border-l-2 border-primary-light/50 bg-white/[0.03] py-2 pl-4 pr-2 italic leading-relaxed text-slate-100">
-                  «{t.script}»
+                  «{tactic.script}»
                 </blockquote>
-                {t.why && (
+                {tactic.why && (
                   <p className="mt-2.5 text-sm text-slate-400">
-                    <span className="text-slate-500">Почему работает:</span> {t.why}
+                    <span className="text-slate-500">{t.whyItWorks}</span> {tactic.why}
                   </p>
                 )}
               </div>
@@ -298,7 +303,7 @@ function AssistantMessage({
               aria-hidden="true"
             />
             <div>
-              <h3 className="font-heading font-bold text-white">Рекомендация</h3>
+              <h3 className="font-heading font-bold text-white">{t.recommendationTitle}</h3>
               <p className="mt-1.5 leading-relaxed text-slate-200">
                 {data.recommendation}
               </p>

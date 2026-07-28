@@ -14,23 +14,12 @@ export type TrendSniperResult = {
   insight: string;
 };
 
+/** Только оформление — подписи переводятся, см. getTools(locale).direction. */
 export const DIRECTION_META: Record<
   TrendDirection,
-  { label: string; className: string; arrow: string }
+  { className: string; arrow: string }
 > = {
-  rising: {
-    label: "Растёт",
-    className: "text-black ring-white/60 bg-white",
-    arrow: "↑",
-  },
-  falling: {
-    label: "Падает",
-    className: "text-neutral-400 ring-white/15 bg-white/5",
-    arrow: "↓",
-  },
-  stable: {
-    label: "Стабильно",
-    className: "text-slate-300 ring-white/15 bg-white/5",
-    arrow: "→",
-  },
+  rising: { className: "text-black ring-white/60 bg-white", arrow: "↑" },
+  falling: { className: "text-neutral-400 ring-white/15 bg-white/5", arrow: "↓" },
+  stable: { className: "text-slate-300 ring-white/15 bg-white/5", arrow: "→" },
 };

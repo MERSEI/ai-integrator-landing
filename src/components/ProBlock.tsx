@@ -1,16 +1,22 @@
 import { FiCheck } from "react-icons/fi";
 import { TbBolt } from "react-icons/tb";
+import { getContent } from "@/lib/content";
+import { localePath, type Locale } from "@/lib/i18n";
 
 /** Блок «что в PRO-версии» для страниц приложений. */
 export default function ProBlock({
+  locale,
   title,
   intro,
   features,
 }: {
+  locale: Locale;
   title: string;
   intro: string;
   features: string[];
 }) {
+  const t = getContent(locale).pro;
+
   return (
     <div className="mx-auto mt-12 max-w-3xl rounded-lg bg-gradient-to-b from-primary/15 to-transparent p-px shadow-glow-sm">
       <div className="rounded-[15px] bg-surface-2 p-6 sm:p-8">
@@ -27,8 +33,8 @@ export default function ProBlock({
             </li>
           ))}
         </ul>
-        <a href="/#final-cta" className="btn-primary mt-6">
-          Подключить PRO
+        <a href={`${localePath(locale, "/")}#final-cta`} className="btn-primary mt-6">
+          {t.cta}
         </a>
       </div>
     </div>

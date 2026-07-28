@@ -10,9 +10,14 @@ import {
   FiCornerUpLeft,
 } from "react-icons/fi";
 import { TbBrandTelegram, TbBolt } from "react-icons/tb";
-import { TIER_META, type PoachingResult, type Prospect } from "@/lib/poaching";
+import { getTools } from "@/lib/content/tools";
+import { localePath, type Locale } from "@/lib/i18n";
+import { TIER_CLASSES, type PoachingResult, type Prospect } from "@/lib/poaching";
 
-export default function PoachingTool() {
+export default function PoachingTool({ locale }: { locale: Locale }) {
+  const t = getTools(locale).poaching;
+  const c = getTools(locale).common;
+  const tierLabels = getTools(locale).tiers;
   const [niche, setNiche] = useState("");
   const [competitors, setCompetitors] = useState("");
   const [loading, setLoading] = useState(false);
@@ -29,16 +34,16 @@ export default function PoachingTool() {
       const res = await fetch("/api/poaching", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ niche, competitors }),
+        body: JSON.stringify({ niche, competitors, locale }),
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error ?? "Что-то пошло не так. Попробуйте ещё раз.");
+        setError(json.error ?? c.genericErrorRetry);
         return;
       }
       setResult(json as PoachingResult);
     } catch {
-      setError("Ошибка сети. Попробуйте ещё раз.");
+      setError(c.networkError);
     } finally {
       setLoading(false);
     }
@@ -60,14 +65,14 @@ export default function PoachingTool() {
         <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
           <div>
             <label htmlFor="niche" className="mb-1.5 block text-sm font-medium text-slate-300">
-              Ваша ниша <span className="text-rose-400">*</span>
+              {t.nicheLabel} <span className="text-rose-400">*</span>
             </label>
             <input
               id="niche"
               value={niche}
               onChange={(e) => setNiche(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && run()}
-              placeholder="например: доставка здоровой еды, фитнес-студия, SMM-агентство…"
+              placeholder={t.nichePlaceholder}
               className="min-h-12 w-full rounded-md border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-slate-500 transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
@@ -78,24 +83,24 @@ export default function PoachingTool() {
             className="btn-primary !min-h-12 sm:w-auto"
           >
             {loading ? (
-              "Ищем…"
+              t.submitting
             ) : (
               <>
                 <FiSearch size={18} aria-hidden="true" />
-                Найти лидов
+                {t.submit}
               </>
             )}
           </button>
         </div>
         <div className="mt-4">
           <label htmlFor="comp" className="mb-1.5 block text-sm font-medium text-slate-300">
-            Конкуренты <span className="text-slate-500">(необязательно, через запятую)</span>
+            {t.competitorsLabel} <span className="text-slate-500">{t.competitorsHint}</span>
           </label>
           <input
             id="comp"
             value={competitors}
             onChange={(e) => setCompetitors(e.target.value)}
-            placeholder="например: @competitor_food, @healthy_delivery"
+            placeholder={t.competitorsPlaceholder}
             className="min-h-11 w-full rounded-md border border-white/15 bg-white/5 px-4 py-2.5 text-white placeholder-slate-500 transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
           />
         </div>
@@ -104,10 +109,7 @@ export default function PoachingTool() {
       <div className="mt-4 flex items-start gap-3 rounded-lg border border-white/15 bg-white/5 p-4 text-sm text-slate-300">
         <FiAlertCircle size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
         <p>
-          <span className="font-semibold">Демо-режим.</span> Люди и комментарии
-          ниже сгенерированы AI как реалистичные примеры — это не реальные
-          пользователи. Демо показывает, как движок находит клиентов у
-          конкурентов. Реальный мониторинг — в PRO.
+          <span className="font-semibold">{c.demoLabel}</span>  {t.demoNote}
         </p>
       </div>
 
@@ -125,7 +127,7 @@ export default function PoachingTool() {
               className="h-10 w-10 animate-spin rounded-full border-2 border-white/15 border-t-primary-light"
               aria-hidden="true"
             />
-            <p className="text-slate-400">Сканируем комментарии у конкурентов…</p>
+            <p className="text-slate-400">{t.loading}</p>
           </div>
         )}
 
@@ -135,8 +137,7 @@ export default function PoachingTool() {
               <FiCrosshair size={26} aria-hidden="true" />
             </div>
             <p className="max-w-xs text-slate-400">
-              Укажите нишу — движок найдёт людей, которые интересовались у
-              конкурентов, и подскажет, как их переманить
+              {t.empty}
             </p>
           </div>
         )}
@@ -144,12 +145,12 @@ export default function PoachingTool() {
         {!loading && result && (
           <div className="space-y-4">
             <p className="text-sm text-slate-400">
-              В нише «<span className="text-slate-200">{result.niche}</span>»
-              найдено {result.prospects.length} человек с интересом у конкурентов,
-              отсортировано по перспективности:
+              «<span className="text-slate-200">{result.niche}</span>»:{" "}
+              {t.summary(result.niche, result.prospects.length)}
             </p>
             {result.prospects.map((p, i) => (
               <ProspectCard
+                locale={locale}
                 key={i}
                 prospect={p}
                 copied={copied === i}
@@ -165,29 +166,23 @@ export default function PoachingTool() {
           <div className="flex items-center gap-2">
             <TbBolt size={20} className="text-primary-light" aria-hidden="true" />
             <h3 className="font-heading text-lg font-bold text-white">
-              Poaching PRO — реальное переманивание
+              {t.proTitle}
             </h3>
           </div>
           <p className="mt-3 text-slate-400">
-            В боевой версии Poaching мониторит комментарии у ваших конкурентов и
-            приводит их клиентов к вам:
+            {t.proIntro}
           </p>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-            {[
-              "Мониторинг комментариев под постами конкурентов в реальном времени",
-              "Сбор людей с подтверждённым интересом — кто уже задавал вопросы",
-              "Готовые тактичные заходы в ЛС и работа с возражениями",
-              "Перевод заинтересованных в ваш Telegram-канал автоматически",
-            ].map((f) => (
+            {t.proFeatures.map((f) => (
               <li key={f} className="flex items-start gap-2.5 text-sm text-slate-300">
                 <FiCheck className="mt-0.5 shrink-0 text-success" aria-hidden="true" />
                 {f}
               </li>
             ))}
           </ul>
-          <a href="/#final-cta" className="btn-primary mt-6">
+          <a href={`${localePath(locale, "/")}#final-cta`} className="btn-primary mt-6">
             <TbBrandTelegram size={18} aria-hidden="true" />
-            Подключить PRO
+            {c.proCta}
           </a>
         </div>
       </div>
@@ -199,12 +194,17 @@ function ProspectCard({
   prospect,
   copied,
   onCopy,
+  locale,
 }: {
   prospect: Prospect;
   copied: boolean;
   onCopy: () => void;
+  locale: Locale;
 }) {
-  const tier = TIER_META[prospect.tier] ?? TIER_META.cold;
+  const t = getTools(locale).poaching;
+  const c = getTools(locale).common;
+  const tierLabels = getTools(locale).tiers;
+  const tierClass = TIER_CLASSES[prospect.tier] ?? TIER_CLASSES.cold;
   const score = Math.max(0, Math.min(100, Math.round(prospect.score)));
   return (
     <article className="card-glass p-5">
@@ -212,14 +212,14 @@ function ProspectCard({
         <div className="min-w-0">
           <p className="font-semibold text-white">{prospect.handle}</p>
           <p className="text-xs text-slate-500">
-            комментировал у{" "}
+            {t.commentedUnder}{" "}
             <span className="text-slate-400">{prospect.competitor}</span>
           </p>
         </div>
         <span
-          className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${tier.className}`}
+          className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${tierClass}`}
         >
-          {tier.label}
+          {tierLabels[prospect.tier] ?? tierLabels.cold}
         </span>
       </div>
 
@@ -240,7 +240,7 @@ function ProspectCard({
       </div>
 
       <p className="mt-3 text-sm text-slate-400">
-        <span className="text-slate-500">Оценка:</span> {prospect.reason}
+        <span className="text-slate-500">{t.scoreLabel}</span> {prospect.reason}
       </p>
 
       {prospect.dm && (
@@ -248,7 +248,7 @@ function ProspectCard({
           <div className="flex items-center justify-between gap-2">
             <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
               <FiCornerUpLeft size={13} aria-hidden="true" />
-              Заход в ЛС
+              {t.dmTitle}
             </span>
             <button
               type="button"
@@ -258,12 +258,12 @@ function ProspectCard({
               {copied ? (
                 <>
                   <FiCheck size={13} className="text-success" aria-hidden="true" />
-                  Скопировано
+                  {c.copied}
                 </>
               ) : (
                 <>
                   <FiCopy size={13} aria-hidden="true" />
-                  Копировать
+                  {c.copy}
                 </>
               )}
             </button>

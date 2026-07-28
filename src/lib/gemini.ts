@@ -70,6 +70,30 @@ export async function callGemini(options: {
   }
 }
 
+/**
+ * Директива языка ответа, дописывается к системному промпту.
+ *
+ * Сами промпты остались на русском намеренно: они описывают задачу и структуру
+ * JSON, и их перевод — это десять шансов случайно сломать схему. Модели
+ * надёжно следуют явному указанию языка вывода, поэтому меняем только его.
+ */
+export function outputLanguage(locale: string): string {
+  if (locale === "en") {
+    return (
+      "\n\nCRITICAL — OUTPUT LANGUAGE: The user is English-speaking. " +
+      "Write EVERY string value in the JSON response in natural, idiomatic English. " +
+      "Never answer in Russian. Keep JSON keys exactly as specified."
+    );
+  }
+  return "\n\nЯЗЫК ОТВЕТА: все строковые значения в JSON пиши по-русски.";
+}
+
+/** Локаль из тела запроса; всё, кроме "en", считаем русским. */
+export function requestLocale(body: unknown): string {
+  const raw = (body as { locale?: unknown } | null)?.locale;
+  return raw === "en" ? "en" : "ru";
+}
+
 // per-minute burst guard, общий для роутов
 const buckets = new Map<string, Map<string, { count: number; ts: number }>>();
 export function burstLimited(scope: string, ip: string, perMinute = 10): boolean {

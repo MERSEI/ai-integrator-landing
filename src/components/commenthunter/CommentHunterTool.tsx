@@ -10,13 +10,18 @@ import {
   FiMessageCircle,
 } from "react-icons/fi";
 import { TbBrandTelegram, TbBolt } from "react-icons/tb";
+import { getTools } from "@/lib/content/tools";
+import { localePath, type Locale } from "@/lib/i18n";
 import {
-  TIER_META,
+  TIER_CLASSES,
   type CommentHunterResult,
   type HuntedPost,
 } from "@/lib/commenthunter";
 
-export default function CommentHunterTool() {
+export default function CommentHunterTool({ locale }: { locale: Locale }) {
+  const t = getTools(locale).commenthunter;
+  const c = getTools(locale).common;
+  const tierLabels = getTools(locale).tiers;
   const [keyword, setKeyword] = useState("");
   const [product, setProduct] = useState("");
   const [loading, setLoading] = useState(false);
@@ -33,16 +38,16 @@ export default function CommentHunterTool() {
       const res = await fetch("/api/commenthunter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ keyword, product }),
+        body: JSON.stringify({ keyword, product, locale }),
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error ?? "Что-то пошло не так. Попробуйте ещё раз.");
+        setError(json.error ?? c.genericErrorRetry);
         return;
       }
       setResult(json as CommentHunterResult);
     } catch {
-      setError("Ошибка сети. Попробуйте ещё раз.");
+      setError(c.networkError);
     } finally {
       setLoading(false);
     }
@@ -70,14 +75,14 @@ export default function CommentHunterTool() {
         <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
           <div>
             <label htmlFor="kw" className="mb-1.5 block text-sm font-medium text-slate-300">
-              Ключевое слово или тема <span className="text-rose-400">*</span>
+              {t.keywordLabel} <span className="text-rose-400">*</span>
             </label>
             <input
               id="kw"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && hunt()}
-              placeholder="например: похудение, запуск бизнеса, изучение английского…"
+              placeholder={t.keywordPlaceholder}
               className="min-h-12 w-full rounded-md border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-slate-500 transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
@@ -88,24 +93,24 @@ export default function CommentHunterTool() {
             className="btn-primary !min-h-12 sm:w-auto"
           >
             {loading ? (
-              "Ищем…"
+              t.submitting
             ) : (
               <>
                 <FiSearch size={18} aria-hidden="true" />
-                Найти в комментах
+                {t.submit}
               </>
             )}
           </button>
         </div>
         <div className="mt-4">
           <label htmlFor="prod" className="mb-1.5 block text-sm font-medium text-slate-300">
-            Что вы продаёте <span className="text-slate-500">(необязательно, точнее скоринг)</span>
+            {t.offerLabel} <span className="text-slate-500">{t.offerHint}</span>
           </label>
           <input
             id="prod"
             value={product}
             onChange={(e) => setProduct(e.target.value)}
-            placeholder="например: онлайн-курс по английскому для взрослых"
+            placeholder={t.offerPlaceholder}
             className="min-h-11 w-full rounded-md border border-white/15 bg-white/5 px-4 py-2.5 text-white placeholder-slate-500 transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
           />
         </div>
@@ -114,10 +119,7 @@ export default function CommentHunterTool() {
       <div className="mt-4 flex items-start gap-3 rounded-lg border border-white/15 bg-white/5 p-4 text-sm text-slate-300">
         <FiAlertCircle size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
         <p>
-          <span className="font-semibold">Демо-режим.</span> Посты и комментарии
-          ниже сгенерированы AI как реалистичные примеры — это не реальные люди.
-          Демо показывает, как движок находит лидов в комментариях. Реальный
-          мониторинг — в PRO.
+          <span className="font-semibold">{c.demoLabel}</span>  {t.demoNote}
         </p>
       </div>
 
@@ -135,7 +137,7 @@ export default function CommentHunterTool() {
               className="h-10 w-10 animate-spin rounded-full border-2 border-white/15 border-t-primary-light"
               aria-hidden="true"
             />
-            <p className="text-slate-400">Читаем комментарии под постами…</p>
+            <p className="text-slate-400">{t.loading}</p>
           </div>
         )}
 
@@ -145,8 +147,7 @@ export default function CommentHunterTool() {
               <FiMessageCircle size={26} aria-hidden="true" />
             </div>
             <p className="max-w-xs text-slate-400">
-              Введите тему — движок найдёт популярные посты и вытащит горячих
-              лидов из комментариев под ними
+              {t.empty}
             </p>
           </div>
         )}
@@ -154,13 +155,11 @@ export default function CommentHunterTool() {
         {!loading && result && (
           <div className="space-y-6">
             <p className="text-sm text-slate-400">
-              По теме «<span className="text-slate-200">{result.keyword}</span>»
-              просканировано {result.posts.length} постов, найдено{" "}
-              <span className="font-semibold text-white">{hotCount}</span>{" "}
-              горячих лидов в комментариях:
+              {t.summary(result.keyword, result.posts.length, hotCount)}
             </p>
             {result.posts.map((post, pi) => (
               <PostThread
+              locale={locale}
                 key={pi}
                 post={post}
                 postIndex={pi}
@@ -177,29 +176,23 @@ export default function CommentHunterTool() {
           <div className="flex items-center gap-2">
             <TbBolt size={20} className="text-primary-light" aria-hidden="true" />
             <h3 className="font-heading text-lg font-bold text-white">
-              Comment Hunter PRO — реальный мониторинг
+              {t.proTitle}
             </h3>
           </div>
           <p className="mt-3 text-slate-400">
-            В боевой версии Comment Hunter отслеживает комментарии под постами по
-            вашим темам и приносит лидов сам:
+            {t.proIntro}
           </p>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-            {[
-              "Мониторинг комментариев под трендовыми постами по вашим темам",
-              "AI-скоринг каждого комментария: горячий / тёплый / не лид",
-              "Уведомления о горячих комментаторах в Telegram",
-              "Готовые черновики ответов для быстрого захода",
-            ].map((f) => (
+            {t.proFeatures.map((f) => (
               <li key={f} className="flex items-start gap-2.5 text-sm text-slate-300">
                 <FiCheck className="mt-0.5 shrink-0 text-success" aria-hidden="true" />
                 {f}
               </li>
             ))}
           </ul>
-          <a href="/#final-cta" className="btn-primary mt-6">
+          <a href={`${localePath(locale, "/")}#final-cta`} className="btn-primary mt-6">
             <TbBrandTelegram size={18} aria-hidden="true" />
-            Подключить PRO
+            {c.proCta}
           </a>
         </div>
       </div>
@@ -212,12 +205,17 @@ function PostThread({
   postIndex,
   copied,
   onCopy,
+  locale,
 }: {
   post: HuntedPost;
   postIndex: number;
   copied: string | null;
   onCopy: (id: string, text: string) => void;
+  locale: Locale;
 }) {
+  const t = getTools(locale).commenthunter;
+  const c = getTools(locale).common;
+  const tierLabels = getTools(locale).tiers;
   return (
     <div className="card-glass overflow-hidden">
       {/* Пост */}
@@ -241,48 +239,48 @@ function PostThread({
 
       {/* Комментарии */}
       <ul className="divide-y divide-white/5">
-        {post.comments.map((c, ci) => {
-          const tier = TIER_META[c.tier] ?? TIER_META.cold;
+        {post.comments.map((cm, ci) => {
+          const tierClass = TIER_CLASSES[cm.tier] ?? TIER_CLASSES.cold;
           const id = `${postIndex}-${ci}`;
-          const score = Math.max(0, Math.min(100, Math.round(c.score)));
+          const score = Math.max(0, Math.min(100, Math.round(cm.score)));
           return (
             <li key={ci} className="p-5">
               <div className="flex items-start justify-between gap-3">
-                <p className="font-medium text-slate-200">{c.handle}</p>
+                <p className="font-medium text-slate-200">{cm.handle}</p>
                 <span
-                  className={`flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${tier.className}`}
+                  className={`flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${tierClass}`}
                 >
-                  {tier.label} · {score}
+                  {tierLabels[cm.tier] ?? tierLabels.cold} · {score}
                 </span>
               </div>
-              <p className="mt-1.5 leading-relaxed text-slate-300">{c.text}</p>
-              <p className="mt-2 text-sm text-slate-500">{c.reason}</p>
-              {c.reply && (
+              <p className="mt-1.5 leading-relaxed text-slate-300">{cm.text}</p>
+              <p className="mt-2 text-sm text-slate-500">{cm.reason}</p>
+              {cm.reply && (
                 <div className="mt-3 rounded-md border border-white/10 bg-white/[0.03] p-3">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                      Ответ на коммент
+                      {t.replyTitle}
                     </span>
                     <button
                       type="button"
-                      onClick={() => onCopy(id, c.reply)}
+                      onClick={() => onCopy(id, cm.reply)}
                       className="flex cursor-pointer items-center gap-1.5 text-xs font-medium text-slate-300 transition-colors hover:text-white"
                     >
                       {copied === id ? (
                         <>
                           <FiCheck size={13} className="text-success" aria-hidden="true" />
-                          Скопировано
+                          {c.copied}
                         </>
                       ) : (
                         <>
                           <FiCopy size={13} aria-hidden="true" />
-                          Копировать
+                          {c.copy}
                         </>
                       )}
                     </button>
                   </div>
                   <p className="mt-2 text-sm italic leading-relaxed text-slate-200">
-                    «{c.reply}»
+                    «{cm.reply}»
                   </p>
                 </div>
               )}

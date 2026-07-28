@@ -1,9 +1,12 @@
 import Image from "next/image";
 import { FiCheck } from "react-icons/fi";
 import Reveal from "./Reveal";
-import { PRICING_TIERS } from "@/lib/content";
+import { getContent } from "@/lib/content";
+import type { Locale } from "@/lib/i18n";
 
-export default function PricingSection() {
+export default function PricingSection({ locale }: { locale: Locale }) {
+  const t = getContent(locale).pricing;
+
   return (
     <section id="pricing" className="relative overflow-hidden bg-dark py-20 sm:py-28">
       <div
@@ -16,11 +19,8 @@ export default function PricingSection() {
       />
       <div className="container-section relative">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <h2 className="section-title">Простые цены без скрытых платежей</h2>
-          <p className="mt-4 text-lg text-slate-400">
-            Демо инструментов и консультация — бесплатно. Платите только за
-            сборку под вашу нишу и поддержку.
-          </p>
+          <h2 className="section-title">{t.title}</h2>
+          <p className="mt-4 text-lg text-slate-400">{t.subtitle}</p>
         </Reveal>
 
         <Reveal delay={0.1} className="mx-auto mt-12 max-w-4xl">
@@ -32,7 +32,7 @@ export default function PricingSection() {
             {/* Иллюстрация светлая — маска растворяет её края в тёмном фоне секции. */}
             <Image
               src="/images/pricing.jpg"
-              alt="Три тарифа: от одного инструмента до полного набора приложений платформы"
+              alt={t.imageAlt}
               width={1280}
               height={714}
               className="relative w-full rounded-2xl [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_92%)]"
@@ -42,7 +42,7 @@ export default function PricingSection() {
         </Reveal>
 
         <div className="mt-14 grid items-stretch gap-8 lg:grid-cols-3">
-          {PRICING_TIERS.map((tier, i) => (
+          {t.tiers.map((tier, i) => (
             <Reveal key={tier.name} delay={i * 0.1} className="h-full">
               <div
                 className={`relative h-full rounded-lg transition-all duration-300 ease-premium hover:-translate-y-1 ${
@@ -60,7 +60,7 @@ export default function PricingSection() {
                 >
                   {tier.popular && (
                     <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-white px-4 py-1 text-xs font-bold uppercase tracking-wide text-black shadow-glow-sm">
-                      Popular
+                      {t.popularBadge}
                     </span>
                   )}
                   <h3 className="font-heading text-xl font-bold tracking-tight text-white">
@@ -71,14 +71,15 @@ export default function PricingSection() {
                     <span className="font-heading text-5xl font-extrabold tracking-tight text-white">
                       ${tier.setup}
                     </span>
-                    <span className="text-slate-400"> за сборку</span>
+                    <span className="text-slate-400">{t.setupSuffix}</span>
                   </p>
                   <p className="mt-1.5 text-sm text-slate-400">
-                    далее{" "}
+                    {t.thenPrefix}{" "}
                     <span className="font-semibold text-primary-light">
-                      ${tier.price}/месяц
+                      ${tier.price}
+                      {t.perMonth}
                     </span>{" "}
-                    — поддержка и обновления
+                    {t.supportSuffix}
                   </p>
                   <ul className="mt-6 flex-1 space-y-3">
                     {tier.features.map((feature) => (
@@ -106,10 +107,7 @@ export default function PricingSection() {
         </div>
 
         <Reveal className="mt-10 text-center text-slate-500">
-          <p>
-            Сначала — бесплатное демо инструментов и консультация. Сборка
-            оплачивается один раз, подписка — только за поддержку и обновления.
-          </p>
+          <p>{t.footnote}</p>
         </Reveal>
       </div>
     </section>

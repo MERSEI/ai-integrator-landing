@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { FiCopy, FiCheck, FiAlertCircle, FiZap, FiUsers } from "react-icons/fi";
+import { getTools } from "@/lib/content/tools";
+import type { Locale } from "@/lib/i18n";
 
 type Post = { type: string; hook: string; text: string; cta: string };
 type Result = {
@@ -11,7 +13,9 @@ type Result = {
   content_tips: string[];
 };
 
-export default function PersonaChannelTool() {
+export default function PersonaChannelTool({ locale }: { locale: Locale }) {
+  const t = getTools(locale).personachannel;
+  const c = getTools(locale).common;
   const [channel, setChannel] = useState("");
   const [persona, setPersona] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,16 +32,16 @@ export default function PersonaChannelTool() {
       const res = await fetch("/api/personachannel", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ channel, persona }),
+        body: JSON.stringify({ channel, persona, locale }),
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error ?? "Что-то пошло не так.");
+        setError(json.error ?? c.genericError);
         return;
       }
       setResult(json as Result);
     } catch {
-      setError("Ошибка сети. Попробуйте ещё раз.");
+      setError(c.networkError);
     } finally {
       setLoading(false);
     }
@@ -59,27 +63,27 @@ export default function PersonaChannelTool() {
         <div className="space-y-4">
           <div>
             <label htmlFor="ch" className="mb-1.5 block text-sm font-medium text-slate-300">
-              О чём ваш канал <span className="text-rose-400">*</span>
+              {t.channelLabel} <span className="text-rose-400">*</span>
             </label>
             <textarea
               id="ch"
               rows={2}
               value={channel}
               onChange={(e) => setChannel(e.target.value)}
-              placeholder="например: Telegram-канал про личные финансы и инвестиции для начинающих"
+              placeholder={t.channelPlaceholder}
               className="w-full resize-y rounded-md border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-slate-500 transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
           <div>
             <label htmlFor="pe" className="mb-1.5 block text-sm font-medium text-slate-300">
-              Ваша персона <span className="text-slate-500">(необязательно — выведем сами)</span>
+              {t.personaLabel} <span className="text-slate-500">{t.personaHint}</span>
             </label>
             <textarea
               id="pe"
               rows={2}
               value={persona}
               onChange={(e) => setPersona(e.target.value)}
-              placeholder="например: 25–35 лет, наёмные специалисты, хотят пассивный доход, боятся потерять деньги"
+              placeholder={t.personaPlaceholder}
               className="w-full resize-y rounded-md border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-slate-500 transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
@@ -90,11 +94,11 @@ export default function PersonaChannelTool() {
             className="btn-primary w-full"
           >
             {loading ? (
-              "Создаём контент…"
+              t.submitting
             ) : (
               <>
                 <FiZap size={18} aria-hidden="true" />
-                Создать контент под персону
+                {t.submit}
               </>
             )}
           </button>
@@ -111,7 +115,7 @@ export default function PersonaChannelTool() {
         {loading && (
           <div className="card-glass flex flex-col items-center justify-center gap-4 p-12 text-center">
             <div className="h-10 w-10 animate-spin rounded-full border-2 border-white/15 border-t-primary-light" aria-hidden="true" />
-            <p className="text-slate-400">Изучаем персону и пишем посты…</p>
+            <p className="text-slate-400">{t.loading}</p>
           </div>
         )}
         {!loading && !error && !result && (
@@ -120,8 +124,7 @@ export default function PersonaChannelTool() {
               <FiUsers size={26} aria-hidden="true" />
             </div>
             <p className="max-w-xs text-slate-400">
-              Здесь появятся портрет персоны и 5 готовых постов, написанных
-              специально под неё
+              {t.empty}
             </p>
           </div>
         )}
@@ -129,11 +132,11 @@ export default function PersonaChannelTool() {
           <div className="space-y-5">
             <div className="card-glass p-5">
               <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-                Портрет персоны
+                {t.personaTitle}
               </h3>
               <p className="mt-2 leading-relaxed text-slate-200">{result.persona_summary}</p>
               <p className="mt-2 text-sm text-slate-400">
-                <span className="text-slate-500">Тон:</span> {result.tone}
+                <span className="text-slate-500">{t.toneLabel}</span> {result.tone}
               </p>
             </div>
 
@@ -151,12 +154,12 @@ export default function PersonaChannelTool() {
                     {copied === i ? (
                       <>
                         <FiCheck size={13} className="text-success" aria-hidden="true" />
-                        Скопировано
+                        {c.copied}
                       </>
                     ) : (
                       <>
                         <FiCopy size={13} aria-hidden="true" />
-                        Копировать
+                        {c.copy}
                       </>
                     )}
                   </button>
@@ -172,7 +175,7 @@ export default function PersonaChannelTool() {
             {result.content_tips.length > 0 && (
               <div className="card-glass p-5">
                 <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-                  Как вести канал для этой персоны
+                  {t.tipsTitle}
                 </h3>
                 <ul className="mt-3 space-y-2">
                   {result.content_tips.map((tip, i) => (

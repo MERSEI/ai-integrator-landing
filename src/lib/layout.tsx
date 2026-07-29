@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import CustomCursor from "@/components/CustomCursor";
 import { getContent } from "@/lib/content";
 import { localePath, type Locale } from "@/lib/i18n";
@@ -108,6 +109,7 @@ export function LocaleRoot({
         />
         {children}
         <CustomCursor />
+        <Analytics />
       </body>
     </html>
   );

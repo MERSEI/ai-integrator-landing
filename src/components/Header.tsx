@@ -68,7 +68,7 @@ export default function Header({ locale }: { locale: Locale }) {
           transition={{ duration: 0.5, delay: 0.15, ease: EASE_PREMIUM }}
         >
           <Link href={home} className="flex cursor-pointer items-center">
-            <Logo className="h-8 w-auto sm:h-9" />
+            <Logo className="h-8 w-auto sm:h-9 md:h-7" />
           </Link>
         </motion.div>
 
@@ -79,7 +79,9 @@ export default function Header({ locale }: { locale: Locale }) {
           animate="visible"
           variants={{
             hidden: {},
-            visible: { transition: { staggerChildren: 0.08, delayChildren: 0.25 } },
+            visible: {
+              transition: { staggerChildren: 0.08, delayChildren: 0.25 },
+            },
           }}
         >
           <motion.div
@@ -87,7 +89,11 @@ export default function Header({ locale }: { locale: Locale }) {
             className="relative"
             variants={{
               hidden: { opacity: 0, y: -10 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: EASE_PREMIUM } },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.45, ease: EASE_PREMIUM },
+              },
             }}
           >
             <button
@@ -95,7 +101,7 @@ export default function Header({ locale }: { locale: Locale }) {
               onClick={() => setAppsOpen((v) => !v)}
               aria-haspopup="true"
               aria-expanded={appsOpen}
-              className="flex cursor-pointer items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:bg-white/5 hover:text-white"
+              className="flex cursor-pointer items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:bg-white/5 hover:text-white md:px-3"
             >
               {t.apps}
               <FiChevronDown
@@ -106,104 +112,112 @@ export default function Header({ locale }: { locale: Locale }) {
             </button>
 
             <AnimatePresence>
-            {appsOpen && (
-              <motion.div
-                className="absolute left-1/2 top-full mt-3 w-[560px] -translate-x-1/2 card-glass !bg-surface-2/95 p-4 shadow-card"
-                initial={{ opacity: 0, y: -8, scale: 0.97 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -8, scale: 0.97 }}
-                transition={{ duration: 0.25, ease: EASE_PREMIUM }}
-              >
-                <div className="grid grid-cols-2 gap-1">
-                  {content.featuredApps.map((app) => (
-                    <a
-                      key={app.id}
-                      href={app.href ? localePath(locale, app.href) : `${home}#features`}
-                      onClick={() => setAppsOpen(false)}
-                      className="flex items-start gap-3 rounded-md p-3 transition-colors duration-200 hover:bg-white/5"
-                    >
-                      <span className="h-9 w-9 shrink-0 overflow-hidden rounded-md ring-1 ring-inset ring-white/10">
-                        <Image
-                          src={app.image}
-                          alt=""
-                          width={36}
-                          height={36}
-                          className="h-full w-full object-cover"
-                        />
-                      </span>
-                      <span>
-                        <span className="flex items-center gap-1.5 text-sm font-semibold text-white">
-                          {app.name}
-                          <span
-                            className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none ${APP_STATUS_CLASSES[app.status]}`}
-                          >
-                            {content.statusLabels[app.status]}
-                          </span>
-                        </span>
-                        <span className="block text-xs text-slate-400">
-                          {app.tagline}
-                        </span>
-                      </span>
-                    </a>
-                  ))}
-                </div>
-                <div className="mt-2 border-t border-white/10 pt-2">
-                  <p className="px-3 pb-1 pt-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                    {t.moreTools}
-                  </p>
+              {appsOpen && (
+                <motion.div
+                  className="absolute left-1/2 top-full mt-3 w-[560px] -translate-x-1/2 card-glass !bg-surface-2/95 p-4 shadow-card"
+                  initial={{ opacity: 0, y: -8, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.97 }}
+                  transition={{ duration: 0.25, ease: EASE_PREMIUM }}
+                >
                   <div className="grid grid-cols-2 gap-1">
-                    {content.standaloneApps.map((app) => (
+                    {content.featuredApps.map((app) => (
                       <a
                         key={app.id}
-                        href={app.href ? localePath(locale, app.href) : `${home}#features`}
+                        href={
+                          app.href
+                            ? localePath(locale, app.href)
+                            : `${home}#features`
+                        }
                         onClick={() => setAppsOpen(false)}
-                        className="flex items-center justify-between gap-2 rounded-md p-2.5 transition-colors duration-200 hover:bg-white/5"
+                        className="flex items-start gap-3 rounded-md p-3 transition-colors duration-200 hover:bg-white/5"
                       >
-                        <span className="min-w-0">
-                          <span className="block truncate text-sm font-semibold text-white">
+                        <span className="h-9 w-9 shrink-0 overflow-hidden rounded-md ring-1 ring-inset ring-white/10">
+                          <Image
+                            src={app.image}
+                            alt=""
+                            width={36}
+                            height={36}
+                            className="h-full w-full object-cover"
+                          />
+                        </span>
+                        <span>
+                          <span className="flex items-center gap-1.5 text-sm font-semibold text-white">
                             {app.name}
+                            <span
+                              className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none ${APP_STATUS_CLASSES[app.status]}`}
+                            >
+                              {content.statusLabels[app.status]}
+                            </span>
                           </span>
-                          <span className="block truncate text-xs text-slate-400">
+                          <span className="block text-xs text-slate-400">
                             {app.tagline}
                           </span>
-                        </span>
-                        <span
-                          className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none ${APP_STATUS_CLASSES[app.status]}`}
-                        >
-                          {content.statusLabels[app.status]}
                         </span>
                       </a>
                     ))}
-                    {content.soonApps.map((app) => (
-                      <span
-                        key={app.id}
-                        className="flex items-center justify-between gap-2 rounded-md p-2.5 opacity-60"
-                      >
-                        <span className="min-w-0">
-                          <span className="block truncate text-sm font-semibold text-slate-300">
-                            {app.name}
-                          </span>
-                          <span className="block truncate text-xs text-slate-500">
-                            {app.tagline}
-                          </span>
-                        </span>
-                        <span className="shrink-0 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none text-slate-400">
-                          {t.soonBadge}
-                        </span>
-                      </span>
-                    ))}
                   </div>
-                </div>
-                <a
-                  href={`${home}#features`}
-                  onClick={() => setAppsOpen(false)}
-                  className="mt-2 flex items-center justify-center gap-1.5 rounded-md py-2.5 text-sm font-semibold text-primary-light transition-colors duration-200 hover:bg-white/5"
-                >
-                  {t.seeAllApps}
-                  <FiArrowRight size={15} aria-hidden="true" />
-                </a>
-              </motion.div>
-            )}
+                  <div className="mt-2 border-t border-white/10 pt-2">
+                    <p className="px-3 pb-1 pt-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      {t.moreTools}
+                    </p>
+                    <div className="grid grid-cols-2 gap-1">
+                      {content.standaloneApps.map((app) => (
+                        <a
+                          key={app.id}
+                          href={
+                            app.href
+                              ? localePath(locale, app.href)
+                              : `${home}#features`
+                          }
+                          onClick={() => setAppsOpen(false)}
+                          className="flex items-center justify-between gap-2 rounded-md p-2.5 transition-colors duration-200 hover:bg-white/5"
+                        >
+                          <span className="min-w-0">
+                            <span className="block truncate text-sm font-semibold text-white">
+                              {app.name}
+                            </span>
+                            <span className="block truncate text-xs text-slate-400">
+                              {app.tagline}
+                            </span>
+                          </span>
+                          <span
+                            className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none ${APP_STATUS_CLASSES[app.status]}`}
+                          >
+                            {content.statusLabels[app.status]}
+                          </span>
+                        </a>
+                      ))}
+                      {content.soonApps.map((app) => (
+                        <span
+                          key={app.id}
+                          className="flex items-center justify-between gap-2 rounded-md p-2.5 opacity-60"
+                        >
+                          <span className="min-w-0">
+                            <span className="block truncate text-sm font-semibold text-slate-300">
+                              {app.name}
+                            </span>
+                            <span className="block truncate text-xs text-slate-500">
+                              {app.tagline}
+                            </span>
+                          </span>
+                          <span className="shrink-0 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none text-slate-400">
+                            {t.soonBadge}
+                          </span>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <a
+                    href={`${home}#features`}
+                    onClick={() => setAppsOpen(false)}
+                    className="mt-2 flex items-center justify-center gap-1.5 rounded-md py-2.5 text-sm font-semibold text-primary-light transition-colors duration-200 hover:bg-white/5"
+                  >
+                    {t.seeAllApps}
+                    <FiArrowRight size={15} aria-hidden="true" />
+                  </a>
+                </motion.div>
+              )}
             </AnimatePresence>
           </motion.div>
 
@@ -211,10 +225,14 @@ export default function Header({ locale }: { locale: Locale }) {
             <motion.a
               key={link.href}
               href={link.href}
-              className="rounded-md px-4 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:bg-white/5 hover:text-white"
+              className="rounded-md px-4 py-2 text-center text-sm font-medium text-slate-300 transition-colors duration-200 hover:bg-white/5 hover:text-white md:px-3"
               variants={{
                 hidden: { opacity: 0, y: -10 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: EASE_PREMIUM } },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.45, ease: EASE_PREMIUM },
+                },
               }}
             >
               {link.label}
@@ -223,21 +241,24 @@ export default function Header({ locale }: { locale: Locale }) {
         </motion.nav>
 
         <motion.div
-          className="hidden items-center gap-3 md:flex"
+          className="hidden items-center gap-3 md:flex md:gap-2"
           initial={{ opacity: 0, x: 16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.45, ease: EASE_PREMIUM }}
         >
-          <LanguageSwitcher locale={locale} />
+          <LanguageSwitcher locale={locale} className="md:h-8" />
           <a
             href={`https://t.me/${CONTACTS.telegram.replace("@", "")}`}
             aria-label={t.telegram}
             title={t.telegram}
-            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-white/5 text-slate-300 transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:border-accent-blue/50 hover:text-white hover:shadow-glow-accent-sm"
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-white/5 text-slate-300 transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:border-accent-blue/50 hover:text-white hover:shadow-glow-accent-sm md:h-8"
           >
             <TbBrandTelegram size={19} />
           </a>
-          <a href="#final-cta" className="btn-primary !min-h-10 !px-5 !py-2 text-sm">
+          <a
+            href="#final-cta"
+            className="btn-primary text-center !min-h-10 !px-5 !py-2 text-sm md:!px-4 md:!py-1 md:!min-h-8"
+          >
             {t.cta}
           </a>
         </motion.div>

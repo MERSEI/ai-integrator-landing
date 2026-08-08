@@ -10,8 +10,6 @@ import {
   type ColdMessageResult,
 } from "@/lib/coldmessage";
 
-
-
 export default function ColdMessageTool({ locale }: { locale: Locale }) {
   const t = getTools(locale).coldmessage;
   const c = getTools(locale).common;
@@ -43,7 +41,14 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
       const res = await fetch("/api/coldmessage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profileText, offerTemplate, channel, tone, sourceLink, locale }),
+        body: JSON.stringify({
+          profileText,
+          offerTemplate,
+          channel,
+          tone,
+          sourceLink,
+          locale,
+        }),
       });
       const json = await res.json();
       if (!res.ok) {
@@ -72,14 +77,17 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
     }
   };
 
-  const canSubmit = profileText.trim().length >= 20 && offerTemplate.trim().length >= 10;
+  const canSubmit =
+    profileText.trim().length >= 20 && offerTemplate.trim().length >= 10;
 
   return (
     <div className="grid gap-8 lg:grid-cols-2">
       {/* ---- Ввод ---- */}
       <div className="card-glass p-6 sm:p-8">
         <div className="flex items-center justify-between">
-          <h2 className="font-heading text-lg font-bold text-white">{t.formTitle}</h2>
+          <h2 className="font-heading text-lg font-bold text-white">
+            {t.formTitle}
+          </h2>
           <button
             type="button"
             onClick={fillExample}
@@ -91,7 +99,10 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
 
         <div className="mt-6 space-y-5">
           <div>
-            <label htmlFor="profile" className="mb-1.5 block text-sm font-medium text-slate-300">
+            <label
+              htmlFor="profile"
+              className="mb-1.5 block text-sm font-medium text-slate-300"
+            >
               {t.profileLabel} <span className="text-rose-400">*</span>
             </label>
             <textarea
@@ -105,7 +116,10 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
           </div>
 
           <div>
-            <label htmlFor="link" className="mb-1.5 block text-sm font-medium text-slate-300">
+            <label
+              htmlFor="link"
+              className="mb-1.5 block text-sm font-medium text-slate-300"
+            >
               {t.linkLabel} <span className="text-slate-500">{t.linkHint}</span>
             </label>
             <input
@@ -119,7 +133,10 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
           </div>
 
           <div>
-            <label htmlFor="offer" className="mb-1.5 block text-sm font-medium text-slate-300">
+            <label
+              htmlFor="offer"
+              className="mb-1.5 block text-sm font-medium text-slate-300"
+            >
               {t.offerLabel} <span className="text-rose-400">*</span>
             </label>
             <textarea
@@ -134,7 +151,10 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label htmlFor="channel" className="mb-1.5 block text-sm font-medium text-slate-300">
+              <label
+                htmlFor="channel"
+                className="mb-1.5 block text-sm font-medium text-slate-300"
+              >
                 {t.channelLabel}
               </label>
               <select
@@ -151,7 +171,10 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
               </select>
             </div>
             <div>
-              <label htmlFor="tone" className="mb-1.5 block text-sm font-medium text-slate-300">
+              <label
+                htmlFor="tone"
+                className="mb-1.5 block text-sm font-medium text-slate-300"
+              >
                 {t.toneLabel}
               </label>
               <select
@@ -161,7 +184,11 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
                 className="min-h-11 w-full cursor-pointer rounded-md border border-white/15 bg-white/5 px-3 py-2.5 text-white transition-colors focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
               >
                 {tones.map((option) => (
-                  <option key={option} value={option} className="bg-surface-2 text-white">
+                  <option
+                    key={option}
+                    value={option}
+                    className="bg-surface-2 text-white"
+                  >
                     {option}
                   </option>
                 ))}
@@ -185,9 +212,7 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
             )}
           </button>
           {!canSubmit && (
-            <p className="text-center text-xs text-slate-500">
-              {t.hint}
-            </p>
+            <p className="text-center text-xs text-slate-500">{t.hint}</p>
           )}
         </div>
       </div>
@@ -196,7 +221,11 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
       <div className="lg:sticky lg:top-24 lg:self-start">
         {error && (
           <div className="flex items-start gap-3 rounded-lg border border-rose-500/30 bg-rose-500/10 p-4 text-rose-300">
-            <FiAlertCircle size={20} className="mt-0.5 shrink-0" aria-hidden="true" />
+            <FiAlertCircle
+              size={20}
+              className="mt-0.5 shrink-0"
+              aria-hidden="true"
+            />
             <p>{error}</p>
           </div>
         )}
@@ -216,9 +245,7 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
             <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-primary/25 to-secondary/25 text-primary-light ring-1 ring-inset ring-white/10">
               <FiZap size={26} aria-hidden="true" />
             </div>
-            <p className="max-w-xs text-slate-400">
-              {t.empty}
-            </p>
+            <p className="max-w-xs text-slate-400">{t.empty}</p>
           </div>
         )}
 
@@ -235,7 +262,9 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
                       key={i}
                       className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm text-slate-200"
                     >
-                      <span className="text-xs uppercase text-slate-500">{c.type}</span>
+                      <span className="text-xs uppercase text-slate-500">
+                        {c.type}
+                      </span>
                       {c.value}
                     </span>
                   ))}
@@ -287,7 +316,11 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
                   >
                     {copied ? (
                       <>
-                        <FiCheck size={15} className="text-success" aria-hidden="true" />
+                        <FiCheck
+                          size={15}
+                          className="text-success"
+                          aria-hidden="true"
+                        />
                         {c.copied}
                       </>
                     ) : (
@@ -300,7 +333,8 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
                 </div>
                 {result.subject && (
                   <p className="mt-4 text-sm text-slate-400">
-                    <span className="text-slate-500">{c.subject}</span> {result.subject}
+                    <span className="text-slate-500">{c.subject}</span>{" "}
+                    {result.subject}
                   </p>
                 )}
                 <p className="mt-3 whitespace-pre-wrap leading-relaxed text-slate-100">

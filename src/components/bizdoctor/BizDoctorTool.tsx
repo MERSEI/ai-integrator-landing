@@ -140,7 +140,7 @@ export default function BizDoctorTool({ locale }: { locale: Locale }) {
         <div className="card-glass !bg-surface-2/95 p-3">
           <div className="flex items-end gap-2">
             <textarea
-              rows={2}
+              rows={6}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {

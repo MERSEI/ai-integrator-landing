@@ -114,7 +114,7 @@ export default function Header({ locale }: { locale: Locale }) {
             <AnimatePresence>
               {appsOpen && (
                 <motion.div
-                  className="absolute left-1/1 top-full mt-3 w-[560px] -translate-x-1/2 card-glass !bg-surface-2/95 p-4 shadow-card"
+                  className="absolute top-full mt-3 w-[560px] -translate-x-1/2 card-glass !bg-surface-2/95 p-4 shadow-card"
                   initial={{ opacity: 0, y: -8, scale: 0.97 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -8, scale: 0.97 }}

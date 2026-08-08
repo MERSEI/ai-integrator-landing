@@ -40,6 +40,7 @@ export default function BizDoctorTool({ locale }: { locale: Locale }) {
   const sev = getTools(locale).severity;
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
+  const [inputFocus, setInputFocus] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
@@ -60,7 +61,7 @@ export default function BizDoctorTool({ locale }: { locale: Locale }) {
       const wire = next.map((m) =>
         m.role === "user"
           ? { role: "user", content: m.text }
-          : { role: "model", content: JSON.stringify(m.data) }
+          : { role: "model", content: JSON.stringify(m.data) },
       );
       const res = await fetch("/api/bizdoctor", {
         method: "POST",
@@ -90,9 +91,7 @@ export default function BizDoctorTool({ locale }: { locale: Locale }) {
             <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-primary/25 to-secondary/25 text-primary-light ring-1 ring-inset ring-white/10">
               <TbStethoscope size={28} aria-hidden="true" />
             </div>
-            <p className="max-w-md text-slate-400">
-              {t.intro}
-            </p>
+            <p className="max-w-md text-slate-400">{t.intro}</p>
             <button
               type="button"
               onClick={() => setInput(t.example)}
@@ -112,18 +111,25 @@ export default function BizDoctorTool({ locale }: { locale: Locale }) {
             </div>
           ) : (
             <Assistant key={i} data={m.data} locale={locale} />
-          )
+          ),
         )}
 
         {loading && (
           <div className="flex items-center gap-3 text-slate-400">
-            <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/15 border-t-primary-light" aria-hidden="true" />
+            <div
+              className="h-5 w-5 animate-spin rounded-full border-2 border-white/15 border-t-primary-light"
+              aria-hidden="true"
+            />
             {t.thinking}
           </div>
         )}
         {error && (
           <div className="flex items-start gap-3 rounded-lg border border-rose-500/30 bg-rose-500/10 p-4 text-rose-300">
-            <FiAlertCircle size={20} className="mt-0.5 shrink-0" aria-hidden="true" />
+            <FiAlertCircle
+              size={20}
+              className="mt-0.5 shrink-0"
+              aria-hidden="true"
+            />
             <p>{error}</p>
           </div>
         )}
@@ -134,7 +140,7 @@ export default function BizDoctorTool({ locale }: { locale: Locale }) {
         <div className="card-glass !bg-surface-2/95 p-3">
           <div className="flex items-end gap-2">
             <textarea
-              rows={1}
+              rows={2}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
@@ -143,14 +149,16 @@ export default function BizDoctorTool({ locale }: { locale: Locale }) {
                   send();
                 }
               }}
-              placeholder={empty ? t.inputPlaceholderEmpty : t.inputPlaceholderReply}
+              placeholder={
+                empty ? t.inputPlaceholderEmpty : t.inputPlaceholderReply
+              }
               className="max-h-40 min-h-[44px] flex-1 resize-none bg-transparent px-2 py-2.5 text-white placeholder-slate-500 focus:outline-none"
             />
             <button
               type="button"
               onClick={send}
               disabled={input.trim().length < 3 || loading}
-              className="btn-primary !min-h-11 !px-4"
+              className="btn-primary !min-h-11 !px-4 self-start"
               aria-label={c.send}
             >
               <FiSend size={18} aria-hidden="true" />
@@ -188,7 +196,11 @@ function Assistant({ data, locale }: { data: BizResponse; locale: Locale }) {
             <ul className="mt-3 space-y-2">
               {data.questions.map((q, i) => (
                 <li key={i} className="flex items-start gap-2.5 text-slate-300">
-                  <FiHelpCircle size={16} className="mt-1 shrink-0 text-primary-light" aria-hidden="true" />
+                  <FiHelpCircle
+                    size={16}
+                    className="mt-1 shrink-0 text-primary-light"
+                    aria-hidden="true"
+                  />
                   {q}
                 </li>
               ))}
@@ -208,7 +220,9 @@ function Assistant({ data, locale }: { data: BizResponse; locale: Locale }) {
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
             {t.diagnosisTitle}
           </h3>
-          <p className="mt-2 leading-relaxed text-slate-200">{data.diagnosis}</p>
+          <p className="mt-2 leading-relaxed text-slate-200">
+            {data.diagnosis}
+          </p>
         </div>
       )}
 
@@ -226,11 +240,17 @@ function Assistant({ data, locale }: { data: BizResponse; locale: Locale }) {
                   <span
                     className={`rounded-full px-2 py-0.5 text-xs font-semibold ring-1 ring-inset ${SEVERITY_CLASS[l.severity] ?? SEVERITY_CLASS.low}`}
                   >
-                    {l.severity === "high" ? sev.high : l.severity === "medium" ? sev.medium : sev.low}
+                    {l.severity === "high"
+                      ? sev.high
+                      : l.severity === "medium"
+                        ? sev.medium
+                        : sev.low}
                   </span>
                 </div>
                 <p className="mt-1 text-sm text-slate-300">{l.problem}</p>
-                <p className="mt-1 text-sm font-medium text-white">{l.impact}</p>
+                <p className="mt-1 text-sm font-medium text-white">
+                  {l.impact}
+                </p>
               </li>
             ))}
           </ul>
@@ -261,10 +281,18 @@ function Assistant({ data, locale }: { data: BizResponse; locale: Locale }) {
       {data.quick_win && (
         <div className="rounded-lg bg-gradient-to-b from-primary/15 to-transparent p-px shadow-glow-sm">
           <div className="flex items-start gap-3 rounded-[15px] bg-surface-2 p-5">
-            <FiZap size={20} className="mt-0.5 shrink-0 text-warning" aria-hidden="true" />
+            <FiZap
+              size={20}
+              className="mt-0.5 shrink-0 text-warning"
+              aria-hidden="true"
+            />
             <div>
-              <h3 className="font-heading font-bold text-white">{t.quickWinTitle}</h3>
-              <p className="mt-1.5 leading-relaxed text-slate-200">{data.quick_win}</p>
+              <h3 className="font-heading font-bold text-white">
+                {t.quickWinTitle}
+              </h3>
+              <p className="mt-1.5 leading-relaxed text-slate-200">
+                {data.quick_win}
+              </p>
             </div>
           </div>
         </div>

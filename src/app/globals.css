@@ -145,10 +145,6 @@ body.cc-active * {
   box-shadow: 0 0 26px 4px rgba(139, 92, 246, 0.4);
 }
 
-textarea {
-  resize: none !important;
-}
-
 textarea::-webkit-scrollbar {
   width: 4px;
   background: none !important;

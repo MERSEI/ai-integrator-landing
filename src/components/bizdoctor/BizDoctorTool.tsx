@@ -40,7 +40,6 @@ export default function BizDoctorTool({ locale }: { locale: Locale }) {
   const sev = getTools(locale).severity;
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
-  const [inputFocus, setInputFocus] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);

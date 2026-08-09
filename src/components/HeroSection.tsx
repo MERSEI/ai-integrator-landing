@@ -35,6 +35,11 @@ export default function HeroSection({ locale }: { locale: Locale }) {
         className="pointer-events-none absolute -top-32 right-[-10%] h-[560px] w-[560px] animate-drift rounded-full bg-white/[0.06] blur-[140px] will-change-transform"
         aria-hidden="true"
       />
+      {/* Статичный (без animate-*) блоб — визуальная глубина без постоянной анимации */}
+      <div
+        className="pointer-events-none absolute bottom-[-15%] left-[-10%] h-[420px] w-[420px] rounded-full bg-accent-blue/[0.05] blur-[130px]"
+        aria-hidden="true"
+      />
 
       <div className="container-section relative flex flex-col items-center py-16 text-center">
         <p className="mb-5 inline-flex items-center gap-2.5 rounded-full border border-primary-light/30 bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary-light backdrop-blur-sm">

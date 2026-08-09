@@ -19,12 +19,11 @@ import type {
   WireMsg,
 } from "@/lib/objectionkiller";
 
-
 function toWire(messages: ChatMsg[]): WireMsg[] {
   return messages.map((m) =>
     m.role === "user"
       ? { role: "user", content: m.text }
-      : { role: "model", content: JSON.stringify(m.data) }
+      : { role: "model", content: JSON.stringify(m.data) },
   );
 }
 
@@ -107,9 +106,7 @@ export default function ObjectionKillerTool({ locale }: { locale: Locale }) {
             <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-primary/25 to-secondary/25 text-primary-light ring-1 ring-inset ring-white/10">
               <TbShieldCheck size={28} aria-hidden="true" />
             </div>
-            <p className="max-w-md text-slate-400">
-              {t.intro}
-            </p>
+            <p className="max-w-md text-slate-400">{t.intro}</p>
             <button
               type="button"
               onClick={() => setInput(t.example)}
@@ -136,7 +133,7 @@ export default function ObjectionKillerTool({ locale }: { locale: Locale }) {
               onCopy={copy}
               msgIndex={i}
             />
-          )
+          ),
         )}
 
         {loading && (
@@ -151,7 +148,11 @@ export default function ObjectionKillerTool({ locale }: { locale: Locale }) {
 
         {error && (
           <div className="flex items-start gap-3 rounded-lg border border-rose-500/30 bg-rose-500/10 p-4 text-rose-300">
-            <FiAlertCircle size={20} className="mt-0.5 shrink-0" aria-hidden="true" />
+            <FiAlertCircle
+              size={20}
+              className="mt-0.5 shrink-0"
+              aria-hidden="true"
+            />
             <p>{error}</p>
           </div>
         )}
@@ -163,7 +164,7 @@ export default function ObjectionKillerTool({ locale }: { locale: Locale }) {
         <div className="card-glass !bg-surface-2/95 p-3">
           <div className="flex items-end gap-2">
             <textarea
-              rows={1}
+              rows={2}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKeyDown}
@@ -174,7 +175,7 @@ export default function ObjectionKillerTool({ locale }: { locale: Locale }) {
               type="button"
               onClick={send}
               disabled={input.trim().length < 3 || loading}
-              className="btn-primary !min-h-11 !px-4"
+              className="btn-primary !min-h-11 !px-4 self-start"
               aria-label={c.send}
             >
               <FiSend size={18} aria-hidden="true" />
@@ -269,7 +270,11 @@ function AssistantMessage({
                   >
                     {copied === id ? (
                       <>
-                        <FiCheck size={13} className="text-success" aria-hidden="true" />
+                        <FiCheck
+                          size={13}
+                          className="text-success"
+                          aria-hidden="true"
+                        />
                         {c.copied}
                       </>
                     ) : (
@@ -285,7 +290,8 @@ function AssistantMessage({
                 </blockquote>
                 {tactic.why && (
                   <p className="mt-2.5 text-sm text-slate-400">
-                    <span className="text-slate-500">{t.whyItWorks}</span> {tactic.why}
+                    <span className="text-slate-500">{t.whyItWorks}</span>{" "}
+                    {tactic.why}
                   </p>
                 )}
               </div>
@@ -303,7 +309,9 @@ function AssistantMessage({
               aria-hidden="true"
             />
             <div>
-              <h3 className="font-heading font-bold text-white">{t.recommendationTitle}</h3>
+              <h3 className="font-heading font-bold text-white">
+                {t.recommendationTitle}
+              </h3>
               <p className="mt-1.5 leading-relaxed text-slate-200">
                 {data.recommendation}
               </p>

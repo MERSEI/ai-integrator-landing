@@ -34,6 +34,7 @@ body {
 
   .btn-primary {
     @apply inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-md bg-gradient-to-r from-accent-blue to-accent-violet bg-[length:160%_100%] bg-left px-6 py-3 font-semibold text-white shadow-glow-accent-sm transition-all duration-300 ease-premium hover:bg-right hover:shadow-glow-accent active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue focus-visible:ring-offset-2 focus-visible:ring-offset-dark disabled:opacity-60 disabled:hover:bg-left disabled:hover:shadow-glow-accent-sm;
+    height: fit-content;
   }
 
   .btn-secondary {
@@ -61,7 +62,9 @@ body {
    SVG arrow is the fallback (touch devices, reduced motion, no-JS); once
    CustomCursor mounts on a fine pointer it hides this and takes over. */
 body {
-  cursor: url("/cursors/default.svg") 3 2, auto;
+  cursor:
+    url("/cursors/default.svg") 3 2,
+    auto;
 }
 
 a,
@@ -71,12 +74,16 @@ select,
 .cursor-pointer,
 input[type="submit"],
 input[type="button"] {
-  cursor: url("/cursors/pointer.svg") 3 2, pointer;
+  cursor:
+    url("/cursors/pointer.svg") 3 2,
+    pointer;
 }
 
 button:disabled,
 [aria-disabled="true"] {
-  cursor: url("/cursors/default.svg") 3 2, not-allowed;
+  cursor:
+    url("/cursors/default.svg") 3 2,
+    not-allowed;
 }
 
 body.cc-active,
@@ -93,7 +100,13 @@ body.cc-active * {
   z-index: 9999;
   border-radius: 9999px;
   opacity: 0;
-  transition: opacity 0.2s ease, width 0.25s ease, height 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    opacity 0.2s ease,
+    width 0.25s ease,
+    height 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
   will-change: transform;
 }
 
@@ -113,13 +126,35 @@ body.cc-active * {
   width: 34px;
   height: 34px;
   border: 1.5px solid rgba(59, 130, 246, 0.55);
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.12), transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(59, 130, 246, 0.12),
+    transparent 70%
+  );
 }
 
 .cc-ring.cc-ring-hover {
   width: 56px;
   height: 56px;
   border-color: rgba(139, 92, 246, 0.85);
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.22), transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(139, 92, 246, 0.22),
+    transparent 70%
+  );
   box-shadow: 0 0 26px 4px rgba(139, 92, 246, 0.4);
+}
+
+textarea::-webkit-scrollbar {
+  width: 4px;
+  background: none !important;
+}
+
+textarea::-webkit-scrollbar-track {
+  margin: 5px 0px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  background-color: #bdbdbda1;
 }

@@ -10,18 +10,18 @@ export default function FinalCTASection({ locale }: { locale: Locale }) {
   return (
     <section
       id="final-cta"
-      className="relative overflow-hidden bg-dark py-20 sm:py-28"
+      className="relative overflow-hidden bg-dark py-20 [content-visibility:auto] [contain-intrinsic-size:auto_700px] sm:py-28"
     >
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute left-1/2 top-[-30%] h-[420px] w-[720px] -translate-x-1/2 animate-drift rounded-full bg-white/[0.07] blur-[150px]"
+        className="pointer-events-none absolute left-1/2 top-[-30%] h-[420px] w-[720px] -translate-x-1/2 animate-drift rounded-full bg-white/[0.07] blur-[150px] will-change-transform"
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute bottom-[-40%] right-[10%] h-[320px] w-[320px] animate-drift-alt rounded-full bg-white/[0.04] blur-[130px]"
+        className="pointer-events-none absolute bottom-[-40%] right-[10%] h-[320px] w-[320px] animate-drift-alt rounded-full bg-white/[0.04] blur-[130px] will-change-transform"
         aria-hidden="true"
       />
       <div className="container-section relative flex flex-col items-center text-center">

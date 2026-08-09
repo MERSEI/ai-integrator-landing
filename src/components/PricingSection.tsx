@@ -8,7 +8,10 @@ export default function PricingSection({ locale }: { locale: Locale }) {
   const t = getContent(locale).pricing;
 
   return (
-    <section id="pricing" className="relative overflow-hidden bg-dark py-20 sm:py-28">
+    <section
+      id="pricing"
+      className="relative overflow-hidden bg-dark py-20 [content-visibility:auto] [contain-intrinsic-size:auto_900px] sm:py-28"
+    >
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
         aria-hidden="true"

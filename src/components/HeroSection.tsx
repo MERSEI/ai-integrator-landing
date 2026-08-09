@@ -32,7 +32,7 @@ export default function HeroSection({ locale }: { locale: Locale }) {
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute -top-32 right-[-10%] h-[560px] w-[560px] animate-drift rounded-full bg-white/[0.06] blur-[140px]"
+        className="pointer-events-none absolute -top-32 right-[-10%] h-[560px] w-[560px] animate-drift rounded-full bg-white/[0.06] blur-[140px] will-change-transform"
         aria-hidden="true"
       />
 

@@ -15,7 +15,10 @@ export default function FAQSection({ locale }: { locale: Locale }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="relative overflow-hidden bg-surface py-20 sm:py-28">
+    <section
+      id="faq"
+      className="relative overflow-hidden bg-surface py-20 [content-visibility:auto] [contain-intrinsic-size:auto_900px] sm:py-28"
+    >
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
         aria-hidden="true"
@@ -24,15 +27,15 @@ export default function FAQSection({ locale }: { locale: Locale }) {
       {/* Ночное небо: мерцающие звёзды + дрейфующие туманности в акцентных цветах */}
       <Starfield />
       <div
-        className="pointer-events-none absolute -left-[10%] top-[12%] h-[420px] w-[420px] animate-drift rounded-full bg-accent-blue/[0.07] blur-[130px]"
+        className="pointer-events-none absolute -left-[10%] top-[12%] h-[420px] w-[420px] animate-drift rounded-full bg-accent-blue/[0.07] blur-[130px] will-change-transform"
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute -right-[8%] bottom-[8%] h-[380px] w-[380px] animate-drift-alt rounded-full bg-accent-violet/[0.08] blur-[130px]"
+        className="pointer-events-none absolute -right-[8%] bottom-[8%] h-[380px] w-[380px] animate-drift-alt rounded-full bg-accent-violet/[0.08] blur-[130px] will-change-transform"
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[600px] -translate-x-1/2 -translate-y-1/2 animate-float-slow rounded-full bg-accent-blue/[0.04] blur-[150px]"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[600px] -translate-x-1/2 -translate-y-1/2 animate-float-slow rounded-full bg-accent-blue/[0.04] blur-[150px] will-change-transform"
         aria-hidden="true"
       />
 

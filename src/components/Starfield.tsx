@@ -26,7 +26,7 @@ const ACCENTS = [
 ];
 
 export default function Starfield({
-  count = 110,
+  count = 60,
   seed = 20260727,
   className = "",
 }: {
@@ -61,7 +61,7 @@ export default function Starfield({
       {stars.map((s, i) => (
         <span
           key={i}
-          className="absolute animate-twinkle rounded-full"
+          className="absolute animate-twinkle rounded-full will-change-transform"
           style={{
             top: `${s.top}%`,
             left: `${s.left}%`,
@@ -70,7 +70,7 @@ export default function Starfield({
             background: s.color,
             animationDuration: `${s.duration}s`,
             animationDelay: `${s.delay}s`,
-            boxShadow: s.glow ? `0 0 ${s.size * 4}px ${s.color}` : undefined,
+            boxShadow: s.glow ? `0 0 ${s.size * 2.5}px ${s.color}` : undefined,
           }}
         />
       ))}

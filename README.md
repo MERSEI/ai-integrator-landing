@@ -3,7 +3,6 @@
 > Bilingual marketing site for an AI automation platform, with ten working
 > tool demos running against Gemini — not mockups.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-15-000000?logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 
@@ -108,7 +107,3 @@ src/
   wrong for a paid product.
 - **`src/lib` has grown into a junk drawer.** Ten tool modules, i18n, storage
   and a stray `layout.tsx` in one flat folder. It wants splitting by domain.
-
-## License
-
-MIT — see [LICENSE](LICENSE).

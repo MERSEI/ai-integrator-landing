@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const GEMINI_MODEL = "gemini-3.6-flash";
+const GEMINI_MODEL = "gemini-3.1-flash-lite";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 type GeminiContent = { role?: string; parts: { text: string }[] };

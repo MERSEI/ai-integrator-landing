@@ -3,6 +3,7 @@ import { Inter, Manrope } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
 import CustomCursor from "@/components/CustomCursor";
+import GoogleAdsTag from "@/components/GoogleAdsTag";
 import { getContent } from "@/lib/content";
 import { localePath, type Locale } from "@/lib/i18n";
 
@@ -114,6 +115,7 @@ export function LocaleRoot({
         {children}
         <CustomCursor />
         <Analytics />
+        <GoogleAdsTag />
         {UMAMI_WEBSITE_ID && (
           <Script
             src={`${UMAMI_URL}/script.js`}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { getContent } from "@/lib/content";
+import { trackLeadConversion } from "@/lib/gtag";
 import { localePath, type Locale } from "@/lib/i18n";
 
 type FormValues = {
@@ -42,6 +43,9 @@ export default function EmailForm({
         setServerError(json.error ?? t.genericError);
         return;
       }
+      // Конверсия засчитывается здесь, а не на /thank-you: на страницу
+      // благодарности можно вернуться кнопкой «назад» и накрутить дубли.
+      trackLeadConversion(source);
       router.push(localePath(locale, "/thank-you"));
     } catch {
       setServerError(t.networkError);

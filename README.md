@@ -77,7 +77,17 @@ npm run test:watch
 
 Vitest covers the rate-limiting layer: proxy-chain IP extraction, credential
 resolution across both the native Upstash and Vercel KV variable names, and
-the in-memory fallback path.
+the in-memory fallback path. It also covers the Google Ads conversion helper:
+`send_to` assembly and the no-op paths when the tag or the label is missing.
+
+## Conversion tracking
+
+Google Ads (gtag.js) is wired into both root layouts and fires a conversion
+when the email form submits successfully — before the redirect to
+`/thank-you`, so a back-button return can't double-count it. Set
+`NEXT_PUBLIC_GOOGLE_ADS_ID` and `NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL` to enable
+it; without the ID the tag isn't injected at all. Setup walkthrough:
+[`docs/google-ads-setup.md`](docs/google-ads-setup.md).
 
 ## Project layout
 
@@ -89,6 +99,7 @@ src/
 ├── components/       landing sections
 └── lib/
     ├── gemini.ts     model calls and locale detection
+    ├── gtag.ts       Google Ads conversion helpers
     ├── rate-limit.ts two-tier limiter with in-memory fallback
     ├── leads.ts      lead persistence
     └── i18n.ts       locale resolution

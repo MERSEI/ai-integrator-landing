@@ -31,7 +31,7 @@ export default function Logo({ className = "h-8 w-auto" }: { className?: string 
       <text
         x="46"
         y="24"
-        fontFamily="var(--font-manrope), system-ui, sans-serif"
+        fontFamily="var(--font-inter), system-ui, sans-serif"
         fontWeight="800"
         fontSize="18.5"
         letterSpacing="-0.3"

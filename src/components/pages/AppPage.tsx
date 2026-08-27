@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { FiArrowRight } from "react-icons/fi";
 import AppHeader from "@/components/AppHeader";
 import ProBlock from "@/components/ProBlock";
 import { getContent } from "@/lib/content";
@@ -39,23 +40,17 @@ export default function AppPage({
   id: AppPageId;
   children: ReactNode;
 }) {
-  const t = getContent(locale).appPages[id];
+  const content = getContent(locale);
+  const t = content.appPages[id];
+  const convert = content.demoConvert;
 
   return (
     <>
       <AppHeader locale={locale} badge={t.badge} />
       <main className="relative min-h-screen overflow-hidden bg-dark">
-        <div
-          className="pointer-events-none absolute -top-32 right-[-10%] h-[460px] w-[460px] animate-drift rounded-full bg-white/[0.06] blur-[140px] will-change-transform"
-          aria-hidden="true"
-        />
-        <div
-          className="pointer-events-none absolute bottom-0 left-[-8%] h-[380px] w-[380px] animate-drift-alt rounded-full bg-white/[0.04] blur-[140px] will-change-transform"
-          aria-hidden="true"
-        />
         <div className="container-section relative py-12 sm:py-16">
           <div className="mx-auto max-w-2xl text-center">
-            <h1 className="font-heading text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+            <h1 className="font-heading text-3xl font-semibold tracking-tighter text-primary sm:text-4xl">
               {t.titleLead}
               <span className="text-gradient">{t.titleAccent}</span>
             </h1>
@@ -71,6 +66,25 @@ export default function AppPage({
               intro={t.pro.intro}
               features={t.pro.features}
             />
+          )}
+
+          {/* Приложения без PRO-апселла всё равно должны вести дальше, а не
+              обрывать путь после демо — иначе часть из 10 живых инструментов
+              вообще не ведёт к конверсии. */}
+          {!t.pro && (
+            <div className="mx-auto mt-12 max-w-3xl rounded-lg border border-white/10 bg-white/[0.03] p-6 text-center sm:p-8">
+              <p className="font-heading text-lg font-bold text-white">
+                {convert.titleTemplate(t.badge)}
+              </p>
+              <p className="mt-1.5 text-sm text-slate-400">{convert.subtitle}</p>
+              <a
+                href={`${localePath(locale, "/")}#final-cta`}
+                className="btn-primary mt-5 inline-flex"
+              >
+                {convert.ctaLabel}
+                <FiArrowRight aria-hidden="true" />
+              </a>
+            </div>
           )}
 
           {t.disclaimer && (

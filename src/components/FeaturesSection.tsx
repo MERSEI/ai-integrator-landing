@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { TbTrendingUp } from "react-icons/tb";
 import { FiArrowRight } from "react-icons/fi";
+import AppIcon from "./AppIcon";
 import Reveal from "./Reveal";
 import { APP_STATUS_CLASSES, getContent } from "@/lib/content";
 import type { CategoryKey } from "@/lib/content";
@@ -27,39 +27,17 @@ export default function FeaturesSection({ locale }: { locale: Locale }) {
       className="relative overflow-hidden bg-dark py-20 [content-visibility:auto] [contain-intrinsic-size:auto_900px] sm:py-28"
     >
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute left-[-10%] top-1/4 h-[400px] w-[400px] rounded-full bg-white/[0.04] blur-[130px]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
         aria-hidden="true"
       />
       <div className="container-section relative">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
-          <Reveal>
-            <h2 className="section-title">{t.title}</h2>
-            <p className="mt-4 text-lg text-slate-400">{t.subtitle}</p>
-          </Reveal>
-          <Reveal delay={0.15}>
-            <div className="relative">
-              <div
-                className="absolute -inset-4 rounded-xl bg-primary/10 blur-2xl"
-                aria-hidden="true"
-              />
-              <Image
-                src="/images/features.jpg"
-                alt={t.imageAlt}
-                width={1280}
-                height={714}
-                className="relative rounded-xl border border-white/10 shadow-card"
-                loading="lazy"
-              />
-            </div>
-          </Reveal>
-        </div>
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <h2 className="section-title">{t.title}</h2>
+          <p className="mt-4 text-lg text-secondary">{t.subtitle}</p>
+        </Reveal>
 
         <div
-          className="mt-14 flex flex-wrap justify-center gap-3"
+          className="mt-10 flex flex-wrap justify-center gap-2"
           role="tablist"
           aria-label={t.categoriesLabel}
         >
@@ -70,10 +48,10 @@ export default function FeaturesSection({ locale }: { locale: Locale }) {
               role="tab"
               aria-selected={category === cat.key}
               onClick={() => setCategory(cat.key)}
-              className={`min-h-11 cursor-pointer rounded-full px-5 py-2 text-sm font-medium transition-all duration-300 ease-premium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
+              className={`cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium transition-colors duration-200 ease-premium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                 category === cat.key
-                  ? "bg-white text-black shadow-glow-sm"
-                  : "border border-white/10 bg-white/5 text-slate-300 hover:border-white/40 hover:bg-white/10 hover:text-white"
+                  ? "border-accent/60 bg-accent/15 text-primary"
+                  : "border-white/10 bg-white/[0.03] text-secondary hover:border-white/20 hover:text-primary-light"
               }`}
             >
               {cat.label}
@@ -84,17 +62,9 @@ export default function FeaturesSection({ locale }: { locale: Locale }) {
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {apps.map((app, i) => (
             <Reveal key={app.id} delay={i * 0.07}>
-              <article className="group flex h-full flex-col card-glass p-6 transition-all duration-300 ease-premium hover:-translate-y-1 hover:border-accent-blue hover:shadow-glow-accent">
-                <div className="flex items-start justify-between">
-                  <div className="h-32 w-32 overflow-hidden rounded-xl ring-1 ring-inset ring-white/10 transition-transform duration-300 ease-premium group-hover:scale-110">
-                    <Image
-                      src={app.image}
-                      alt=""
-                      width={128}
-                      height={128}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
+              <article className="group flex h-full flex-col card-glass p-6 hover:border-white/[0.16]">
+                <div className="flex items-start justify-between gap-3">
+                  <AppIcon id={app.id} category={app.category} />
                   <span
                     className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${APP_STATUS_CLASSES[app.status]}`}
                   >

@@ -46,8 +46,6 @@ export type Testimonial = {
   quote: string;
 };
 
-export type Stat = { value: string; label: string };
-
 export type PricingTier = {
   name: string;
   setup: number;
@@ -59,6 +57,28 @@ export type PricingTier = {
 };
 
 export type FaqItem = { question: string; answer: string };
+
+/**
+ * Граф сценария автоматизации — узлы идут строго по цепочке слева направо
+ * (на мобильном — сверху вниз), поэтому связи выводятся из порядка массива,
+ * а не хранятся отдельно.
+ */
+export type ScenarioNodeKind = "trigger" | "agent" | "action";
+
+export type ScenarioNode = {
+  kind: ScenarioNodeKind;
+  /** Что происходит: «Новый лид в CRM». */
+  label: string;
+  /** Чем именно: «Webhook», «Gemini», «Telegram». */
+  meta: string;
+};
+
+export type Scenario = {
+  id: string;
+  /** Подпись вкладки переключателя. */
+  label: string;
+  nodes: ScenarioNode[];
+};
 
 /** id страниц приложений — у каждого своя страница с демо-инструментом. */
 export type AppPageId =
@@ -108,6 +128,7 @@ export type Content = {
     pricing: string;
     faq: string;
     results: string;
+    calculator: string;
     moreTools: string;
     seeAllApps: string;
     soonBadge: string;
@@ -129,7 +150,22 @@ export type Content = {
     headingAccent: string;
     subtitle: string;
     cta: string;
+    /** Ссылка-приглашение сначала посмотреть живые демо, не оставляя email. */
+    secondaryCta: string;
     trust: string[];
+  };
+
+  /** Полоса фактов сразу под hero — без выдуманных цифр, только проверяемое. */
+  trustBar: {
+    items: string[];
+  };
+
+  /** Витрина графа сценариев — центральный визуал вместо видео-фона. */
+  scenarios: {
+    title: string;
+    subtitle: string;
+    kindLabels: Record<ScenarioNodeKind, string>;
+    items: Scenario[];
   };
 
   problems: {
@@ -160,12 +196,44 @@ export type Content = {
 
   results: {
     title: string;
-    rating: string;
-    ratingAria: string;
+    subtitle: string;
     advantages: { title: string; description: string }[];
     testimonials: Testimonial[];
-    stats: Stat[];
+    /** Честная замена непроверяемой статистике — CTA на живые демо вместо цифр. */
+    demoCta: { title: string; subtitle: string; ctaLabel: string };
     portraitAlt: (name: string) => string;
+  };
+
+  /** Интерактивный расчёт потенциала — стоит между соцдоказательством и ценами. */
+  roiCalculator: {
+    title: string;
+    subtitle: string;
+    dealsLabel: string;
+    dealValueLabel: string;
+    hoursLabel: string;
+    hoursUnit: string;
+    hourlyRateLabel: string;
+    tierLabel: string;
+    resultTitle: string;
+    timeSavedLabel: string;
+    extraRevenueLabel: string;
+    totalLabel: string;
+    perMonthSuffix: string;
+    planCostLabel: string;
+    paybackLabel: (months: number) => string;
+    paybackNever: string;
+    ctaTitle: string;
+    ctaSubtitle: string;
+    submitCta: string;
+    assumptions: string;
+    disclaimer: string;
+  };
+
+  /** Универсальный CTA после демо-инструмента — показывается на всех /apps/*. */
+  demoConvert: {
+    titleTemplate: (appName: string) => string;
+    subtitle: string;
+    ctaLabel: string;
   };
 
   pricing: {
@@ -179,6 +247,8 @@ export type Content = {
     perMonth: string;
     supportSuffix: string;
     popularBadge: string;
+    /** Строка про гарантию возврата — рядом с тарифами, а не только в FAQ. */
+    guarantee: string;
     footnote: string;
   };
 
@@ -212,6 +282,10 @@ export type Content = {
     submitting: string;
     genericError: string;
     networkError: string;
+    /** Необязательный select "что автоматизировать" — квалифицирует лид сразу. */
+    interestLabel: string;
+    interestPlaceholder: string;
+    interestOther: string;
   };
 
   pro: {

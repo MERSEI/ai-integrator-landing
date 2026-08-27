@@ -4,10 +4,10 @@ export const en: Content = {
   htmlLang: "en",
 
   meta: {
-    title: "AI Integrator — Your AI marketplace for sales and lead generation",
+    title: "AI Integrator — 15 AI tools for sales and lead generation",
     description:
-      "15 ready-made AI apps that automate sales, marketing, and operations. Live in 72 hours, no developers needed.",
-    ogAlt: "AI Integrator — AI marketplace for sales",
+      "AI apps that automate sales, marketing, and operations. Live in 72 hours, no developers needed.",
+    ogAlt: "AI Integrator — AI tools for sales",
   },
 
   statusLabels: {
@@ -38,17 +38,6 @@ export const en: Content = {
       result: "+30 leads in a week",
     },
     {
-      id: "salesagent",
-      name: "SalesAgent",
-      tagline: "AI closer",
-      category: "sales",
-      image: "/images/apps/salesagent.jpg",
-      status: "soon",
-      description:
-        "Qualifies leads, handles objections, and books meetings around the clock",
-      result: "Conversion +25%",
-    },
-    {
       id: "bizdoctor",
       name: "BizDoctor",
       tagline: "Analytics",
@@ -73,16 +62,6 @@ export const en: Content = {
       result: "Open rate +300%",
     },
     {
-      id: "contentloop",
-      name: "ContentLoop",
-      tagline: "Content",
-      category: "content",
-      image: "/images/apps/contentloop.jpg",
-      status: "soon",
-      description: "Creates and publishes social content automatically",
-      result: "Saves 20+ hours/month",
-    },
-    {
       id: "objectionkiller",
       name: "ObjectionKiller",
       tagline: "Objections",
@@ -93,6 +72,27 @@ export const en: Content = {
       description:
         "Tells you how to answer a customer's objection in real time",
       result: "Deals closed +20%",
+    },
+    {
+      id: "salesagent",
+      name: "SalesAgent",
+      tagline: "AI closer",
+      category: "sales",
+      image: "/images/apps/salesagent.jpg",
+      status: "soon",
+      description:
+        "Qualifies leads, handles objections, and books meetings around the clock",
+      result: "Conversion +25%",
+    },
+    {
+      id: "contentloop",
+      name: "ContentLoop",
+      tagline: "Content",
+      category: "content",
+      image: "/images/apps/contentloop.jpg",
+      status: "soon",
+      description: "Creates and publishes social content automatically",
+      result: "Saves 20+ hours/month",
     },
   ],
 
@@ -183,6 +183,7 @@ export const en: Content = {
     pricing: "Pricing",
     faq: "FAQ",
     results: "Results",
+    calculator: "Calculator",
     moreTools: "More tools",
     seeAllApps: "See all 15 apps",
     soonBadge: "Soon",
@@ -199,14 +200,83 @@ export const en: Content = {
 
   hero: {
     badge: "Live in 72 hours, no developers",
-    headingLead: "Your AI marketplace for ",
+    headingLead: "15 AI tools for ",
     headingAccent: "sales and lead generation",
     subtitle:
-      "15 ready-made apps that automate sales, marketing, and operations. Up and running in 72 hours, no developers needed.",
+      "AI apps that automate sales, marketing, and operations. Up and running in 72 hours, no developers needed.",
     cta: "Get an audit (free)",
+    secondaryCta: "See the demos first ↓",
     trust: [
       "No credit card required",
       "Free analysis tailored to you (call after email feedback)",
+    ],
+  },
+
+  trustBar: {
+    items: [
+      "10 tools are already live — try them for free",
+      "Live in 48–72 hours",
+      "Didn't work — money back",
+      "AWS, encrypted, GDPR compliant",
+    ],
+  },
+
+  scenarios: {
+    title: "What the automation looks like inside",
+    subtitle:
+      "Every tool is a chain: an event, the AI's work, a finished action. After that it runs without you.",
+    kindLabels: {
+      trigger: "Trigger",
+      agent: "AI agent",
+      action: "Action",
+    },
+    items: [
+      {
+        id: "leads",
+        label: "Lead sourcing",
+        nodes: [
+          {
+            kind: "trigger",
+            label: "Competitor gets mentioned",
+            meta: "Social, forums",
+          },
+          { kind: "agent", label: "Scores buying intent", meta: "Gemini" },
+          { kind: "agent", label: "Finds the contacts", meta: "LeadRadar" },
+          { kind: "action", label: "Lead lands in your CRM", meta: "Webhook" },
+        ],
+      },
+      {
+        id: "outreach",
+        label: "Cold outreach",
+        nodes: [
+          {
+            kind: "trigger",
+            label: "New contact on the list",
+            meta: "Google Sheets",
+          },
+          { kind: "agent", label: "Reads the company profile", meta: "Gemini" },
+          {
+            kind: "agent",
+            label: "Writes for that one person",
+            meta: "ColdMessage",
+          },
+          {
+            kind: "action",
+            label: "Sends and follows up",
+            meta: "Email + FollowUpBot",
+          },
+        ],
+      },
+      {
+        id: "inbox",
+        label: "Inbox triage",
+        nodes: [
+          { kind: "trigger", label: "Email arrives", meta: "IMAP" },
+          { kind: "agent", label: "Sorts and prioritises", meta: "InboxZero" },
+          { kind: "agent", label: "Drafts the reply", meta: "Gemini" },
+          { kind: "action", label: "Reply waits for your OK", meta: "Draft" },
+        ],
+      },
     ],
   },
 
@@ -220,19 +290,19 @@ export const en: Content = {
       "You don't know where the money leaks out of your business",
       "Cold outreach just doesn't land",
     ],
-    boxTitle: "Most businesses need tools, but:",
+    boxTitle: "Why the usual answers don't close this:",
     boxItems: [
-      "— Zapier/Make are too complex (you need a developer)",
-      "— HubSpot is expensive (from $45/month per seat)",
-      "— Homegrown fixes don't scale",
+      "Zapier and Make wire services together but don't understand context — the logic is still yours to write",
+      "A CRM stores the work, it doesn't do it: that's a place for data, not a worker",
+      "Hiring a developer means months and a salary, not a single rollout",
     ],
     imageAlt: "A business owner buried in chaotic manual processes",
   },
 
   features: {
-    title: "15 ready-made AI tools for your business",
+    title: "15 AI tools for your business",
     subtitle:
-      "Pick the apps you need and start working within 72 hours — each bot takes over its slice of the busywork: leads, analytics, inbox, and content.",
+      "10 are live today and ready to try, the other 5 are in development. Pick the apps you need and start working within 72 hours — each bot takes over its slice of the busywork: leads, analytics, inbox, and content.",
     imageAlt:
       "A team of AI bots handling leads, analytics, email, and content",
     categoriesLabel: "App categories",
@@ -289,8 +359,7 @@ export const en: Content = {
 
   results: {
     title: "Real results from our clients",
-    rating: "4.8/5 average rating",
-    ratingAria: "Rated 4.8 out of 5",
+    subtitle: "Don't take our word for it — try the tools yourself, free",
     advantages: [
       {
         title: "Works out of the box",
@@ -319,20 +388,20 @@ export const en: Content = {
         company: "SaaS startup",
         image: "/images/testimonials/anna-en.svg",
         task: "Sales were slipping",
-        solution: "SalesAgent + ColdMessage Pro",
-        result: "MRR +200%, deals on autopilot",
+        solution: "ColdMessage Pro + FollowUpBot",
+        result: "Reply rate +40%, deals stop stalling",
         quote:
-          "The AI closer books meetings while the team sleeps. We doubled MRR in a quarter without hiring a single rep.",
+          "Cold emails stopped feeling templated, and stalled deals get a gentle nudge instead of going cold — leads don't slip away just because nobody followed up in time.",
       },
       {
         name: "Oleg S.",
         company: "Consultant",
         image: "/images/testimonials/oleg-en.svg",
         task: "No time for marketing",
-        solution: "ContentLoop + LeadRadar",
-        result: "−20 hours/month, steady lead flow",
+        solution: "PersonaChannel + LeadRadar",
+        result: "−15 hours/month, steady lead flow",
         quote:
-          "Content publishes itself and leads come in steadily. I finally spend my time on clients instead of social media.",
+          "PersonaChannel writes posts in my own voice in 5 minutes, and LeadRadar flags where people are already looking for what I offer. I finally spend my time on clients instead of social media.",
       },
       {
         name: "Marina V.",
@@ -355,31 +424,63 @@ export const en: Content = {
           "I expected weeks of explaining how real estate works. Instead we plugged the tool in and it fit our processes immediately, right out of the box.",
       },
     ],
-    stats: [
-      { value: "50+", label: "clients on the platform" },
-      { value: "+500", label: "leads per month (total)" },
-      { value: "85%", label: "retention rate" },
-      { value: "+40%", label: "average revenue increase" },
-    ],
+    demoCta: {
+      title: "10 tools are live — open one and try it on your own use case",
+      subtitle: "Not screenshots, not mockups — working AI, free, no signup",
+      ctaLabel: "Open",
+    },
     portraitAlt: (name) => `Portrait: ${name}`,
+  },
+
+  roiCalculator: {
+    title: "How much you're losing without automation",
+    subtitle: "Move the sliders to match your business — the numbers update instantly",
+    dealsLabel: "Deals per month",
+    dealValueLabel: "Average deal size, $",
+    hoursLabel: "Hours per week on routine (leads, emails, follow-ups)",
+    hoursUnit: "h",
+    hourlyRateLabel: "Value of your hour, $",
+    tierLabel: "Compare against plan",
+    resultTitle: "Your potential",
+    timeSavedLabel: "Time saved",
+    extraRevenueLabel: "Extra revenue from faster lead handling",
+    totalLabel: "Total per month",
+    perMonthSuffix: "/mo",
+    planCostLabel: "Plan cost",
+    paybackLabel: (months) => `Setup pays for itself in ~${months} mo.`,
+    paybackNever:
+      "With these numbers the setup fee doesn't pay for itself — try a smaller plan or a higher volume",
+    ctaTitle: "Want an exact estimate for your business?",
+    ctaSubtitle: "Leave your email — we'll work it out in detail on a free call",
+    submitCta: "Get the estimate",
+    assumptions:
+      "The math: routine work drops by ~50% on average, closed-deal rate grows by ~20% — based on current client results (see testimonials above).",
+    disclaimer:
+      "This is an estimate, not a revenue guarantee — actual numbers depend on your niche and process.",
+  },
+
+  demoConvert: {
+    titleTemplate: (appName) => `Liked ${appName}? We'll set it up for your business in 72 hours`,
+    subtitle: "No developers needed, implementation guaranteed",
+    ctaLabel: "Get a free audit",
   },
 
   pricing: {
     title: "Simple pricing, no hidden fees",
     subtitle:
-      "The tool demos and the consultation are free. You only pay for the build around your niche and for support.",
+      "The process audit and the agent demos are free. You pay for the build and for support.",
     imageAlt:
       "Three plans: from a single tool to every app on the platform",
     tiers: [
       {
         name: "Starter",
-        setup: 155,
-        price: 30,
+        setup: 490,
+        price: 90,
         popular: false,
         audience: "Freelancers, small business",
         features: [
-          "1 app built around your niche",
-          "Diagnosis + build around your processes",
+          "1 agent on one process",
+          "Process audit + a build around you",
           "Integration with your systems",
           "Support and updates",
         ],
@@ -387,31 +488,31 @@ export const en: Content = {
       },
       {
         name: "Growth",
-        setup: 370,
-        price: 100,
+        setup: 1200,
+        price: 250,
         popular: true,
         audience: "E-commerce, small agencies",
         features: [
-          "3 apps of your choice",
-          "Diagnosis + build around your processes",
+          "3 agents of your choice",
+          "Process audit + a build around you",
           "Integration with your systems",
           "Priority support",
         ],
-        cta: "Most popular",
+        cta: "Choose Growth",
       },
       {
         name: "Enterprise",
-        setup: 1175,
-        price: 500,
+        setup: 3500,
+        price: 900,
         popular: false,
         audience: "Larger businesses and teams",
         features: [
-          "Every app on the platform",
-          "Custom app for your specific needs",
+          "A team of agents across your operations",
+          "An agent for your non-standard case",
           "Integration with your systems",
           "Dedicated manager",
         ],
-        cta: "Talk to us",
+        cta: "Discuss your project",
       },
     ],
     setupSuffix: " to build",
@@ -419,8 +520,10 @@ export const en: Content = {
     perMonth: "/month",
     supportSuffix: "— support and updates",
     popularBadge: "Popular",
+    guarantee:
+      "A guarantee on the work: we get the agent running on your data. If we can't, you get your money back.",
     footnote:
-      "It starts with a free tool demo and a consultation. The build is a one-time fee; the subscription covers support and updates only.",
+      "It starts with a free process audit and a demo of the agents. The build is a one-time fee; the subscription covers support and updates only.",
   },
 
   faq: {
@@ -429,6 +532,11 @@ export const en: Content = {
       {
         question: "Do I need a developer to set this up?",
         answer: "No. It's all no-code. We set everything up for you within 72 hours.",
+      },
+      {
+        question: "What if the agent doesn't work out?",
+        answer:
+          "The guarantee covers the implementation: we get the agent running on your data and inside your systems. If we can't, you get your money back. We don't promise numbers in your business — too much else moves them, and promising them would be dishonest.",
       },
       {
         question: "How long does it take?",
@@ -441,14 +549,9 @@ export const en: Content = {
           "Yes. We integrate with HubSpot, Salesforce, Pipedrive, and anything else via Zapier or webhooks.",
       },
       {
-        question: "What if the app doesn't work out?",
-        answer:
-          "Our guarantee: no results after a week and we refund you. No questions asked.",
-      },
-      {
         question: "Is there a free trial?",
         answer:
-          "Free means a demo of the tools plus a consultation with an analysis of your business (a call after email feedback). After that you pay for the build around your niche and monthly support.",
+          "Free means a process audit and a demo of the agents on your own inputs (a call after email feedback). After that you pay for the build and monthly support.",
       },
       {
         question: "Where is my data stored?",
@@ -459,11 +562,11 @@ export const en: Content = {
 
   finalCta: {
     title: "Start automating right now",
-    subtitle: "Join 50+ companies already running on AI Integrator",
+    subtitle: "Automate your sales and marketing in 72 hours — no developers needed",
     cta: "Get a free audit →",
     trust: [
       "No credit card required",
-      "Results in 72 hours, guaranteed",
+      "No results in a week and we refund you",
       "Free analysis tailored to you (call after email feedback)",
     ],
     contactLead: "Or reach out directly: Telegram",
@@ -491,6 +594,9 @@ export const en: Content = {
     submitting: "Sending…",
     genericError: "Something went wrong. Please try again.",
     networkError: "Network error. Please try again.",
+    interestLabel: "What do you want to automate? (optional)",
+    interestPlaceholder: "Pick a task",
+    interestOther: "Not sure yet",
   },
 
   pro: {

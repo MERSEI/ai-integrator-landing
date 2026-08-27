@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { FiCheck } from "react-icons/fi";
+import { FiCheck, FiShield } from "react-icons/fi";
 import Reveal from "./Reveal";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
@@ -13,44 +12,22 @@ export default function PricingSection({ locale }: { locale: Locale }) {
       className="relative overflow-hidden bg-dark py-20 [content-visibility:auto] [contain-intrinsic-size:auto_900px] sm:py-28"
     >
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute left-1/2 top-1/4 h-[400px] w-[800px] -translate-x-1/2 rounded-full bg-white/[0.05] blur-[160px]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
         aria-hidden="true"
       />
       <div className="container-section relative">
         <Reveal className="mx-auto max-w-2xl text-center">
           <h2 className="section-title">{t.title}</h2>
-          <p className="mt-4 text-lg text-slate-400">{t.subtitle}</p>
+          <p className="mt-4 text-lg text-secondary">{t.subtitle}</p>
         </Reveal>
 
-        <Reveal delay={0.1} className="mx-auto mt-12 max-w-4xl">
-          <div className="relative">
-            <div
-              className="absolute -inset-6 rounded-2xl bg-accent-blue/10 blur-3xl"
-              aria-hidden="true"
-            />
-            {/* Иллюстрация светлая — маска растворяет её края в тёмном фоне секции. */}
-            <Image
-              src="/images/pricing.jpg"
-              alt={t.imageAlt}
-              width={1280}
-              height={714}
-              className="relative w-full rounded-2xl [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_92%)]"
-              loading="lazy"
-            />
-          </div>
-        </Reveal>
-
-        <div className="mt-14 grid items-stretch gap-8 lg:grid-cols-3">
+        <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-3">
           {t.tiers.map((tier, i) => (
             <Reveal key={tier.name} delay={i * 0.1} className="h-full">
               <div
                 className={`relative h-full rounded-lg transition-all duration-300 ease-premium hover:-translate-y-1 ${
                   tier.popular
-                    ? "bg-gradient-to-b from-primary via-secondary/60 to-transparent p-px shadow-glow"
+                    ? "bg-gradient-to-b from-accent via-accent/40 to-transparent p-px"
                     : ""
                 }`}
               >
@@ -62,7 +39,7 @@ export default function PricingSection({ locale }: { locale: Locale }) {
                   }`}
                 >
                   {tier.popular && (
-                    <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-white px-4 py-1 text-xs font-bold uppercase tracking-wide text-black shadow-glow-sm">
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-3 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">
                       {t.popularBadge}
                     </span>
                   )}
@@ -97,9 +74,11 @@ export default function PricingSection({ locale }: { locale: Locale }) {
                       </li>
                     ))}
                   </ul>
+                  {/* Акцентная кнопка только у популярного тарифа — иначе три
+                      одинаковых CTA не ведут глаз. */}
                   <a
                     href="#final-cta"
-                    className="mt-8 btn-primary w-full"
+                    className={`mt-8 w-full ${tier.popular ? "btn-primary" : "btn-secondary"}`}
                   >
                     {tier.cta}
                   </a>
@@ -109,7 +88,12 @@ export default function PricingSection({ locale }: { locale: Locale }) {
           ))}
         </div>
 
-        <Reveal className="mt-10 text-center text-slate-500">
+        <Reveal className="mx-auto mt-10 flex max-w-xl items-center justify-center gap-2.5 rounded-lg border border-success/20 bg-success/10 px-5 py-3.5 text-center text-sm font-medium text-success">
+          <FiShield size={18} className="shrink-0" aria-hidden="true" />
+          {t.guarantee}
+        </Reveal>
+
+        <Reveal className="mt-6 text-center text-slate-500">
           <p>{t.footnote}</p>
         </Reveal>
       </div>

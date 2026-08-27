@@ -1,10 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { FiCheck } from "react-icons/fi";
 import Reveal from "./Reveal";
-import TypewriterText from "./TypewriterText";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
 
@@ -20,26 +18,13 @@ export default function HowItWorksSection({ locale }: { locale: Locale }) {
       className="relative overflow-hidden bg-dark py-20 [content-visibility:auto] [contain-intrinsic-size:auto_900px] sm:py-28"
     >
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[700px] -translate-x-1/2 rounded-full bg-white/[0.04] blur-[140px]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
         aria-hidden="true"
       />
       <div className="container-section relative">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <h2 className="section-title">
-            <TypewriterText text={t.title} />
-          </h2>
-          <p className="mt-4 text-lg text-slate-400">
-            <TypewriterText
-              text={t.subtitle}
-              speed={28}
-              delay={700}
-              cursor={false}
-            />
-          </p>
+          <h2 className="section-title">{t.title}</h2>
+          <p className="mt-4 text-lg text-secondary">{t.subtitle}</p>
         </Reveal>
 
         <motion.div
@@ -53,7 +38,7 @@ export default function HowItWorksSection({ locale }: { locale: Locale }) {
           }}
         >
           <motion.div
-            className="absolute left-[16%] right-[16%] top-14 hidden h-px origin-left bg-gradient-to-r from-primary/0 via-accent-blue/50 to-primary/0 md:block"
+            className="absolute left-[16%] right-[16%] top-14 hidden h-px origin-left bg-gradient-to-r from-transparent via-white/15 to-transparent md:block"
             aria-hidden="true"
             variants={{
               hidden: { scaleX: 0, opacity: 0 },
@@ -76,34 +61,20 @@ export default function HowItWorksSection({ locale }: { locale: Locale }) {
                 },
               }}
             >
-              <div className="relative h-full card-glass p-8 transition-all duration-300 ease-premium hover:-translate-y-1 hover:border-accent-blue/50 hover:shadow-glow-accent-sm">
+              <div className="relative h-full card-glass p-8 hover:border-white/[0.16]">
                 <div className="flex items-center justify-between">
-                  <span className="font-heading text-5xl font-extrabold text-transparent [-webkit-text-stroke:1.5px_rgba(255,255,255,0.4)]">
+                  <span className="font-heading text-4xl font-semibold tabular-nums tracking-tighter text-white/20">
                     {step.number}
                   </span>
-                  <span className="rounded-full border border-secondary/30 bg-secondary/10 px-3 py-1 text-sm font-semibold text-primary-light">
+                  <span className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-0.5 text-xs font-medium text-secondary">
                     {step.time}
                   </span>
                 </div>
-                <h3 className="mt-4 font-heading text-2xl font-bold tracking-tight text-white">
-                  <TypewriterText
-                    text={step.title}
-                    speed={55}
-                    delay={500 + i * 320}
-                    cursor={false}
-                  />
+                <h3 className="mt-4 font-heading text-2xl font-semibold tracking-tighter text-primary">
+                  {step.title}
                 </h3>
 
-                {/* Иллюстрации светлые — маска растворяет края в тёмной карточке. */}
-                <Image
-                  src={step.image}
-                  alt={step.imageAlt}
-                  width={960}
-                  height={536}
-                  className="mt-5 w-full rounded-lg [mask-image:radial-gradient(ellipse_at_center,black_58%,transparent_94%)]"
-                  loading="lazy"
-                />
-                <ul className="mt-4 space-y-3">
+                <ul className="mt-6 space-y-3">
                   {step.points.map((point, j) => (
                     <motion.li
                       key={point}

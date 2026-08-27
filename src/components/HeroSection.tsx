@@ -1,5 +1,5 @@
 import EmailForm from "./EmailForm";
-import TypewriterHeading from "./TypewriterHeading";
+import ScenarioFlow from "./ScenarioFlow";
 import { FiCheck } from "react-icons/fi";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
@@ -8,68 +8,50 @@ export default function HeroSection({ locale }: { locale: Locale }) {
   const t = getContent(locale).hero;
 
   return (
-    <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-dark pt-[72px]">
-      {/* Video background — портретный кадр на мобильных, широкий на десктопе */}
-      <video
-        className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
-        poster="/images/hero.png"
-        autoPlay
-        muted
-        loop
-        playsInline
-        aria-hidden="true"
-      >
-        <source media="(max-width: 767px)" src="/videos/hero-bg-mobile.mp4" type="video/mp4" />
-        <source src="/videos/hero-bg.mp4" type="video/mp4" />
-      </video>
-      {/* Readability overlays */}
+    <section className="relative overflow-hidden bg-dark pt-[72px]">
+      {/* Единственный фоновый приём: мягкое свечение из-под шапки. Заменяет
+          видео-фон и дрейфующие блобы — страница легче на 2.8MB. */}
       <div
-        className="absolute inset-0 bg-dark/60"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[560px] bg-[radial-gradient(ellipse_55%_100%_at_50%_0%,rgba(110,86,207,0.28),transparent_72%)]"
         aria-hidden="true"
       />
       <div
-        className="absolute inset-0 bg-gradient-to-b from-dark/80 via-dark/30 to-dark"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute -top-32 right-[-10%] h-[560px] w-[560px] animate-drift rounded-full bg-white/[0.06] blur-[140px] will-change-transform"
-        aria-hidden="true"
-      />
-      {/* Статичный (без animate-*) блоб — визуальная глубина без постоянной анимации */}
-      <div
-        className="pointer-events-none absolute bottom-[-15%] left-[-10%] h-[420px] w-[420px] rounded-full bg-accent-blue/[0.05] blur-[130px]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
         aria-hidden="true"
       />
 
-      <div className="container-section relative flex flex-col items-center py-16 text-center">
-        <p className="mb-5 inline-flex items-center gap-2.5 rounded-full border border-primary-light/30 bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary-light backdrop-blur-sm">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-success shadow-[0_0_12px_4px_rgba(34,197,94,0.7)]" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-success shadow-[0_0_6px_1px_rgba(34,197,94,0.9)]" />
+      <div className="container-section relative flex flex-col items-center pb-24 pt-14 text-center sm:pb-28 sm:pt-20">
+        <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs font-medium text-primary-light">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-success" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-success" />
           </span>
           {t.badge}
         </p>
-        <div className="rounded-3xl border border-white/10 bg-black/30 px-6 py-8 shadow-card backdrop-blur-md sm:px-10 sm:py-10">
-          <TypewriterHeading
-            className="mx-auto max-w-4xl font-heading text-4xl font-extrabold leading-[1.1] tracking-tight text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.7)] sm:text-5xl lg:text-[60px]"
-            segments={[
-              { text: t.headingLead },
-              {
-                text: t.headingAccent,
-                className: "text-gradient",
-              },
-            ]}
-          />
-          <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-200 [text-shadow:0_1px_12px_rgba(0,0,0,0.8)]">
-            {t.subtitle}
-          </p>
-        </div>
 
-        <div className="mt-8 flex w-full justify-center">
+        {/* Заголовок сплошным цветом: градиент по тексту рвётся на переносах —
+            каждая строка показывает свой кусок и последняя уходит в серый. */}
+        <h1 className="mt-7 max-w-3xl font-heading text-4xl font-semibold leading-[1.08] tracking-tighter text-primary sm:text-5xl lg:text-[56px]">
+          {t.headingLead}
+          {t.headingAccent}
+        </h1>
+
+        <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-secondary">
+          {t.subtitle}
+        </p>
+
+        <div className="mt-9 flex w-full justify-center">
           <EmailForm locale={locale} cta={t.cta} source="hero" />
         </div>
 
-        <ul className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-slate-400">
+        <a
+          href="#results"
+          className="mt-4 text-sm font-medium text-primary-light transition-colors hover:text-white"
+        >
+          {t.secondaryCta}
+        </a>
+
+        <ul className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-secondary">
           {t.trust.map((item) => (
             <li key={item} className="flex items-center gap-1.5">
               <FiCheck className="text-success" aria-hidden="true" />
@@ -77,6 +59,11 @@ export default function HeroSection({ locale }: { locale: Locale }) {
             </li>
           ))}
         </ul>
+
+        {/* Центральный визуал первого экрана: цепочка живого сценария. */}
+        <div className="mt-16 w-full text-left">
+          <ScenarioFlow locale={locale} />
+        </div>
       </div>
     </section>
   );

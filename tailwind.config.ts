@@ -1,89 +1,102 @@
 import type { Config } from "tailwindcss";
 
+/**
+ * Дизайн-токены v2. Имена намеренно совпадают с v1: все десять демо-инструментов
+ * (src/components/<app>/*Tool.tsx) собраны на этих же токенах и общих классах из
+ * globals.css, поэтому смена значений перекрашивает их без правки их JSX.
+ * Переименование токена = ручная правка ~65 мест, поэтому меняем только значения.
+ */
 const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        primary: "#FFFFFF",
-        "primary-light": "#D4D4D4",
-        secondary: "#737373",
-        accent: "#FFFFFF",
-        dark: "#050505",
-        surface: "#0A0A0A",
-        "surface-2": "#121212",
-        light: "#F5F5F5",
-        success: "#22c55e",
-        warning: "#A3A3A3",
-        "accent-blue": "#3b82f6",
-        "accent-violet": "#8b5cf6",
+        // Текст. Чистый #FFF на тёмном звенит — берём чуть притушенный белый.
+        primary: "#F7F8F8",
+        "primary-light": "#C9CDD3",
+        secondary: "#8A8F98",
+        accent: "#6E56CF",
+        "accent-hover": "#7C66DD",
+
+        // Холст и поверхности: тёплый near-black с еле заметным подъёмом слоёв.
+        dark: "#08090A",
+        surface: "#0E0F11",
+        "surface-2": "#16181B",
+        light: "#F7F8F8",
+
+        success: "#3FB950",
+        warning: "#D29922",
+
+        // Пара для рёбер графа сценариев и редких акцентных подсветок.
+        "accent-blue": "#4C8DFF",
+        "accent-violet": "#9A7CF0",
       },
+      // Один гарнитур на весь сайт (Inter): различие даёт трекинг и вес, а не
+      // вторая гарнитура. Токен `heading` сохранён — им размечено много JSX.
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        heading: ["var(--font-manrope)", "system-ui", "sans-serif"],
+        heading: ["var(--font-inter)", "system-ui", "sans-serif"],
+      },
+      letterSpacing: {
+        tight: "-0.02em",
+        tighter: "-0.03em",
       },
       borderRadius: {
         sm: "6px",
-        md: "10px",
-        lg: "16px",
-        xl: "24px",
+        md: "8px",
+        lg: "12px",
+        xl: "16px",
       },
       transitionTimingFunction: {
         premium: "cubic-bezier(0.16, 1, 0.3, 1)",
       },
+      /**
+       * «Glow» из v1 переопределён в hairline-ring + сдержанная тень: несущий
+       * приём Linear — 1px граница, а не свечение. Имена оставлены прежними,
+       * чтобы инструменты подхватили новый вид автоматически.
+       */
       boxShadow: {
-        glow: "0 0 48px -10px rgba(255, 255, 255, 0.22)",
-        "glow-sm": "0 0 28px -8px rgba(255, 255, 255, 0.14)",
-        card: "0 8px 32px -12px rgba(0, 0, 0, 0.55)",
-        "glow-accent": "0 0 32px -6px rgba(59, 130, 246, 0.55), 0 0 12px -4px rgba(139, 92, 246, 0.4)",
-        "glow-accent-sm": "0 0 20px -8px rgba(59, 130, 246, 0.4)",
+        glow: "0 0 0 1px rgba(255,255,255,0.06), 0 8px 24px -12px rgba(0,0,0,0.7)",
+        "glow-sm": "0 0 0 1px rgba(255,255,255,0.05), 0 4px 12px -6px rgba(0,0,0,0.6)",
+        card: "0 1px 2px rgba(0,0,0,0.4), 0 8px 24px -16px rgba(0,0,0,0.8)",
+        "glow-accent":
+          "0 0 0 1px rgba(110,86,207,0.5), 0 8px 28px -10px rgba(110,86,207,0.45)",
+        "glow-accent-sm":
+          "0 0 0 1px rgba(110,86,207,0.35), 0 2px 12px -6px rgba(110,86,207,0.3)",
       },
       keyframes: {
-        drift: {
-          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
-          "33%": { transform: "translate(40px, -30px) scale(1.08)" },
-          "66%": { transform: "translate(-30px, 24px) scale(0.95)" },
-        },
-        "drift-alt": {
-          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
-          "40%": { transform: "translate(-36px, 28px) scale(1.06)" },
-          "70%": { transform: "translate(28px, -20px) scale(0.96)" },
-        },
+        // Живой индикатор у бейджа «в работе» — единственная уместная петля.
         "pulse-dot": {
           "0%, 100%": { opacity: "1", transform: "scale(1)" },
-          "50%": { opacity: "0.2", transform: "scale(0.75)" },
+          "50%": { opacity: "0.35", transform: "scale(0.8)" },
         },
-        shimmer: {
-          "0%": { backgroundPosition: "200% 0" },
-          "100%": { backgroundPosition: "-200% 0" },
+        "fade-up": {
+          from: { opacity: "0", transform: "translateY(8px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
         },
         blink: {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0" },
         },
-        "blink-fade": {
-          "0%, 60%": { opacity: "1" },
-          "30%": { opacity: "0" },
-          "100%": { opacity: "0" },
+        // Импульс по связи графа: анимируем left/top, потому что проценты здесь
+        // считаются от размера связи, а translate — от размера самой точки.
+        "flow-dot-x": {
+          "0%": { left: "0%", opacity: "0" },
+          "15%, 85%": { opacity: "1" },
+          "100%": { left: "100%", opacity: "0" },
         },
-        twinkle: {
-          "0%, 100%": { opacity: "0.15", transform: "scale(0.85)" },
-          "50%": { opacity: "1", transform: "scale(1)" },
-        },
-        "float-slow": {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-18px)" },
+        "flow-dot-y": {
+          "0%": { top: "0%", opacity: "0" },
+          "15%, 85%": { opacity: "1" },
+          "100%": { top: "100%", opacity: "0" },
         },
       },
       animation: {
-        drift: "drift 18s ease-in-out infinite",
-        "drift-alt": "drift-alt 22s ease-in-out infinite",
         "pulse-dot": "pulse-dot 2.4s ease-in-out infinite",
-        shimmer: "shimmer 8s linear infinite",
+        "fade-up": "fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both",
         blink: "blink 0.9s step-end infinite",
-        "blink-fade": "blink-fade 2.4s ease-out forwards",
-        twinkle: "twinkle 4s ease-in-out infinite",
-        "float-slow": "float-slow 9s ease-in-out infinite",
+        "flow-dot-x": "flow-dot-x 2.6s ease-in-out infinite",
+        "flow-dot-y": "flow-dot-y 2.6s ease-in-out infinite",
       },
     },
   },

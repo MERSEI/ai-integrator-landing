@@ -9,6 +9,7 @@ import { localePath, type Locale } from "@/lib/i18n";
 
 type FormValues = {
   email: string;
+  interest: string;
   website: string; // honeypot
 };
 
@@ -16,12 +17,18 @@ export default function EmailForm({
   locale,
   cta,
   source,
+  stacked = false,
 }: {
   locale: Locale;
   cta?: string;
   source: string;
+  /** Колонкой на всех размерах — для узких контейнеров (напр. карточка калькулятора),
+   * где `sm:flex-row` сжимает email-поле до нечитаемой ширины независимо от вьюпорта. */
+  stacked?: boolean;
 }) {
-  const t = getContent(locale).form;
+  const content = getContent(locale);
+  const t = content.form;
+  const interestOptions = content.categories.filter((cat) => cat.key !== "all");
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const {
@@ -55,10 +62,10 @@ export default function EmailForm({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex w-full max-w-xl flex-col gap-3 sm:flex-row"
+      className={`flex w-full flex-col gap-3 ${stacked ? "" : "max-w-3xl sm:flex-row"}`}
       noValidate
     >
-      <div className="flex-1">
+      <div className="min-w-0 flex-1">
         <label htmlFor={`email-${source}`} className="sr-only">
           {t.emailLabel}
         </label>
@@ -67,7 +74,7 @@ export default function EmailForm({
           type="email"
           placeholder={t.placeholder}
           autoComplete="email"
-          className="min-h-12 w-full rounded-md border border-white/15 bg-white/5 px-4 py-3 text-white placeholder-slate-500 backdrop-blur-sm transition-all duration-300 ease-premium hover:border-white/25 focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className="min-h-11 w-full rounded-md border border-white/10 bg-white/[0.03] px-4 py-2.5 text-primary placeholder-secondary/70 transition-colors duration-200 ease-premium hover:border-white/20 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/35"
           aria-invalid={!!errors.email}
           {...register("email", {
             required: t.required,
@@ -83,6 +90,29 @@ export default function EmailForm({
           </p>
         )}
       </div>
+      <div className={stacked ? "shrink-0" : "shrink-0 sm:w-52"}>
+        <label htmlFor={`interest-${source}`} className="sr-only">
+          {t.interestLabel}
+        </label>
+        <select
+          id={`interest-${source}`}
+          defaultValue=""
+          className="min-h-11 w-full cursor-pointer rounded-md border border-white/10 bg-white/[0.03] px-4 py-2.5 text-primary transition-colors duration-200 ease-premium hover:border-white/20 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/35"
+          {...register("interest")}
+        >
+          <option value="" className="bg-dark text-slate-400">
+            {t.interestPlaceholder}
+          </option>
+          {interestOptions.map((cat) => (
+            <option key={cat.key} value={cat.key} className="bg-dark text-white">
+              {cat.label}
+            </option>
+          ))}
+          <option value="other" className="bg-dark text-white">
+            {t.interestOther}
+          </option>
+        </select>
+      </div>
       {/* Honeypot — скрыто от людей, видимо ботам */}
       <input
         type="text"
@@ -92,7 +122,7 @@ export default function EmailForm({
         className="hidden"
         {...register("website")}
       />
-      <button type="submit" className="btn-primary" disabled={isSubmitting}>
+      <button type="submit" className="btn-primary shrink-0" disabled={isSubmitting}>
         {isSubmitting ? t.submitting : cta}
       </button>
     </form>

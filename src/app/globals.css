@@ -4,14 +4,15 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  @apply bg-dark text-slate-300 font-sans antialiased;
+  @apply bg-dark font-sans text-primary-light antialiased;
 }
 
 ::selection {
-  @apply bg-white text-black;
+  @apply bg-accent text-white;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -27,122 +28,67 @@ body {
   }
 }
 
+/**
+ * Имена классов совпадают с v1 — на них собраны все демо-инструменты, поэтому
+ * переопределяем тела, а не переименовываем. Несущий приём: 1px hairline-граница
+ * вместо свечения и тяжёлого стекла.
+ */
 @layer components {
   .container-section {
-    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
   }
 
   .btn-primary {
-    @apply inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-md bg-gradient-to-r from-accent-blue to-accent-violet bg-[length:160%_100%] bg-left px-6 py-3 font-semibold text-white shadow-glow-accent-sm transition-all duration-300 ease-premium hover:bg-right hover:shadow-glow-accent active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue focus-visible:ring-offset-2 focus-visible:ring-offset-dark disabled:opacity-60 disabled:hover:bg-left disabled:hover:shadow-glow-accent-sm;
+    @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-md bg-accent px-5 py-2.5 font-medium text-white transition-colors duration-200 ease-premium hover:bg-accent-hover active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-dark disabled:opacity-50 disabled:hover:bg-accent;
     height: fit-content;
   }
 
   .btn-secondary {
-    @apply inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-md border border-white/20 bg-white/5 px-6 py-3 font-semibold text-white backdrop-blur-sm transition-all duration-300 ease-premium hover:border-white/50 hover:bg-white/10 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white;
+    @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-md border border-white/10 bg-white/[0.03] px-5 py-2.5 font-medium text-primary transition-colors duration-200 ease-premium hover:border-white/20 hover:bg-white/[0.06] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40;
+  }
+
+  /**
+   * Историческое имя: стекло уступило место плоской поверхности. Объём даёт не
+   * тень, а внутренняя подсветка по верхней кромке — карточка будто ловит свет.
+   */
+  .card-glass {
+    @apply rounded-lg border border-white/[0.08] bg-gradient-to-b from-white/[0.045] to-white/[0.01] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.055)] transition-colors duration-200 ease-premium;
   }
 
   .section-title {
-    @apply font-heading text-3xl font-extrabold tracking-tight text-white sm:text-4xl;
+    @apply font-heading text-3xl font-semibold tracking-tighter text-primary sm:text-4xl;
   }
 
-  .card-glass {
-    @apply rounded-lg border border-white/10 bg-white/[0.04] shadow-card backdrop-blur-sm;
-  }
-
+  /**
+   * Акцент внутри заголовка. Градиент по тексту убран совсем: заголовки
+   * переносятся, каждая строка получает свой кусок градиента, и последняя
+   * уходит в серый — читается как баг рендера. Имя класса сохранено, потому
+   * что им размечены заголовки секций и страниц приложений; акцент вернём
+   * приёмом, не зависящим от геометрии строк.
+   */
   .text-gradient {
-    @apply bg-gradient-to-r from-white via-neutral-300 to-neutral-500 bg-clip-text text-transparent;
+    @apply text-primary;
   }
 
   .chip-result {
-    @apply inline-flex w-fit items-center gap-1.5 rounded-full bg-success/10 px-3 py-1 text-sm font-semibold text-success ring-1 ring-inset ring-success/20;
+    @apply inline-flex w-fit items-center gap-1.5 rounded-full bg-success/10 px-2.5 py-0.5 text-xs font-medium text-success ring-1 ring-inset ring-success/25;
+  }
+
+  /* Разделитель-градиент: линия, гаснущая к краям. Заменяет блюр-блобы. */
+  .rule-fade {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent;
   }
 }
 
-/* Custom cursor — unlayered so it wins over Tailwind's cursor-pointer utility.
-   SVG arrow is the fallback (touch devices, reduced motion, no-JS); once
-   CustomCursor mounts on a fine pointer it hides this and takes over. */
-body {
-  cursor:
-    url("/cursors/default.svg") 3 2,
-    auto;
-}
-
-a,
-button,
-select,
-[role="button"],
-.cursor-pointer,
-input[type="submit"],
-input[type="button"] {
-  cursor:
-    url("/cursors/pointer.svg") 3 2,
-    pointer;
-}
-
-button:disabled,
-[aria-disabled="true"] {
-  cursor:
-    url("/cursors/default.svg") 3 2,
-    not-allowed;
-}
-
-body.cc-active,
-body.cc-active * {
-  cursor: none !important;
-}
-
-.cc-dot,
-.cc-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 9999;
-  border-radius: 9999px;
-  opacity: 0;
-  transition:
-    opacity 0.2s ease,
-    width 0.25s ease,
-    height 0.25s ease,
-    background 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
-  will-change: transform;
-}
-
-.cc-dot {
-  width: 8px;
-  height: 8px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  box-shadow: 0 0 10px 2px rgba(59, 130, 246, 0.7);
-}
-
-.cc-dot.cc-dot-hover {
-  width: 6px;
-  height: 6px;
-}
-
-.cc-ring {
-  width: 34px;
-  height: 34px;
-  border: 1.5px solid rgba(59, 130, 246, 0.55);
-  background: radial-gradient(
-    circle,
-    rgba(59, 130, 246, 0.12),
-    transparent 70%
-  );
-}
-
-.cc-ring.cc-ring-hover {
-  width: 56px;
-  height: 56px;
-  border-color: rgba(139, 92, 246, 0.85);
-  background: radial-gradient(
-    circle,
-    rgba(139, 92, 246, 0.22),
-    transparent 70%
-  );
-  box-shadow: 0 0 26px 4px rgba(139, 92, 246, 0.4);
+@layer utilities {
+  /* Горизонтальный список остаётся прокручиваемым, но без видимой полосы. */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 textarea::-webkit-scrollbar {
@@ -156,5 +102,5 @@ textarea::-webkit-scrollbar-track {
 
 textarea::-webkit-scrollbar-thumb {
   border-radius: 100px;
-  background-color: #bdbdbda1;
+  background-color: rgba(255, 255, 255, 0.18);
 }

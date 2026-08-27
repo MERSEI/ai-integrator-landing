@@ -11,7 +11,6 @@ export type {
   FaqItem,
   PricingTier,
   SoonApp,
-  Stat,
   Step,
   Testimonial,
 } from "./types";

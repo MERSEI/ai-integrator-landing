@@ -1,5 +1,7 @@
 # AI Integrator
 
+[![CI](https://github.com/MERSEI/ai-integrator-landing/actions/workflows/ci.yml/badge.svg)](https://github.com/MERSEI/ai-integrator-landing/actions/workflows/ci.yml)
+
 > Bilingual marketing site for an AI automation platform, with ten working
 > tool demos running against Gemini — not mockups.
 

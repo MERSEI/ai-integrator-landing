@@ -2,11 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { HiMenu, HiX } from "react-icons/hi";
 import { FiChevronDown, FiArrowRight } from "react-icons/fi";
 import { TbBrandTelegram } from "react-icons/tb";
+import AppIcon from "./AppIcon";
 import Logo from "./Logo";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { APP_STATUS_CLASSES, CONTACTS, getContent } from "@/lib/content";
@@ -21,6 +21,7 @@ export default function Header({ locale }: { locale: Locale }) {
 
   const navLinks = [
     { href: "#how-it-works", label: t.howItWorks },
+    { href: "#calculator", label: t.calculator },
     { href: "#pricing", label: t.pricing },
     { href: "#faq", label: t.faq },
   ];
@@ -114,7 +115,7 @@ export default function Header({ locale }: { locale: Locale }) {
             <AnimatePresence>
               {appsOpen && (
                 <motion.div
-                  className="absolute left-1/2 top-full mt-3 w-[560px] -translate-x-1/2 card-glass !bg-surface-2/95 p-4 shadow-card"
+                  className="absolute left-1/2 top-full mt-3 w-[560px] -translate-x-1/2 rounded-lg border border-white/[0.08] bg-surface-2 p-4 shadow-card"
                   initial={{ opacity: 0, y: -8, scale: 0.97 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -8, scale: 0.97 }}
@@ -132,15 +133,7 @@ export default function Header({ locale }: { locale: Locale }) {
                         onClick={() => setAppsOpen(false)}
                         className="flex items-start gap-3 rounded-md p-3 transition-colors duration-200 hover:bg-white/5"
                       >
-                        <span className="h-9 w-9 shrink-0 overflow-hidden rounded-md ring-1 ring-inset ring-white/10">
-                          <Image
-                            src={app.image}
-                            alt=""
-                            width={36}
-                            height={36}
-                            className="h-full w-full object-cover"
-                          />
-                        </span>
+                        <AppIcon id={app.id} category={app.category} size={36} />
                         <span>
                           <span className="flex items-center gap-1.5 text-sm font-semibold text-white">
                             {app.name}

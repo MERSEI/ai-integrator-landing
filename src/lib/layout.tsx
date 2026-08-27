@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { Inter, Manrope } from "next/font/google";
+import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
-import CustomCursor from "@/components/CustomCursor";
 import GoogleAdsTag from "@/components/GoogleAdsTag";
 import { getContent } from "@/lib/content";
 import { localePath, type Locale } from "@/lib/i18n";
@@ -18,16 +17,13 @@ const UMAMI_WEBSITE_ID = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
 
 export const SITE_URL = "https://ai-integrator-landing.vercel.app";
 
+/**
+ * Одна гарнитура на весь сайт: заголовки отличаются трекингом и весом, а не
+ * второй гарнитурой. Заодно минус один шрифтовой запрос.
+ */
 export const inter = Inter({
   subsets: ["latin", "cyrillic"],
   variable: "--font-inter",
-  display: "swap",
-});
-
-export const manrope = Manrope({
-  subsets: ["latin", "cyrillic"],
-  weight: ["600", "700", "800"],
-  variable: "--font-manrope",
   display: "swap",
 });
 
@@ -84,14 +80,12 @@ function jsonLd(locale: Locale) {
     description: getContent(locale).meta.description,
     offers: {
       "@type": "Offer",
-      price: "30",
+      price: "490",
       priceCurrency: "USD",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.8",
-      reviewCount: "50",
-    },
+    // aggregateRating убран намеренно: в разметке стояли 4.8 и 50 отзывов,
+    // которых нет — на сайте пять именных отзывов. Выдуманный рейтинг в
+    // машиночитаемых данных это подлог, а не оптимизация.
   };
 }
 
@@ -103,17 +97,13 @@ export function LocaleRoot({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang={getContent(locale).htmlLang}
-      className={`${inter.variable} ${manrope.variable}`}
-    >
+    <html lang={getContent(locale).htmlLang} className={inter.variable}>
       <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd(locale)) }}
         />
         {children}
-        <CustomCursor />
         <Analytics />
         <GoogleAdsTag />
         {UMAMI_WEBSITE_ID && (

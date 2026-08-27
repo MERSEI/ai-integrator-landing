@@ -1,4 +1,3 @@
-import { FaLinkedin, FaTwitter, FaFacebook } from "react-icons/fa";
 import Logo from "./Logo";
 import { CONTACTS, getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
@@ -9,7 +8,7 @@ export default function Footer({ locale }: { locale: Locale }) {
   return (
     <footer className="relative bg-dark py-14">
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
         aria-hidden="true"
       />
       <div className="container-section grid gap-10 md:grid-cols-3">
@@ -63,22 +62,6 @@ export default function Footer({ locale }: { locale: Locale }) {
             </li>
             <li>{CONTACTS.address}</li>
           </ul>
-          <div className="mt-5 flex gap-3 text-slate-500">
-            {[
-              { Icon: FaLinkedin, label: "LinkedIn" },
-              { Icon: FaTwitter, label: "Twitter" },
-              { Icon: FaFacebook, label: "Facebook" },
-            ].map(({ Icon, label }) => (
-              <a
-                key={label}
-                href="#"
-                aria-label={label}
-                className="flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:border-primary-light/40 hover:text-white"
-              >
-                <Icon size={18} />
-              </a>
-            ))}
-          </div>
         </div>
       </div>
     </footer>

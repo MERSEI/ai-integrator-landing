@@ -1,14 +1,18 @@
 import Image from "next/image";
-import { FiStar, FiZap, FiTarget } from "react-icons/fi";
+import Link from "next/link";
+import { FiZap, FiTarget, FiArrowRight } from "react-icons/fi";
 import Reveal from "./Reveal";
-import StatCounter from "./StatCounter";
-import { getContent } from "@/lib/content";
-import type { Locale } from "@/lib/i18n";
+import { APP_STATUS_CLASSES, getContent } from "@/lib/content";
+import { localePath, type Locale } from "@/lib/i18n";
 
 const ADVANTAGE_ICONS = [FiZap, FiTarget];
 
 export default function ResultsSection({ locale }: { locale: Locale }) {
-  const t = getContent(locale).results;
+  const content = getContent(locale);
+  const t = content.results;
+  const liveApps = [...content.featuredApps, ...content.standaloneApps].filter(
+    (app) => app.status === "live" && app.href
+  );
 
   return (
     <section
@@ -16,24 +20,13 @@ export default function ResultsSection({ locale }: { locale: Locale }) {
       className="relative overflow-hidden bg-surface py-20 [content-visibility:auto] [contain-intrinsic-size:auto_900px] sm:py-28"
     >
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-blue/40 to-transparent"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute bottom-[-25%] left-[-8%] h-[420px] w-[420px] rounded-full bg-white/[0.05] blur-[140px]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
         aria-hidden="true"
       />
       <div className="container-section relative">
         <Reveal className="mx-auto max-w-2xl text-center">
           <h2 className="section-title">{t.title}</h2>
-          <p className="mt-4 flex items-center justify-center gap-2 text-lg text-slate-400">
-            <span className="flex gap-0.5 text-warning" aria-label={t.ratingAria}>
-              {Array.from({ length: 5 }).map((_, i) => (
-                <FiStar key={i} size={18} fill="currentColor" aria-hidden="true" />
-              ))}
-            </span>
-            {t.rating}
-          </p>
+          <p className="mt-4 text-lg text-slate-400">{t.subtitle}</p>
         </Reveal>
 
         <div className="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-2">
@@ -86,16 +79,38 @@ export default function ResultsSection({ locale }: { locale: Locale }) {
           ))}
         </div>
 
-        <div className="mt-16 grid grid-cols-2 gap-8 card-glass p-8 text-center md:grid-cols-4">
-          {t.stats.map((stat, i) => (
-            <Reveal key={stat.label} delay={i * 0.08}>
-              <p className="font-heading text-4xl font-extrabold tracking-tight text-gradient">
-                <StatCounter value={stat.value} />
-              </p>
-              <p className="mt-2 text-sm text-slate-400">{stat.label}</p>
-            </Reveal>
-          ))}
-        </div>
+        <Reveal className="mt-16 card-glass p-8">
+          <div className="text-center">
+            <p className="font-heading text-xl font-bold text-white">
+              {t.demoCta.title}
+            </p>
+            <p className="mt-1.5 text-sm text-slate-400">{t.demoCta.subtitle}</p>
+          </div>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {liveApps.map((app) => (
+              <Link
+                key={app.id}
+                href={localePath(locale, app.href!)}
+                className="group flex flex-col gap-2 rounded-lg border border-white/10 bg-white/5 p-4 transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:border-primary-light/40"
+              >
+                <span
+                  className={`inline-flex w-fit items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${APP_STATUS_CLASSES[app.status]}`}
+                >
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-success" />
+                  </span>
+                  {content.statusLabels[app.status]}
+                </span>
+                <span className="text-sm font-semibold text-white">{app.name}</span>
+                <span className="text-xs text-slate-500">{app.result}</span>
+                <span className="mt-auto flex items-center gap-1 text-xs font-semibold text-primary-light transition-colors group-hover:text-white">
+                  {t.demoCta.ctaLabel}
+                  <FiArrowRight size={13} aria-hidden="true" />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );

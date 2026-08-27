@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkDailyLimit, clientIp } from "@/lib/rate-limit";
 import { saveLead } from "@/lib/leads";
+import { sendAuditRequestEmail } from "@/lib/email";
 import { apiMessage } from "@/lib/apiMessages";
 import { requestLocale } from "@/lib/gemini";
 
@@ -71,6 +72,8 @@ export async function POST(req: NextRequest) {
     company: body.company,
     source: body.source,
   });
+
+  await sendAuditRequestEmail(email);
 
   const { MAILCHIMP_API_KEY, MAILCHIMP_LIST_ID, MAILCHIMP_SERVER_PREFIX } =
     process.env;

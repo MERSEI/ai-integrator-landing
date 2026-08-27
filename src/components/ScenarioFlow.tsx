@@ -100,7 +100,7 @@ export default function ScenarioFlow({ locale }: { locale: Locale }) {
                   >
                     {/* Импульс, бегущий по связи; замирает при reduced-motion */}
                     <span
-                      className="absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-accent-violet shadow-[0_0_8px_2px_rgba(154,124,240,0.55)] motion-safe:animate-flow-dot-y lg:left-0 lg:top-1/2 lg:translate-x-0 lg:-translate-y-1/2 lg:motion-safe:animate-flow-dot-x"
+                      className="absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-accent-violet shadow-[0_0_8px_2px_rgba(176,141,87,0.55)] motion-safe:animate-flow-dot-y lg:left-0 lg:top-1/2 lg:translate-x-0 lg:-translate-y-1/2 lg:motion-safe:animate-flow-dot-x"
                       style={{ animationDelay: `${i * 260}ms` }}
                     />
                   </div>

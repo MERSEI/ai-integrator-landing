@@ -12,7 +12,7 @@ export default function HeroSection({ locale }: { locale: Locale }) {
       {/* Единственный фоновый приём: мягкое свечение из-под шапки. Заменяет
           видео-фон и дрейфующие блобы — страница легче на 2.8MB. */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-[560px] bg-[radial-gradient(ellipse_55%_100%_at_50%_0%,rgba(110,86,207,0.28),transparent_72%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[560px] bg-[radial-gradient(ellipse_55%_100%_at_50%_0%,rgba(15,124,119,0.28),transparent_72%)]"
         aria-hidden="true"
       />
       <div

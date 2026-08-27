@@ -1,13 +1,16 @@
 /**
  * Автоответ лиду сразу после отправки формы — приглашение на бесплатный
- * аудит. Отправка через Resend REST API (fetch, без SDK — тот же подход,
- * что и у Mailchimp/Gemini в этом проекте).
+ * аудит. Отправка через Gmail SMTP (nodemailer + App Password с
+ * aleksfialko15@gmail.com) — без своего домена Resend/SES не дают слать
+ * реальным получателям (только на почту владельца аккаунта), а Gmail
+ * работает сразу, с любого адреса.
  *
- * Best-effort: без RESEND_API_KEY просто не отправляет и логирует
- * предупреждение — лид всё равно сохранён (Upstash/Sheets) и передан в
- * Mailchimp, форма не должна падать из-за почты.
+ * Best-effort: без GMAIL_ADDRESS/GMAIL_APP_PASSWORD просто не отправляет и
+ * логирует предупреждение — лид всё равно сохранён (Upstash/Sheets) и
+ * передан в Mailchimp, форма не должна падать из-за почты.
  */
 
+import nodemailer, { type Transporter } from "nodemailer";
 import { CONTACTS } from "./content";
 
 const AUDIT_EMAIL_SUBJECT = "AI Integrator Free Audit";
@@ -39,37 +42,40 @@ Best,
 Oleksandr
 AI Integrator`;
 
+let transporter: Transporter | null = null;
+
+function getTransporter(): Transporter | null {
+  const user = process.env.GMAIL_ADDRESS;
+  const pass = process.env.GMAIL_APP_PASSWORD;
+  if (!user || !pass) return null;
+
+  if (!transporter) {
+    transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: { user, pass },
+    });
+  }
+  return transporter;
+}
+
 export async function sendAuditRequestEmail(to: string): Promise<void> {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
+  const tx = getTransporter();
+  if (!tx) {
     console.warn(
-      "[email] RESEND_API_KEY не настроен — автоответ лиду не отправлен. См. docs/resend-setup.md."
+      "[email] GMAIL_ADDRESS/GMAIL_APP_PASSWORD не настроены — автоответ лиду не отправлен. См. docs/gmail-smtp-setup.md."
     );
     return;
   }
 
-  const from = process.env.RESEND_FROM_EMAIL ?? "AI Integrator <onboarding@resend.dev>";
-
   try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from,
-        to,
-        reply_to: CONTACTS.email,
-        subject: AUDIT_EMAIL_SUBJECT,
-        text: AUDIT_EMAIL_TEXT,
-      }),
+    await tx.sendMail({
+      from: `"AI Integrator" <${process.env.GMAIL_ADDRESS}>`,
+      to,
+      replyTo: CONTACTS.email,
+      subject: AUDIT_EMAIL_SUBJECT,
+      text: AUDIT_EMAIL_TEXT,
     });
-    if (!res.ok) {
-      const err = await res.json().catch(() => null);
-      console.error("[email] Resend error:", err);
-    }
   } catch (e) {
-    console.error("[email] Resend request failed:", e);
+    console.error("[email] Gmail SMTP отправка не удалась:", e);
   }
 }

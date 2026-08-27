@@ -31,7 +31,7 @@ export const APP_STATUS_CLASSES: Record<string, string> = {
 
 /** Контакты одинаковы для всех языков. */
 export const CONTACTS = {
-  email: "aiintegrator.hello@gmail.com",
+  email: "aleksfialko15@gmail.com",
   telegram: "@f1_owe",
   phone: "+420 773 693 263",
   address: "Kyiv, Ukraine",

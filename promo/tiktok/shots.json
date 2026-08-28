@@ -1,0 +1,184 @@
+{
+  "meta": {
+    "title": "AI Integrator — TikTok promo (RU)",
+    "aspect": "9:16",
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "voice": "Brian (male, american)",
+    "voiceModel": "eleven_multilingual_v2",
+    "languageCode": "ru",
+    "music": {
+      "model": "elevenlabs/sound-generation",
+      "duration": 30,
+      "prompt": "Dark minimal tech underscore for a product teaser: deep sub bass pulse, tight muted percussion, sparse metallic ticks, cold synth pad rising, 100 BPM, driving but restrained, no vocals, seamless"
+    },
+    "note": "fallbackDuration — длительность кадра, когда озвучки ещё нет; с озвучкой кадр равен своему сегменту VO плюс паузы."
+  },
+  "shots": [
+    {
+      "id": "s1_hook",
+      "source": {
+        "type": "gen",
+        "model": "kling/kling-3.0-turbo-t2v",
+        "duration": 5,
+        "resolution": "1080p",
+        "aspect_ratio": "9:16"
+      },
+      "prompt": "Vertical 9:16 cinematic commercial shot. A dark minimalist office at night, one smartphone lying face-up on a black desk suddenly lights up, notification glow spilling teal light across the surface, a laptop screen glowing out of focus behind it. Deep near-black background, cold teal rim light, one warm bronze lamp far in the background. Very slow push-in, shallow depth of field, anamorphic, fine film grain, premium tech advertising look. No text, no logos, no user interface.",
+      "vo": "Пока ты дочитываешь этот текст, твой конкурент уже написал твоему клиенту.",
+      "caption": [
+        {
+          "text": "ТВОЙ КОНКУРЕНТ"
+        },
+        {
+          "text": "УЖЕ НАПИСАЛ",
+          "accent": true
+        },
+        {
+          "text": "ТВОЕМУ КЛИЕНТУ"
+        }
+      ],
+      "fallbackDuration": 4.2
+    },
+    {
+      "id": "s2_ai",
+      "source": {
+        "type": "gen",
+        "model": "kling/kling-3.0-turbo-t2v",
+        "duration": 3,
+        "resolution": "1080p",
+        "aspect_ratio": "9:16"
+      },
+      "prompt": "Vertical 9:16 abstract macro. A glowing teal constellation of nodes assembling itself inside total darkness, thin cyan filaments connecting, bronze particles orbiting a soft luminous core, bright data pulses travelling along the links. Slow rotation, volumetric haze, near-black background, high-end AI commercial, rendered in octane. No text, no logos, no user interface.",
+      "vo": "Точнее, не он. Его AI.",
+      "caption": [
+        {
+          "text": "точнее — не он."
+        },
+        {
+          "text": "его AI",
+          "accent": true
+        }
+      ],
+      "fallbackDuration": 2.2
+    },
+    {
+      "id": "s3_pain",
+      "source": {
+        "type": "gen",
+        "model": "kling/kling-3.0-turbo-t2v",
+        "duration": 7,
+        "resolution": "1080p",
+        "aspect_ratio": "9:16"
+      },
+      "prompt": "Vertical 9:16 cinematic macro, slow motion. Dozens of dark sealed envelopes drift in black space and slowly dissolve into ash and teal embers, one envelope tumbling away from the camera. Cold teal key light, bronze sparks, volumetric dust, moody premium commercial. No text, no logos, no user interface.",
+      "vo": "Холодные письма без ответа. Лиды, которых никто не дожал. Возражения, на которые не нашлось слов.",
+      "caption": [
+        {
+          "text": "письма — без ответа"
+        },
+        {
+          "text": "лиды — без дожима"
+        },
+        {
+          "text": "сделки — мимо",
+          "accent": true
+        }
+      ],
+      "fallbackDuration": 5.4
+    },
+    {
+      "id": "s4_hero",
+      "source": {
+        "type": "landing",
+        "clip": "hero"
+      },
+      "vo": "AI Integrator — пятнадцать AI-инструментов для продаж и привлечения клиентов.",
+      "caption": [
+        {
+          "text": "15 AI-инструментов",
+          "accent": true
+        },
+        {
+          "text": "для продаж и лидов"
+        }
+      ],
+      "fallbackDuration": 3.8
+    },
+    {
+      "id": "s5_apps",
+      "source": {
+        "type": "landing",
+        "clip": "apps"
+      },
+      "vo": "Десять уже работают прямо на сайте. Заходишь и запускаешь бесплатно, без регистрации.",
+      "caption": [
+        {
+          "text": "10 уже работают",
+          "accent": true
+        },
+        {
+          "text": "бесплатно, без регистрации"
+        }
+      ],
+      "fallbackDuration": 4.6
+    },
+    {
+      "id": "s6_tool",
+      "source": {
+        "type": "landing",
+        "clip": "tool"
+      },
+      "vo": "Письмо под клиента. Разбор бизнеса. Радар горячих запросов.",
+      "caption": [
+        {
+          "text": "письмо под клиента"
+        },
+        {
+          "text": "за 20 секунд",
+          "accent": true
+        }
+      ],
+      "fallbackDuration": 3.8
+    },
+    {
+      "id": "s7_speed",
+      "source": {
+        "type": "gen",
+        "model": "kling/kling-3.0-turbo-t2v",
+        "duration": 5,
+        "resolution": "1080p",
+        "aspect_ratio": "9:16"
+      },
+      "prompt": "Vertical 9:16 cinematic. A teal light beam sweeps upward across a dark glass surface while glowing bar-chart columns rise fast in the background, bronze highlights catching every edge, particles accelerating upward through volumetric haze. Smooth upward camera move, near-black background, premium tech commercial. No text, no logos, no numbers, no user interface.",
+      "vo": "Запуск за семьдесят два часа. Без разработчиков.",
+      "caption": [
+        {
+          "text": "запуск за 72 часа",
+          "accent": true
+        },
+        {
+          "text": "без разработчиков"
+        }
+      ],
+      "fallbackDuration": 3.6
+    },
+    {
+      "id": "s8_cta",
+      "source": {
+        "type": "landing",
+        "clip": "cta"
+      },
+      "vo": "Ссылка в профиле.",
+      "endcard": true,
+      "caption": [
+        {
+          "text": "ссылка в профиле",
+          "accent": true
+        }
+      ],
+      "fallbackDuration": 3.4
+    }
+  ]
+}

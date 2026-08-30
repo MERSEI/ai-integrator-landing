@@ -205,6 +205,8 @@ export const en: Content = {
     subtitle:
       "AI apps that automate sales, marketing, and operations. Up and running in 72 hours, no developers needed.",
     cta: "Get an audit (free)",
+    telegramCta: "Message me on Telegram",
+    orLabel: "or",
     secondaryCta: "See the demos first ↓",
     trust: [
       "No credit card required",
@@ -463,6 +465,7 @@ export const en: Content = {
     titleTemplate: (appName) => `Liked ${appName}? We'll set it up for your business in 72 hours`,
     subtitle: "No developers needed, implementation guaranteed",
     ctaLabel: "Get a free audit",
+    telegramCta: "Ask on Telegram",
   },
 
   pricing: {
@@ -564,6 +567,8 @@ export const en: Content = {
     title: "Start automating right now",
     subtitle: "Automate your sales and marketing in 72 hours — no developers needed",
     cta: "Get a free audit →",
+    telegramCta: "Message me on Telegram",
+    orLabel: "or reach me directly",
     trust: [
       "No credit card required",
       "No results in a week and we refund you",
@@ -597,6 +602,28 @@ export const en: Content = {
     interestLabel: "What do you want to automate? (optional)",
     interestPlaceholder: "Pick a task",
     interestOther: "Not sure yet",
+    channelLabel: "Where should we reply?",
+    channelOptions: {
+      email: "Email",
+      telegram: "Telegram",
+      whatsapp: "WhatsApp",
+      phone: "Call",
+    },
+    contactLabels: {
+      email: "Email",
+      telegram: "Telegram username",
+      whatsapp: "WhatsApp number",
+      phone: "Phone number",
+    },
+    contactPlaceholders: {
+      email: "Your email",
+      telegram: "@username",
+      whatsapp: "+1 555 000 0000",
+      phone: "+1 555 000 0000",
+    },
+    contactRequired: "Leave a contact for the channel you picked",
+    contactInvalid: "That contact looks incomplete — please check it",
+    channelHint: "We'll reply wherever suits you. The email is only used to confirm the request.",
   },
 
   pro: {
@@ -784,7 +811,9 @@ export const en: Content = {
     metaTitle: "Thank you! — AI Integrator",
     title: "Request received!",
     subtitle:
-      "We'll get back to you within 24 hours and run a free diagnosis of your business.",
+      "We'll get back to you within 24 hours — in the channel you picked — and run a free diagnosis of your business.",
     cta: "← Back to home",
+    telegramLead: "Don't want to wait? Message me right now:",
+    telegramCta: "Message me on Telegram",
   },
 };

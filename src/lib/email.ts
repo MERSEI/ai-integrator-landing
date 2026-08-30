@@ -12,6 +12,7 @@
 
 import nodemailer, { type Transporter } from "nodemailer";
 import { CONTACTS } from "./content";
+import type { ContactChannel } from "./contactChannel";
 
 const AUDIT_EMAIL_SUBJECT = "AI Integrator Free Audit";
 
@@ -42,6 +43,22 @@ Best,
 Oleksandr
 AI Integrator`;
 
+const CHANNEL_NAMES: Record<Exclude<ContactChannel, "email">, string> = {
+  telegram: "Telegram",
+  whatsapp: "WhatsApp",
+  phone: "phone",
+};
+
+/**
+ * Подтверждаем выбранный канал прямо в письме: лид видит, что его выбор
+ * услышан, и знает, где ждать ответа. Для канала "email" ничего не добавляем —
+ * письмо и так пришло туда.
+ */
+function channelNote(channel: ContactChannel, contact: string): string {
+  if (channel === "email" || !contact) return "";
+  return `\n\nYou asked to be contacted via ${CHANNEL_NAMES[channel]} (${contact}) — I'll reach out there as well.`;
+}
+
 let transporter: Transporter | null = null;
 
 function getTransporter(): Transporter | null {
@@ -58,7 +75,13 @@ function getTransporter(): Transporter | null {
   return transporter;
 }
 
-export async function sendAuditRequestEmail(to: string): Promise<void> {
+export async function sendAuditRequestEmail(
+  to: string,
+  preferred: { channel: ContactChannel; contact: string } = {
+    channel: "email",
+    contact: "",
+  }
+): Promise<void> {
   const tx = getTransporter();
   if (!tx) {
     console.warn(
@@ -73,7 +96,7 @@ export async function sendAuditRequestEmail(to: string): Promise<void> {
       to,
       replyTo: CONTACTS.email,
       subject: AUDIT_EMAIL_SUBJECT,
-      text: AUDIT_EMAIL_TEXT,
+      text: AUDIT_EMAIL_TEXT + channelNote(preferred.channel, preferred.contact),
     });
   } catch (e) {
     console.error("[email] Gmail SMTP отправка не удалась:", e);

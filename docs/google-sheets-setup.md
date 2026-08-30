@@ -24,6 +24,34 @@
 // Придумай любую длинную строку и подставь её сюда.
 const SECRET = 'ЗАМЕНИ_НА_СВОЙ_СЕКРЕТ';
 
+const HEADERS = [
+  'Дата',
+  'Email',
+  'Канал связи',
+  'Контакт',
+  'Написать',
+  'Интерес',
+  'Имя',
+  'Компания',
+  'Источник',
+];
+
+// Ключи приходят с сайта в неизменном виде — здесь только подписи для таблицы.
+const CHANNEL_LABELS = {
+  email: 'Email',
+  telegram: 'Telegram',
+  whatsapp: 'WhatsApp',
+  phone: 'Телефон',
+};
+
+const INTEREST_LABELS = {
+  attract: 'Привлечение',
+  sales: 'Продажи',
+  content: 'Контент',
+  analytics: 'Аналитика',
+  other: 'Пока не уверен(а)',
+};
+
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
@@ -36,13 +64,22 @@ function doPost(e) {
 
     // Первый запуск: проставляем заголовки колонок.
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['Дата', 'Email', 'Имя', 'Компания', 'Источник']);
-      sheet.getRange(1, 1, 1, 5).setFontWeight('bold');
+      sheet.appendRow(HEADERS);
+      sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
+      sheet.setFrozenRows(1);
     }
+
+    const channel = data.channel || 'email';
+    // Для канала "email" отдельного контакта нет — это и есть сам email.
+    const contact = data.contact || (channel === 'email' ? data.email : '') || '';
 
     sheet.appendRow([
       data.ts ? new Date(data.ts) : new Date(),
       data.email || '',
+      CHANNEL_LABELS[channel] || channel,
+      contact,
+      contactLink(channel, contact),
+      INTEREST_LABELS[data.interest] || data.interest || '',
       data.name || '',
       data.company || '',
       data.source || '',
@@ -53,10 +90,42 @@ function doPost(e) {
     return ContentService.createTextOutput('error: ' + err.message);
   }
 }
+
+// Колонка «Написать»: кликабельная ссылка прямо в тот канал, который выбрал лид.
+function contactLink(channel, contact) {
+  const value = String(contact).replace(/"/g, '').trim();
+  if (!value) return '';
+
+  const digits = value.replace(/[^0-9]/g, '');
+  let url = '';
+
+  if (channel === 'telegram') {
+    url = 'https://t.me/' + value.replace('@', '');
+  } else if (channel === 'whatsapp' && digits) {
+    url = 'https://wa.me/' + digits;
+  } else if (channel === 'phone' && digits) {
+    url = 'tel:+' + digits;
+  } else if (value.indexOf('@') !== -1) {
+    url = 'mailto:' + value;
+  }
+
+  if (!url) return '';
+  // Разделитель аргументов в формулах, которые ставятся из скрипта, — всегда
+  // запятая, независимо от локали таблицы.
+  return '=HYPERLINK("' + url + '", "Написать")';
+}
 ```
 
 Замени `ЗАМЕНИ_НА_СВОЙ_СЕКРЕТ` на любую длинную случайную строку и сохрани
 (иконка дискеты или Ctrl+S).
+
+> 📋 **Если таблица уже с лидами** (старый скрипт на 5 колонок). Заголовки
+> проставляются только на пустом листе, поэтому шапку нужно поправить руками —
+> иначе новые строки поедут относительно старых подписей. Проще всего вставить
+> три новые колонки после `Email` (`Канал связи`, `Контакт`, `Написать`) и одну
+> после них (`Интерес`), чтобы порядок совпал с `HEADERS` в скрипте:
+> `Дата · Email · Канал связи · Контакт · Написать · Интерес · Имя · Компания · Источник`.
+> У старых строк новые ячейки просто останутся пустыми.
 
 **Проверь, что код валиден:** после сохранения в выпадающем списке функций
 сверху должен появиться `doPost`. Если список пустой — в файле синтаксическая
@@ -104,6 +173,25 @@ this app" → *Advanced* → *Go to ... (unsafe)*; это твой собств�
 
 ---
 
+## Что попадает в таблицу
+
+| Колонка | Откуда |
+|---|---|
+| `Дата` | момент отправки формы |
+| `Email` | обязательное поле формы |
+| `Канал связи` | выбор лида: Email / Telegram / WhatsApp / Телефон |
+| `Контакт` | `@ник` или номер в выбранном канале (для Email — сам email) |
+| `Написать` | ссылка в один клик: `t.me`, `wa.me`, `tel:` или `mailto:` |
+| `Интерес` | необязательный селект «что автоматизировать» |
+| `Имя`, `Компания` | заполняются только формами, где эти поля есть |
+| `Источник` | блок, из которого пришёл лид: `hero`, `final-cta`, `calculator` |
+
+Канал и контакт нормализуются на стороне сайта (`src/lib/contactChannel.ts`):
+в таблицу телеграм приходит как `@username`, номера — как `+380…`. Неизвестный
+канал всегда сохраняется как `email` — колонка не может оказаться пустой.
+
+---
+
 ## Проверка
 
 Отправь тестовый email через форму на сайте — строка должна появиться в таблице
@@ -124,7 +212,7 @@ Logs; Railway: вкладка Logs) и ищи префикс `[sheets]`:
 
 ```bash
 curl -L -X POST -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","source":"curl","secret":"ТВОЙ_СЕКРЕТ"}' \
+  -d '{"email":"test@example.com","channel":"telegram","contact":"@durov","interest":"sales","source":"curl","secret":"ТВОЙ_СЕКРЕТ"}' \
   "ТВОЙ_WEB_APP_URL"
 ```
 

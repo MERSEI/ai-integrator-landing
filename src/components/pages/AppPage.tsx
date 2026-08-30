@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { FiArrowRight } from "react-icons/fi";
 import AppHeader from "@/components/AppHeader";
 import ProBlock from "@/components/ProBlock";
+import TelegramButton from "@/components/TelegramButton";
 import { getContent } from "@/lib/content";
 import type { AppPageId } from "@/lib/content/types";
 import { localePath, type Locale } from "@/lib/i18n";
@@ -77,13 +78,16 @@ export default function AppPage({
                 {convert.titleTemplate(t.badge)}
               </p>
               <p className="mt-1.5 text-sm text-slate-400">{convert.subtitle}</p>
-              <a
-                href={`${localePath(locale, "/")}#final-cta`}
-                className="btn-primary mt-5 inline-flex"
-              >
-                {convert.ctaLabel}
-                <FiArrowRight aria-hidden="true" />
-              </a>
+              <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <a
+                  href={`${localePath(locale, "/")}#final-cta`}
+                  className="btn-primary inline-flex"
+                >
+                  {convert.ctaLabel}
+                  <FiArrowRight aria-hidden="true" />
+                </a>
+                <TelegramButton label={convert.telegramCta} source={`demo-${id}`} />
+              </div>
             </div>
           )}
 

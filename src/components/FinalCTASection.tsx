@@ -1,6 +1,7 @@
 import { FiCheck } from "react-icons/fi";
 import Reveal from "./Reveal";
 import EmailForm from "./EmailForm";
+import TelegramButton from "./TelegramButton";
 import { CONTACTS, getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
 
@@ -26,6 +27,13 @@ export default function FinalCTASection({ locale }: { locale: Locale }) {
 
         <Reveal delay={0.1} className="mt-8 flex w-full justify-center">
           <EmailForm locale={locale} cta={t.cta} source="final-cta" />
+        </Reveal>
+
+        <Reveal delay={0.15} className="mt-6 flex w-full justify-center">
+          <div className="flex flex-col items-center gap-3 sm:flex-row">
+            <span className="text-sm text-slate-400">{t.orLabel}</span>
+            <TelegramButton label={t.telegramCta} source="final-cta" />
+          </div>
         </Reveal>
 
         <Reveal delay={0.2}>

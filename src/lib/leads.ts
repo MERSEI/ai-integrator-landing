@@ -9,6 +9,7 @@
 
 import { upstash, upstashCreds } from "./rate-limit";
 import { appendLeadRow } from "./googleSheets";
+import type { ContactChannel } from "./contactChannel";
 
 export const LEADS_KEY = "leads:landing";
 
@@ -17,6 +18,12 @@ export type Lead = {
   name?: string;
   company?: string;
   source?: string;
+  /** Где лиду удобнее общаться — выбор из формы. */
+  channel?: ContactChannel;
+  /** Контакт в выбранном канале: @ник, номер телефона. Для канала "email" пуст. */
+  contact?: string;
+  /** Ключ категории из селекта «что автоматизировать». */
+  interest?: string;
   ts: string;
 };
 

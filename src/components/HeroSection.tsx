@@ -1,5 +1,6 @@
 import EmailForm from "./EmailForm";
 import ScenarioFlow from "./ScenarioFlow";
+import TelegramButton from "./TelegramButton";
 import { FiCheck } from "react-icons/fi";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
@@ -44,9 +45,15 @@ export default function HeroSection({ locale }: { locale: Locale }) {
           <EmailForm locale={locale} cta={t.cta} source="hero" />
         </div>
 
+        {/* Второй путь конверсии: кто не оставляет email — пишет в личку. */}
+        <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <span className="text-sm text-secondary">{t.orLabel}</span>
+          <TelegramButton label={t.telegramCta} source="hero" />
+        </div>
+
         <a
           href="#results"
-          className="mt-4 text-sm font-medium text-primary-light transition-colors hover:text-white"
+          className="mt-5 text-sm font-medium text-primary-light transition-colors hover:text-white"
         >
           {t.secondaryCta}
         </a>

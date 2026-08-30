@@ -206,6 +206,8 @@ export const ru: Content = {
       "AI-приложения для автоматизации продаж, маркетинга и операционки. Запуск за 72 часа без разработчиков.",
     cta: "Получить аудит (бесплатно)",
     secondaryCta: "Сначала посмотреть демо ↓",
+    telegramCta: "Написать в Telegram",
+    orLabel: "или",
     trust: [
       "Не нужна кредитная карта",
       "Бесплатный анализ под клиента (созвон после обратной связи по почте)",
@@ -463,6 +465,7 @@ export const ru: Content = {
     titleTemplate: (appName) => `Понравился ${appName}? Настроим под ваш бизнес за 72 часа`,
     subtitle: "Без разработчиков, с гарантией на внедрение",
     ctaLabel: "Получить аудит",
+    telegramCta: "Спросить в Telegram",
   },
 
   pricing: {
@@ -563,7 +566,9 @@ export const ru: Content = {
   finalCta: {
     title: "Начни автоматизировать прямо сейчас",
     subtitle: "Автоматизируй продажи и маркетинг за 72 часа — без разработчиков",
-    cta: "Получить бесплатный audit →",
+    cta: "Получить бесплатный аудит →",
+    telegramCta: "Написать в Telegram",
+    orLabel: "или сразу в личку",
     trust: [
       "Не нужна кредитная карта",
       "Деньги назад, если через неделю нет результата",
@@ -597,6 +602,28 @@ export const ru: Content = {
     interestLabel: "Что хотите автоматизировать? (необязательно)",
     interestPlaceholder: "Выберите задачу",
     interestOther: "Пока не уверен(а)",
+    channelLabel: "Где вам удобнее общаться?",
+    channelOptions: {
+      email: "Email",
+      telegram: "Telegram",
+      whatsapp: "WhatsApp",
+      phone: "Звонок",
+    },
+    contactLabels: {
+      email: "Email",
+      telegram: "Ник в Telegram",
+      whatsapp: "Номер WhatsApp",
+      phone: "Номер телефона",
+    },
+    contactPlaceholders: {
+      email: "Ваш email",
+      telegram: "@username",
+      whatsapp: "+380 00 000 00 00",
+      phone: "+380 00 000 00 00",
+    },
+    contactRequired: "Оставьте контакт для выбранного канала",
+    contactInvalid: "Проверьте контакт — похоже, он неполный",
+    channelHint: "Ответим туда, где вам удобнее. Email нужен для подтверждения заявки.",
   },
 
   pro: {
@@ -786,7 +813,9 @@ export const ru: Content = {
     metaTitle: "Спасибо! — AI Integrator",
     title: "Заявка принята!",
     subtitle:
-      "Мы свяжемся с вами в течение 24 часов и проведём бесплатную диагностику вашего бизнеса.",
+      "Мы свяжемся с вами в течение 24 часов — в том канале, который вы выбрали, — и проведём бесплатную диагностику вашего бизнеса.",
     cta: "← Вернуться на главную",
+    telegramLead: "Не хотите ждать? Напишите прямо сейчас:",
+    telegramCta: "Написать в Telegram",
   },
 };

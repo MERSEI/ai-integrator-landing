@@ -4,6 +4,11 @@ import { saveLead } from "@/lib/leads";
 import { sendAuditRequestEmail } from "@/lib/email";
 import { apiMessage } from "@/lib/apiMessages";
 import { requestLocale } from "@/lib/gemini";
+import {
+  needsContactValue,
+  normalizeChannel,
+  normalizeContact,
+} from "@/lib/contactChannel";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -49,6 +54,9 @@ export async function POST(req: NextRequest) {
     company?: string;
     website?: string;
     source?: string;
+    channel?: string;
+    contact?: string;
+    interest?: string;
   };
 
   // Honeypot: боты заполняют скрытое поле "website".
@@ -64,6 +72,13 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Канал связи приходит с клиента, поэтому нормализуем: неизвестное значение
+  // становится "email", контакт приводится к канону (@ник, +номер).
+  const channel = normalizeChannel(body.channel);
+  const contact = needsContactValue(channel)
+    ? normalizeContact(channel, body.contact)
+    : "";
+
   // Всегда сохраняем лид в постоянное хранилище (Upstash), чтобы он не терялся,
   // даже если Mailchimp не настроен или временно недоступен.
   await saveLead({
@@ -71,9 +86,14 @@ export async function POST(req: NextRequest) {
     name: body.name,
     company: body.company,
     source: body.source,
+    channel,
+    contact,
+    interest: typeof body.interest === "string" ? body.interest.slice(0, 40) : "",
   });
 
-  await sendAuditRequestEmail(email);
+  // Пустой контакт при неemail-канале форму не роняет: лид ценнее валидации,
+  // email для ответа у нас всё равно есть.
+  await sendAuditRequestEmail(email, { channel, contact });
 
   const { MAILCHIMP_API_KEY, MAILCHIMP_LIST_ID, MAILCHIMP_SERVER_PREFIX } =
     process.env;

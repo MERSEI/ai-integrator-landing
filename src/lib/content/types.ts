@@ -1,3 +1,5 @@
+import type { ContactChannel } from "../contactChannel";
+
 /**
  * Типы словаря контента. Оба языка обязаны реализовать `Content` целиком —
  * забытый перевод падает на этапе сборки, а не находится глазами на проде.
@@ -152,6 +154,10 @@ export type Content = {
     cta: string;
     /** Ссылка-приглашение сначала посмотреть живые демо, не оставляя email. */
     secondaryCta: string;
+    /** Второй путь для тех, кто не хочет оставлять email, — написать в Telegram. */
+    telegramCta: string;
+    /** Разделитель между формой и кнопкой Telegram: «или». */
+    orLabel: string;
     trust: string[];
   };
 
@@ -234,6 +240,7 @@ export type Content = {
     titleTemplate: (appName: string) => string;
     subtitle: string;
     ctaLabel: string;
+    telegramCta: string;
   };
 
   pricing: {
@@ -261,6 +268,8 @@ export type Content = {
     title: string;
     subtitle: string;
     cta: string;
+    telegramCta: string;
+    orLabel: string;
     trust: string[];
     contactLead: string;
     emailLabel: string;
@@ -286,6 +295,16 @@ export type Content = {
     interestLabel: string;
     interestPlaceholder: string;
     interestOther: string;
+    /** Выбор канала связи: где лиду удобнее продолжить разговор. */
+    channelLabel: string;
+    channelOptions: Record<ContactChannel, string>;
+    /** Подпись и плейсхолдер поля контакта — свои у каждого канала. */
+    contactLabels: Record<ContactChannel, string>;
+    contactPlaceholders: Record<ContactChannel, string>;
+    contactRequired: string;
+    contactInvalid: string;
+    /** Пояснение под выбором канала — почему email всё равно спрашиваем. */
+    channelHint: string;
   };
 
   pro: {
@@ -299,5 +318,8 @@ export type Content = {
     title: string;
     subtitle: string;
     cta: string;
+    /** Пока лид «горячий» — предлагаем написать сразу, не дожидаясь ответа. */
+    telegramLead: string;
+    telegramCta: string;
   };
 };

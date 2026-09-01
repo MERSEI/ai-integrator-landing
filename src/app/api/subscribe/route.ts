@@ -49,6 +49,7 @@ export async function POST(req: NextRequest) {
     company?: string;
     website?: string;
     source?: string;
+    interest?: string;
   };
 
   // Honeypot: боты заполняют скрытое поле "website".
@@ -66,14 +67,17 @@ export async function POST(req: NextRequest) {
 
   // Всегда сохраняем лид в постоянное хранилище (Upstash), чтобы он не терялся,
   // даже если Mailchimp не настроен или временно недоступен.
+  const interest = body.interest || undefined;
+
   await saveLead({
     email,
     name: body.name,
     company: body.company,
     source: body.source,
+    interest,
   });
 
-  await sendAuditRequestEmail(email);
+  await sendAuditRequestEmail({ email, source: body.source, interest });
 
   const { MAILCHIMP_API_KEY, MAILCHIMP_LIST_ID, MAILCHIMP_SERVER_PREFIX } =
     process.env;

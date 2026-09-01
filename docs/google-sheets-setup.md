@@ -162,3 +162,52 @@ deployments → карандаш → Version: *New version* → Deploy. Без �
 деплой** (Deploy → Manage deployments → карандаш → New version): без нового деплоя
 правки кода на боевой URL не попадают. Заголовки колонок дописываются только в
 пустой таблице — в уже заполненную допишите их руками одной строкой.
+
+---
+
+## Удаление тестовых строк
+
+За время отладки в таблицу попали заявки, которых не было: собственные адреса,
+`test@example.com`, моки и служебные источники (`smtp-test`, `cli-check`,
+`prod-smoke-test`). Чтобы не выбирать их глазами, добавьте эту функцию в тот же
+файл Apps Script и запустите её **один раз** из редактора (выбрать
+`cleanupTestRows` в списке функций → Run). Веб-апп она не трогает и повторного
+деплоя не требует.
+
+```javascript
+// Разовая чистка: удаляет из таблицы заявки, созданные при отладке.
+// Список намеренно узкий — под свои адреса и служебные источники, чужие лиды
+// под него не попадают.
+function cleanupTestRows() {
+  const TEST_SOURCES = ['smtp-test', 'cli-check', 'cli-check-2', 'prod-smoke-test'];
+  const TEST_EMAILS = ['test@example.com'];
+
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+  const values = sheet.getDataRange().getValues();
+  let removed = 0;
+
+  // Идём снизу вверх: удаление строки сдвигает все, что под ней.
+  for (let i = values.length - 1; i >= 1; i--) {
+    const email = String(values[i][1] || '').toLowerCase();
+    const source = String(values[i][4] || '').toLowerCase();
+
+    const isTest =
+      email.indexOf('aleksfialko15') !== -1 ||
+      email.indexOf('.mock.') !== -1 ||
+      TEST_EMAILS.indexOf(email) !== -1 ||
+      TEST_SOURCES.indexOf(source) !== -1;
+
+    if (isTest) {
+      sheet.deleteRow(i + 1);
+      removed++;
+    }
+  }
+
+  Logger.log('Удалено тестовых строк: ' + removed);
+}
+```
+
+Ожидаемо удалится 9 строк: два `prod-smoke-test` от 01.09.2026, `smtp-test` и
+два `cli-check` от 27.08, собственный адрес от 27.07, `test@example.com` от
+07.08 и две записи `sophia.lopez.mock.us@gmail.com` от 10.08. После запуска
+функцию можно удалить из файла.

@@ -59,7 +59,30 @@ function getTransporter(): Transporter | null {
   return transporter;
 }
 
-export async function sendAuditRequestEmail(to: string): Promise<void> {
+export type LeadDetails = {
+  email: string;
+  /** Форма, с которой пришёл лид: hero, calculator, final-cta. */
+  source?: string;
+  /** Что человек выбрал в селекте «что автоматизировать». */
+  interest?: string;
+};
+
+function ownerLeadText(lead: LeadDetails): string {
+  return `Новый лид с формы.
+
+Email:      ${lead.email}
+Форма:      ${lead.source || "—"}
+Интерес:    ${lead.interest || "—"}
+
+Автоответ с приглашением на аудит уже ушёл на этот адрес.`;
+}
+
+/**
+ * Два письма на заявку: приглашение лиду и уведомление владельцу. Без второго
+ * о лиде можно узнать только заглянув в таблицу — а туда никто не смотрит
+ * ежедневно, и заявка остывает.
+ */
+export async function sendAuditRequestEmail(lead: LeadDetails): Promise<void> {
   const tx = getTransporter();
   if (!tx) {
     console.warn(
@@ -68,16 +91,30 @@ export async function sendAuditRequestEmail(to: string): Promise<void> {
     return;
   }
 
-  try {
-    await tx.sendMail({
-      from: `"AI Integrator" <${process.env.GMAIL_ADDRESS}>`,
-      to,
+  const from = `"AI Integrator" <${process.env.GMAIL_ADDRESS}>`;
+
+  const results = await Promise.allSettled([
+    tx.sendMail({
+      from,
+      to: lead.email,
       replyTo: CONTACTS.email,
       subject: AUDIT_EMAIL_SUBJECT,
       text: AUDIT_EMAIL_TEXT,
-    });
-  } catch (e) {
-    console.error("[email] Gmail SMTP отправка не удалась:", e);
+    }),
+    tx.sendMail({
+      from,
+      to: CONTACTS.email,
+      // Ответ уходит прямо лиду: письмо себе работает как начало переписки.
+      replyTo: lead.email,
+      subject: `Лид: ${lead.email}${lead.source ? ` — ${lead.source}` : ""}`,
+      text: ownerLeadText(lead),
+    }),
+  ]);
+
+  for (const r of results) {
+    if (r.status === "rejected") {
+      console.error("[email] письмо о лиде не ушло:", r.reason);
+    }
   }
 }
 

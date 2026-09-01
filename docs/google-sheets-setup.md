@@ -179,7 +179,7 @@ deployments → карандаш → Version: *New version* → Deploy. Без �
 // Список намеренно узкий — под свои адреса и служебные источники, чужие лиды
 // под него не попадают.
 function cleanupTestRows() {
-  const TEST_SOURCES = ['smtp-test', 'cli-check', 'cli-check-2', 'prod-smoke-test', 'owner-notify-test'];
+  const TEST_SOURCES = ['smtp-test', 'cli-check', 'cli-check-2', 'prod-smoke-test', 'owner-notify-test', 'typo-check'];
   const TEST_EMAILS = ['test@example.com'];
 
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
@@ -207,7 +207,8 @@ function cleanupTestRows() {
 }
 ```
 
-Ожидаемо удалится 10 строк: два `prod-smoke-test` и один `owner-notify-test` от
+Ожидаемо удалится 11 строк: два `prod-smoke-test`, один `owner-notify-test` и
+один `typo-check` от
 01.09.2026, `smtp-test` и два `cli-check` от 27.08, собственный адрес от 27.07,
 `test@example.com` от 07.08 и две записи `sophia.lopez.mock.us@gmail.com` от
 10.08. После запуска функцию можно удалить из файла.

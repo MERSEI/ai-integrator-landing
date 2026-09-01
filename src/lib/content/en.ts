@@ -600,6 +600,7 @@ export const en: Content = {
     stepContact: "3. Where to send the confirmation",
     timezoneNote: "Times are in your timezone",
     pickDateFirst: "Pick a day first",
+    pickDateFirstCompact: "Pick a day above first",
     noSlots: "No slots left on this day — pick another one",
     slotRequired: "Pick a day and a time for the call",
     channelLabel: "How should I reach you",

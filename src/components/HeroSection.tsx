@@ -1,4 +1,4 @@
-import EmailForm from "./EmailForm";
+import CtaTabs from "./CtaTabs";
 import ScenarioFlow from "./ScenarioFlow";
 import { FiCheck } from "react-icons/fi";
 import { getContent } from "@/lib/content";
@@ -41,7 +41,7 @@ export default function HeroSection({ locale }: { locale: Locale }) {
         </p>
 
         <div className="mt-9 flex w-full justify-center">
-          <EmailForm locale={locale} cta={t.cta} source="hero" />
+          <CtaTabs locale={locale} cta={t.cta} source="hero" />
         </div>
 
         <a

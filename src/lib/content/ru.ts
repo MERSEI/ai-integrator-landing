@@ -600,6 +600,7 @@ export const ru: Content = {
     stepContact: "3. Куда прислать подтверждение",
     timezoneNote: "Время в вашем часовом поясе",
     pickDateFirst: "Сначала выберите день слева",
+    pickDateFirstCompact: "Сначала выберите день выше",
     noSlots: "На этот день слотов не осталось — выберите другой",
     slotRequired: "Выберите день и время созвона",
     channelLabel: "Как вам удобнее связаться",

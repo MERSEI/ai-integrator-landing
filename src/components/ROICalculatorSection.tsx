@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { FiClock, FiTrendingUp, FiCheckCircle } from "react-icons/fi";
 import { TbCalculator } from "react-icons/tb";
 import Reveal from "./Reveal";
-import EmailForm from "./EmailForm";
+import CtaTabs from "./CtaTabs";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
 
@@ -221,7 +221,7 @@ export default function ROICalculatorSection({ locale }: { locale: Locale }) {
                 <p className="font-heading text-sm font-bold text-white">{t.ctaTitle}</p>
                 <p className="mt-1 text-sm text-slate-400">{t.ctaSubtitle}</p>
                 <div className="mt-4">
-                  <EmailForm locale={locale} cta={t.submitCta} source="calculator" stacked />
+                  <CtaTabs locale={locale} cta={t.submitCta} source="calculator" compact />
                 </div>
               </div>
             </div>

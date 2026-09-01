@@ -29,7 +29,7 @@ export default function FinalCTASection({ locale }: { locale: Locale }) {
         </Reveal>
 
         <Reveal delay={0.1} className="mt-8 flex w-full justify-center">
-          <CtaTabs locale={locale} />
+          <CtaTabs locale={locale} cta={t.cta} source="final-cta" />
         </Reveal>
 
         <Reveal delay={0.2}>

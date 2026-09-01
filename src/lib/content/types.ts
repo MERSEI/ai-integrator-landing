@@ -288,6 +288,8 @@ export type Content = {
     stepContact: string;
     timezoneNote: string;
     pickDateFirst: string;
+    /** Тот же текст для узкой раскладки, где календарь стоит сверху, а не слева. */
+    pickDateFirstCompact: string;
     noSlots: string;
     slotRequired: string;
     channelLabel: string;

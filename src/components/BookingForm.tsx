@@ -38,9 +38,15 @@ function chipClass(selected: boolean): string {
 export default function BookingForm({
   locale,
   source,
+  /**
+   * Узкий контейнер (карточка калькулятора): календарь и слоты идут одной
+   * колонкой, а внешнюю рамку не рисуем — иначе карточка внутри карточки.
+   */
+  compact = false,
 }: {
   locale: Locale;
   source: string;
+  compact?: boolean;
 }) {
   const content = getContent(locale);
   const t = content.booking;
@@ -168,7 +174,11 @@ export default function BookingForm({
 
   if (booked) {
     return (
-      <div className="card-glass mx-auto w-full max-w-3xl p-6 text-left sm:p-8">
+      <div
+        className={`w-full text-left ${
+          compact ? "" : "card-glass mx-auto max-w-3xl p-6 sm:p-8"
+        }`}
+      >
         <p className="flex items-center gap-2 font-heading text-lg font-semibold text-primary">
           <FiCheck className="shrink-0 text-success" aria-hidden="true" />
           {t.successTitle.replace("{datetime}", booked)}
@@ -181,10 +191,14 @@ export default function BookingForm({
   return (
     <form
       onSubmit={onSubmit}
-      className="card-glass mx-auto w-full max-w-3xl p-5 text-left sm:p-6"
+      className={`w-full text-left ${
+        compact ? "" : "card-glass mx-auto max-w-3xl p-5 sm:p-6"
+      }`}
       noValidate
     >
-      <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_160px]">
+      <div
+        className={`grid gap-6 ${compact ? "" : "sm:grid-cols-[minmax(0,1fr)_160px]"}`}
+      >
         {/* Календарь */}
         <div>
           <div className="flex items-center justify-between">
@@ -262,23 +276,29 @@ export default function BookingForm({
         </div>
 
         {/* Слоты выбранного дня */}
-        <div className="sm:border-l sm:border-white/[0.08] sm:pl-5">
+        <div className={compact ? "" : "sm:border-l sm:border-white/[0.08] sm:pl-5"}>
           <p className="text-xs font-medium uppercase tracking-wider text-secondary">
             {t.stepTime}
           </p>
           <p className="mt-3 text-[11px] leading-snug text-secondary">
             {t.timezoneNote}
-            <br />
+            {compact ? " · " : <br />}
             {timezone}
           </p>
 
-          {!selectedDay && <p className="mt-3 text-sm text-slate-500">{t.pickDateFirst}</p>}
+          {!selectedDay && (
+            <p className="mt-3 text-sm text-slate-500">
+              {compact ? t.pickDateFirstCompact : t.pickDateFirst}
+            </p>
+          )}
           {selectedDay && slots.length === 0 && (
             <p className="mt-3 text-sm text-slate-500">{t.noSlots}</p>
           )}
 
           {slots.length > 0 && (
-            <div className="mt-3 grid grid-cols-3 gap-1.5 sm:grid-cols-2">
+            <div
+              className={`mt-3 grid grid-cols-3 gap-1.5 ${compact ? "" : "sm:grid-cols-2"}`}
+            >
               {slots.map((slot) => (
                 <button
                   key={slot}
@@ -306,13 +326,13 @@ export default function BookingForm({
           {t.stepContact}
         </p>
 
-        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+        <div className={`mt-3 grid gap-3 ${compact ? "" : "sm:grid-cols-2"}`}>
           <div>
-            <label htmlFor="booking-email" className="sr-only">
+            <label htmlFor={`booking-email-${source}`} className="sr-only">
               {f.emailLabel}
             </label>
             <input
-              id="booking-email"
+              id={`booking-email-${source}`}
               type="email"
               autoComplete="email"
               placeholder={f.placeholder}
@@ -322,11 +342,11 @@ export default function BookingForm({
             />
           </div>
           <div>
-            <label htmlFor="booking-interest" className="sr-only">
+            <label htmlFor={`booking-interest-${source}`} className="sr-only">
               {f.interestLabel}
             </label>
             <select
-              id="booking-interest"
+              id={`booking-interest-${source}`}
               value={interest}
               onChange={(e) => setInterest(e.target.value)}
               className={`${inputClass} cursor-pointer`}
@@ -368,11 +388,11 @@ export default function BookingForm({
         </div>
 
         <div className="mt-3">
-          <label htmlFor="booking-contact" className="sr-only">
+          <label htmlFor={`booking-contact-${source}`} className="sr-only">
             {t.contactLabels[channel]}
           </label>
           <input
-            id="booking-contact"
+            id={`booking-contact-${source}`}
             type={channel === "email" ? "email" : channel === "telegram" ? "text" : "tel"}
             inputMode={channel === "telegram" || channel === "email" ? "text" : "tel"}
             placeholder={t.contactPlaceholders[channel]}
@@ -386,11 +406,11 @@ export default function BookingForm({
         </div>
 
         <div className="mt-3">
-          <label htmlFor="booking-note" className="sr-only">
+          <label htmlFor={`booking-note-${source}`} className="sr-only">
             {t.noteLabel}
           </label>
           <textarea
-            id="booking-note"
+            id={`booking-note-${source}`}
             rows={2}
             placeholder={t.notePlaceholder}
             value={note}

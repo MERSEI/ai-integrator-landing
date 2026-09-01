@@ -31,6 +31,9 @@ export async function appendLeadRow(lead: Lead): Promise<void> {
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      // Заявки на созвон приносят лишние поля (slot/channel/contact/note) —
+      // старый Apps Script их просто игнорирует, обновлённый пишет в свои
+      // колонки (docs/google-sheets-setup.md).
       body: JSON.stringify({ ...lead, secret }),
       // Apps Script отвечает 302 на итоговый script.googleusercontent.com —
       // fetch по умолчанию следует за редиректом, это ожидаемо.

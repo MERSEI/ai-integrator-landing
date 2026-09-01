@@ -1,16 +1,20 @@
 import { FiCheck } from "react-icons/fi";
+import { TbBrandTelegram } from "react-icons/tb";
 import Reveal from "./Reveal";
-import EmailForm from "./EmailForm";
+import CtaTabs from "./CtaTabs";
 import { CONTACTS, getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
 
 export default function FinalCTASection({ locale }: { locale: Locale }) {
-  const t = getContent(locale).finalCta;
+  const content = getContent(locale);
+  const t = content.finalCta;
+  const b = content.booking;
+  const telegramUrl = `https://t.me/${CONTACTS.telegram.replace("@", "")}`;
 
   return (
     <section
       id="final-cta"
-      className="relative overflow-hidden bg-dark py-20 [content-visibility:auto] [contain-intrinsic-size:auto_700px] sm:py-28"
+      className="relative overflow-hidden bg-dark py-20 [content-visibility:auto] [contain-intrinsic-size:auto_900px] sm:py-28"
     >
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
@@ -25,7 +29,7 @@ export default function FinalCTASection({ locale }: { locale: Locale }) {
         </Reveal>
 
         <Reveal delay={0.1} className="mt-8 flex w-full justify-center">
-          <EmailForm locale={locale} cta={t.cta} source="final-cta" />
+          <CtaTabs locale={locale} />
         </Reveal>
 
         <Reveal delay={0.2}>
@@ -37,10 +41,34 @@ export default function FinalCTASection({ locale }: { locale: Locale }) {
               </li>
             ))}
           </ul>
+        </Reveal>
+
+        {/* Прямой канал для тех, кому форма — лишний шаг: обещание ответа держим явным. */}
+        <Reveal delay={0.25} className="mt-10 w-full">
+          <div className="card-glass mx-auto flex w-full max-w-3xl flex-col items-center gap-4 p-5 text-center sm:flex-row sm:justify-between sm:p-6 sm:text-left">
+            <div>
+              <p className="font-heading text-base font-medium text-primary">
+                {b.telegramTitle}
+              </p>
+              <p className="mt-1 text-sm text-slate-400">{b.telegramText}</p>
+            </div>
+            <a
+              href={telegramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary w-full shrink-0 sm:w-auto"
+            >
+              <TbBrandTelegram aria-hidden="true" />
+              {b.telegramCta}
+            </a>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.3}>
           <p className="mt-6 text-sm text-slate-500">
             {t.contactLead}{" "}
             <a
-              href={`https://t.me/${CONTACTS.telegram.replace("@", "")}`}
+              href={telegramUrl}
               className="text-primary-light transition-colors hover:text-white"
             >
               {CONTACTS.telegram}

@@ -32,6 +32,8 @@ const ru = {
     "Опишите ситуацию подробнее: что предлагали, на чём зависло.",
   needNiche: "Укажите вашу нишу.",
   invalidEmail: "Введите корректный email",
+  invalidSlot: "Это время уже недоступно. Выберите другой слот.",
+  invalidContact: "Проверьте контакт для выбранного способа связи.",
 };
 
 const en: typeof ru = {
@@ -62,6 +64,8 @@ const en: typeof ru = {
     "Describe the situation in more detail: what you pitched and where it stalled.",
   needNiche: "Name your niche.",
   invalidEmail: "Enter a valid email",
+  invalidSlot: "That time is no longer available. Pick another slot.",
+  invalidContact: "Check the contact for the channel you picked.",
 };
 
 export type ApiMessageKey = keyof typeof ru;

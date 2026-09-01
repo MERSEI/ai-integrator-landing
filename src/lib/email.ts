@@ -12,6 +12,7 @@
 
 import nodemailer, { type Transporter } from "nodemailer";
 import { CONTACTS } from "./content";
+import { BOOKING_DURATION_MIN, type ContactChannel } from "./booking";
 
 const AUDIT_EMAIL_SUBJECT = "AI Integrator Free Audit";
 
@@ -77,5 +78,136 @@ export async function sendAuditRequestEmail(to: string): Promise<void> {
     });
   } catch (e) {
     console.error("[email] Gmail SMTP отправка не удалась:", e);
+  }
+}
+
+// ── Заявка на созвон ────────────────────────────────────────────────
+
+export type BookingDetails = {
+  email: string;
+  /** Момент созвона в UTC (ISO). */
+  slot: string;
+  /** IANA-пояс лида — в нём он выбирал время, в нём же должен видеть его в письме. */
+  timezone: string;
+  channel: ContactChannel;
+  contact: string;
+  note?: string;
+  interest?: string;
+  locale: string;
+};
+
+/** Наш пояс: письмо себе всегда в пражском времени, чтобы не пересчитывать в уме. */
+const OWNER_TIMEZONE = "Europe/Prague";
+
+function formatIn(slot: string, timezone: string, locale: string): string {
+  try {
+    return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "ru-RU", {
+      dateStyle: "full",
+      timeStyle: "short",
+      timeZone: timezone,
+    }).format(new Date(slot));
+  } catch {
+    // Невалидный IANA-пояс из браузера лида не должен ронять письмо.
+    return new Date(slot).toISOString();
+  }
+}
+
+function leadBookingText(b: BookingDetails): { subject: string; text: string } {
+  const when = formatIn(b.slot, b.timezone, b.locale);
+
+  if (b.locale === "en") {
+    return {
+      subject: `Call booked — ${when}`,
+      text: `Thanks for booking a call.
+
+When: ${when} (${b.timezone}), ${BOOKING_DURATION_MIN} minutes.
+How we connect: ${b.channel} — ${b.contact}
+
+I'm Oleksandr. Before we talk, two lines from you would make the call
+much more useful: what your business does, and what hurts most right
+now — not enough inbound leads, sales depending entirely on you,
+content, something else.
+
+Just reply to this email. If plans change, reply here or ping me on
+Telegram (${CONTACTS.telegram}) and we'll move it.
+
+Best,
+Oleksandr
+AI Integrator`,
+    };
+  }
+
+  return {
+    subject: `Созвон забронирован — ${when}`,
+    text: `Спасибо за заявку на созвон.
+
+Когда: ${when} (${b.timezone}), ${BOOKING_DURATION_MIN} минут.
+Как свяжемся: ${b.channel} — ${b.contact}
+
+Меня зовут Александр. Чтобы созвон был по делу, ответьте парой строк
+прямо на это письмо: чем занимается бизнес и что болит сильнее всего —
+мало входящих заявок, продажи держатся только на вас, контент или
+что-то другое.
+
+Если планы поменяются — ответьте на это письмо или напишите в Telegram
+(${CONTACTS.telegram}), перенесём.
+
+Хорошего дня,
+Александр
+AI Integrator`,
+  };
+}
+
+function ownerBookingText(b: BookingDetails): string {
+  return `Новая заявка на созвон.
+
+Когда (его время):  ${formatIn(b.slot, b.timezone, "ru")} — ${b.timezone}
+Когда (Прага):      ${formatIn(b.slot, OWNER_TIMEZONE, "ru")}
+Email:              ${b.email}
+Способ связи:       ${b.channel} — ${b.contact}
+Интерес:            ${b.interest || "—"}
+Комментарий:        ${b.note || "—"}`;
+}
+
+/**
+ * Два письма на одну бронь: подтверждение лиду и уведомление себе. Оба
+ * best-effort — заявка уже сохранена в Upstash/Sheets, падать из-за SMTP
+ * форма не должна.
+ */
+export async function sendBookingEmails(b: BookingDetails): Promise<void> {
+  const tx = getTransporter();
+  if (!tx) {
+    console.warn(
+      "[email] GMAIL_ADDRESS/GMAIL_APP_PASSWORD не настроены — подтверждение созвона не отправлено:",
+      b.email,
+      b.slot
+    );
+    return;
+  }
+
+  const lead = leadBookingText(b);
+  const from = `"AI Integrator" <${process.env.GMAIL_ADDRESS}>`;
+
+  const results = await Promise.allSettled([
+    tx.sendMail({
+      from,
+      to: b.email,
+      replyTo: CONTACTS.email,
+      subject: lead.subject,
+      text: lead.text,
+    }),
+    tx.sendMail({
+      from,
+      to: CONTACTS.email,
+      replyTo: b.email,
+      subject: `Созвон: ${formatIn(b.slot, OWNER_TIMEZONE, "ru")} — ${b.email}`,
+      text: ownerBookingText(b),
+    }),
+  ]);
+
+  for (const r of results) {
+    if (r.status === "rejected") {
+      console.error("[email] письмо о созвоне не ушло:", r.reason);
+    }
   }
 }

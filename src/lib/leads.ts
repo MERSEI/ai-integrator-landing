@@ -17,6 +17,13 @@ export type Lead = {
   name?: string;
   company?: string;
   source?: string;
+  /** Поля заявки на созвон (форма BookingForm); у обычной подписки их нет. */
+  slot?: string;
+  timezone?: string;
+  channel?: string;
+  contact?: string;
+  interest?: string;
+  note?: string;
   ts: string;
 };
 

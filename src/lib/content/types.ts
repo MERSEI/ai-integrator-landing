@@ -329,6 +329,9 @@ export type Content = {
     interestLabel: string;
     interestPlaceholder: string;
     interestOther: string;
+    /** Подсказка при опечатке в домене: «Возможно, вы имели в виду …» + кнопка. */
+    typoQuestion: string;
+    typoApply: string;
   };
 
   pro: {

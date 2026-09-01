@@ -9,6 +9,8 @@
  * пояса уходит вместе с заявкой, поэтому в письме видно и наше время тоже.
  */
 
+import { emailProblem } from "./emailCheck";
+
 /** Рабочие часы по часовому поясу лида. Часовой шаг: полчасовой даёт 20 чипов — стена кнопок. */
 export const BOOKING_SLOTS = [
   "09:00",
@@ -106,7 +108,6 @@ export function isBookableSlotIso(iso: unknown, now: Date): boolean {
 
 const TELEGRAM_RE = /^@?[a-zA-Z][a-zA-Z0-9_]{3,31}$/;
 const PHONE_RE = /^\+?[0-9]{7,15}$/;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 /**
  * Приводит контакт к каноничному виду или возвращает null, если формат не
@@ -120,7 +121,10 @@ export function normalizeContact(
 ): string | null {
   const raw = (value ?? "").trim();
 
-  if (channel === "email") return raw === "" ? email : EMAIL_RE.test(raw) ? raw : null;
+  // Запасной адрес проверяем той же структурной проверкой, что и основной.
+  if (channel === "email") {
+    return raw === "" ? email : emailProblem(raw) ? null : raw;
+  }
   if (channel === "telegram") {
     return TELEGRAM_RE.test(raw) ? `@${raw.replace(/^@/, "")}` : null;
   }

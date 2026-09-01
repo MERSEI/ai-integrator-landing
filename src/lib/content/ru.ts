@@ -650,6 +650,8 @@ export const ru: Content = {
     interestLabel: "Что хотите автоматизировать? (необязательно)",
     interestPlaceholder: "Выберите задачу",
     interestOther: "Пока не уверен(а)",
+    typoQuestion: "Возможно, вы имели в виду",
+    typoApply: "Исправить",
   },
 
   pro: {

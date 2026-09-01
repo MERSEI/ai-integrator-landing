@@ -5,8 +5,7 @@ import { sendBookingEmails } from "@/lib/email";
 import { apiMessage } from "@/lib/apiMessages";
 import { requestLocale } from "@/lib/gemini";
 import { isBookableSlotIso, isContactChannel, normalizeContact } from "@/lib/booking";
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+import { emailProblem, suggestEmail } from "@/lib/emailCheck";
 
 /** Столько символов комментария хватает на суть; остальное — место для мусора. */
 const NOTE_MAX = 1000;
@@ -68,9 +67,16 @@ export async function POST(req: NextRequest) {
   }
 
   const email = body.email?.trim().toLowerCase() ?? "";
-  if (!EMAIL_RE.test(email)) {
+  if (emailProblem(email)) {
     return NextResponse.json(
       { error: apiMessage(locale, "invalidEmail") },
+      { status: 400 }
+    );
+  }
+  const suggestion = suggestEmail(email);
+  if (suggestion) {
+    return NextResponse.json(
+      { error: apiMessage(locale, "emailTypo").replace("{email}", suggestion) },
       { status: 400 }
     );
   }

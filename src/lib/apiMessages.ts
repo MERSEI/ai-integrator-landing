@@ -34,6 +34,7 @@ const ru = {
   invalidEmail: "Введите корректный email",
   invalidSlot: "Это время уже недоступно. Выберите другой слот.",
   invalidContact: "Проверьте контакт для выбранного способа связи.",
+  emailTypo: "Проверьте адрес — возможно, вы имели в виду {email}",
 };
 
 const en: typeof ru = {
@@ -66,6 +67,7 @@ const en: typeof ru = {
   invalidEmail: "Enter a valid email",
   invalidSlot: "That time is no longer available. Pick another slot.",
   invalidContact: "Check the contact for the channel you picked.",
+  emailTypo: "Check the address — did you mean {email}?",
 };
 
 export type ApiMessageKey = keyof typeof ru;

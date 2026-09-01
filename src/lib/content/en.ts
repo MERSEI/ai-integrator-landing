@@ -650,6 +650,8 @@ export const en: Content = {
     interestLabel: "What do you want to automate? (optional)",
     interestPlaceholder: "Pick a task",
     interestOther: "Not sure yet",
+    typoQuestion: "Did you mean",
+    typoApply: "Fix it",
   },
 
   pro: {

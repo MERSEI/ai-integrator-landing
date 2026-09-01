@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { getContent } from "@/lib/content";
+import { emailProblem, suggestEmail } from "@/lib/emailCheck";
 import { trackLeadConversion } from "@/lib/gtag";
 import { localePath, type Locale } from "@/lib/i18n";
 
@@ -34,8 +35,14 @@ export default function EmailForm({
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>();
+
+  // Опечатка в домене — не ошибка формы, а вопрос: показываем исправленный
+  // вариант рядом с полем и даём подставить его одной кнопкой.
+  const typo = suggestEmail(watch("email") ?? "");
 
   const onSubmit = async (data: FormValues) => {
     setServerError(null);
@@ -78,15 +85,27 @@ export default function EmailForm({
           aria-invalid={!!errors.email}
           {...register("email", {
             required: t.required,
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
-              message: t.invalid,
-            },
+            validate: (value) => (emailProblem(value) ? t.invalid : true),
           })}
         />
         {(errors.email || serverError) && (
           <p role="alert" className="mt-2 text-sm text-rose-400">
             {errors.email?.message ?? serverError}
+          </p>
+        )}
+        {typo && !errors.email && (
+          <p className="mt-2 text-sm text-warning">
+            {t.typoQuestion}{" "}
+            <button
+              type="button"
+              onClick={() =>
+                setValue("email", typo, { shouldValidate: true, shouldDirty: true })
+              }
+              className="font-medium underline underline-offset-2 hover:text-primary"
+            >
+              {typo}
+            </button>
+            ? <span className="sr-only">{t.typoApply}</span>
           </p>
         )}
       </div>

@@ -4,8 +4,7 @@ import { saveLead } from "@/lib/leads";
 import { sendAuditRequestEmail } from "@/lib/email";
 import { apiMessage } from "@/lib/apiMessages";
 import { requestLocale } from "@/lib/gemini";
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+import { emailProblem, suggestEmail } from "@/lib/emailCheck";
 
 // Простой in-memory rate limit: 5 запросов в минуту с одного IP.
 const hits = new Map<string, { count: number; ts: number }>();
@@ -58,9 +57,18 @@ export async function POST(req: NextRequest) {
   }
 
   const email = body.email?.trim().toLowerCase() ?? "";
-  if (!EMAIL_RE.test(email)) {
+  if (emailProblem(email)) {
     return NextResponse.json(
       { error: apiMessage(locale, "invalidEmail") },
+      { status: 400 }
+    );
+  }
+  // Опечатку в домене отбиваем на сервере тоже: письмо по такому адресу
+  // отобьётся, а лид останется ждать ответа, которого не будет.
+  const suggestion = suggestEmail(email);
+  if (suggestion) {
+    return NextResponse.json(
+      { error: apiMessage(locale, "emailTypo").replace("{email}", suggestion) },
       { status: 400 }
     );
   }

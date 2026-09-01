@@ -13,13 +13,12 @@ import {
   type ContactChannel,
 } from "@/lib/booking";
 import { getContent } from "@/lib/content";
+import { emailProblem, suggestEmail } from "@/lib/emailCheck";
 import { trackLeadConversion } from "@/lib/gtag";
 import type { Locale } from "@/lib/i18n";
 
 /** Канал по умолчанию — Telegram: быстрее почты и это наш основной канал связи. */
 const DEFAULT_CHANNEL: ContactChannel = "telegram";
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function intlLocale(locale: Locale): string {
   return locale === "en" ? "en-GB" : "ru-RU";
@@ -86,6 +85,10 @@ export default function BookingForm({
     [selectedDay, now]
   );
 
+  // Опечатка в домене — вопрос, а не ошибка: подсказываем исправленный адрес,
+  // подставить его можно одним кликом.
+  const emailTypo = suggestEmail(email);
+
   const timezone =
     typeof Intl !== "undefined"
       ? Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -131,7 +134,7 @@ export default function BookingForm({
       setError(t.slotRequired);
       return;
     }
-    if (!EMAIL_RE.test(email.trim())) {
+    if (emailProblem(email.trim())) {
       setError(f.invalid);
       return;
     }
@@ -340,6 +343,22 @@ export default function BookingForm({
               onChange={(e) => setEmail(e.target.value)}
               className={inputClass}
             />
+            {emailTypo && (
+              <p className="mt-1.5 text-sm text-warning">
+                {f.typoQuestion}{" "}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail(emailTypo);
+                    setError(null);
+                  }}
+                  className="font-medium underline underline-offset-2 hover:text-primary"
+                >
+                  {emailTypo}
+                </button>
+                ? <span className="sr-only">{f.typoApply}</span>
+              </p>
+            )}
           </div>
           <div>
             <label htmlFor={`booking-interest-${source}`} className="sr-only">

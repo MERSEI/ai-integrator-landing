@@ -432,6 +432,11 @@ export const en: Content = {
       ctaLabel: "Open",
     },
     portraitAlt: (name) => `Portrait: ${name}`,
+    caseLabels: {
+      challenge: "Before",
+      solution: "What we deployed",
+      result: "Result",
+    },
   },
 
   roiCalculator: {
@@ -459,6 +464,21 @@ export const en: Content = {
       "The math: routine work drops by ~50% on average, closed-deal rate grows by ~20% — based on current client results (see testimonials above).",
     disclaimer:
       "This is an estimate, not a revenue guarantee — actual numbers depend on your niche and process.",
+    presetsLabel: "Business type",
+    presets: {
+      ecommerce: "E-commerce",
+      saas: "B2B SaaS",
+      realestate: "Real estate",
+      legal: "Legal / fintech",
+    },
+    lockCta: (amount) => `Lock in ${amount} — book a demo`,
+    lockCtaHint: "Your numbers travel with the request — we'll walk through them on the call",
+    modalTitle: "Book a demo",
+    modalSubtitle: (amount) =>
+      `Your estimate is ${amount} a month. On the call we'll show which agents produce that number and how fast the build pays for itself.`,
+    modalSummaryTitle: "Your estimate",
+    modalClose: "Close",
+    industryLabel: "Niche",
   },
 
   demoConvert: {
@@ -481,13 +501,14 @@ export const en: Content = {
         price: 90,
         popular: false,
         audience: "Freelancers, small business",
+        tagline: "A quick test to start with: one process, lowest commitment",
         features: [
           "1 agent on one process",
           "Process audit + a build around you",
           "Integration with your systems",
           "Support and updates",
         ],
-        cta: "Get started",
+        cta: "Start with Starter (1 agent)",
       },
       {
         name: "Growth",
@@ -495,13 +516,14 @@ export const en: Content = {
         price: 250,
         popular: true,
         audience: "E-commerce, small agencies",
+        tagline: "The sweet spot: three agents cover the whole deal cycle",
         features: [
           "3 agents of your choice",
           "Process audit + a build around you",
           "Integration with your systems",
           "Priority support",
         ],
-        cta: "Choose Growth",
+        cta: "Book a Growth demo (3 agents)",
       },
       {
         name: "Enterprise",
@@ -509,24 +531,31 @@ export const en: Content = {
         price: 900,
         popular: false,
         audience: "Larger businesses and teams",
+        tagline: "A team of agents shaped around your operations and playbooks",
+        badge: "Custom SLA & LLM fine-tuning",
         features: [
           "A team of agents across your operations",
           "An agent for your non-standard case",
           "Integration with your systems",
           "Dedicated manager",
         ],
-        cta: "Discuss your project",
+        cta: "Talk to the CTO — custom project",
       },
     ],
     setupSuffix: " to build",
     thenPrefix: "then",
     perMonth: "/month",
     supportSuffix: "— support and updates",
-    popularBadge: "Popular",
+    popularBadge: "Best ROI",
     guarantee:
       "A guarantee on the work: we get the agent running on your data. If we can't, you get your money back.",
     footnote:
       "It starts with a free process audit and a demo of the agents. The build is a one-time fee; the subscription covers support and updates only.",
+    breakdownLabel: "What the price is made of",
+    setupTooltip:
+      "One-time: the process audit, agents built on your data, integration with your systems, and going live in 48–72 hours.",
+    monthlyTooltip:
+      "Monthly: agent hosting, response monitoring, model updates and support. Cancel any time — the build stays yours.",
   },
 
   faq: {
@@ -577,6 +606,53 @@ export const en: Content = {
     contactLead: "Or reach out directly: Telegram",
     emailLabel: "Email",
     phoneLabel: "Phone",
+  },
+
+  liveDemo: {
+    badge: "Live demo",
+    title: "Test the agent right here",
+    subtitle:
+      "Ask it the way your customer would. This is the same engine we deploy for clients.",
+    roleLabel: "Agent role",
+    roles: [
+      {
+        key: "sales",
+        label: "Sales",
+        prompt:
+          "You are the AI sales agent for a company that deploys AI agents for sales and marketing in 48-72 hours. Plans: Starter $490 build + $90/mo, Growth $1200 + $250/mo, Enterprise $3500 + $900/mo. Answer briefly (2-4 sentences), concretely, no pressure. If asked about price, state it plainly. End with a sensible next step.",
+      },
+      {
+        key: "support",
+        label: "Support",
+        prompt:
+          "You are the AI support agent for a company that deploys AI agents. Answer calmly and specifically (2-4 sentences): deployment takes 48-72 hours, integrations go through APIs and webhooks, data stays in the client's own systems. If you don't know, say so and offer to connect them with the team.",
+      },
+      {
+        key: "qualifier",
+        label: "Lead qualifier",
+        prompt:
+          "You are an AI qualification agent. Your job is to understand the niche, lead volume and current process in 2-3 questions. Keep replies short and ask exactly one next question at a time.",
+      },
+    ],
+    placeholder: "For example: how much is a deployment and how fast does it pay off?",
+    examplesLabel: "Or start from an example",
+    send: "Ask",
+    thinking: "The agent is typing…",
+    reset: "Clear",
+    disclaimer:
+      "The demo answers from general information about the service and can be wrong. The exact numbers for your business come on the call.",
+    cta: "I want an agent like this",
+    emptyState:
+      "Ask a question and the agent answers here. It's a live model, not a script — ask it anything.",
+  },
+
+  activity: {
+    title: "Happening on the site",
+    runLabel: (tool) => `${tool} — demo run`,
+    justNow: "just now",
+    minutesAgo: (n) => `${n} min ago`,
+    hoursAgo: (n) => `${n} h ago`,
+    close: "Hide notifications",
   },
 
   footer: {

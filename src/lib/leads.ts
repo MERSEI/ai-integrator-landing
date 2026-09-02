@@ -24,6 +24,8 @@ export type Lead = {
   contact?: string;
   /** Ключ категории из селекта «что автоматизировать». */
   interest?: string;
+  /** Контекст заявки: посчитанный ROI, тариф, ниша — если форма его собрала. */
+  note?: string;
   ts: string;
 };
 

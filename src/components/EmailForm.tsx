@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { TbBrandTelegram, TbBrandWhatsapp } from "react-icons/tb";
 import { FiMail, FiPhone } from "react-icons/fi";
@@ -25,6 +27,34 @@ type FormValues = {
   website: string; // honeypot
 };
 
+/**
+ * Схема живёт внутри компонента, потому что тексты ошибок переводятся, а
+ * обязательность контакта зависит от выбранного канала: для email второго
+ * поля нет вовсе, для остальных оно обязательно и проверяется по формату.
+ */
+function buildSchema(t: ReturnType<typeof getContent>["form"]) {
+  return z
+    .object({
+      email: z
+        .string()
+        .min(1, t.required)
+        .regex(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, t.invalid),
+      interest: z.string().optional().default(""),
+      channel: z.enum(CONTACT_CHANNELS).default(DEFAULT_CONTACT_CHANNEL),
+      contact: z.string().optional().default(""),
+      website: z.string().optional().default(""),
+    })
+    .superRefine((values, ctx) => {
+      if (!needsContactValue(values.channel)) return;
+      const contact = values.contact?.trim() ?? "";
+      if (!contact) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["contact"], message: t.contactRequired });
+      } else if (!isValidContact(values.channel, contact)) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["contact"], message: t.contactInvalid });
+      }
+    });
+}
+
 const CHANNEL_ICONS: Record<ContactChannel, IconType> = {
   email: FiMail,
   telegram: TbBrandTelegram,
@@ -37,6 +67,9 @@ export default function EmailForm({
   cta,
   source,
   stacked = false,
+  note,
+  onSubmitted,
+  autoFocus = false,
 }: {
   locale: Locale;
   cta?: string;
@@ -44,11 +77,17 @@ export default function EmailForm({
   /** Колонкой на всех размерах — для узких контейнеров (напр. карточка калькулятора),
    * где `sm:flex-row` сжимает email-поле до нечитаемой ширины независимо от вьюпорта. */
   stacked?: boolean;
+  /** Контекст заявки — например, посчитанный ROI. Уходит в лид и в таблицу. */
+  note?: string;
+  /** Вызывается после успешной отправки, до перехода на /thank-you. */
+  onSubmitted?: () => void;
+  autoFocus?: boolean;
 }) {
   const content = getContent(locale);
   const t = content.form;
   const interestOptions = content.categories.filter((cat) => cat.key !== "all");
   const router = useRouter();
+  const schema = useMemo(() => buildSchema(t), [t]);
   const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
@@ -57,6 +96,7 @@ export default function EmailForm({
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     defaultValues: { channel: DEFAULT_CONTACT_CHANNEL },
+    resolver: zodResolver(schema),
   });
 
   // Email уже введён выше, поэтому для канала "email" второе поле не нужно —
@@ -70,7 +110,7 @@ export default function EmailForm({
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, source, locale }),
+        body: JSON.stringify({ ...data, source, locale, note }),
       });
       const json = await res.json();
       if (!res.ok) {
@@ -81,6 +121,7 @@ export default function EmailForm({
       // благодарности можно вернуться кнопкой «назад» и накрутить дубли.
       trackLeadConversion(source);
       trackEvent("lead_channel", { source, channel: data.channel });
+      onSubmitted?.();
       router.push(localePath(locale, "/thank-you"));
     } catch {
       setServerError(t.networkError);
@@ -208,15 +249,7 @@ export default function EmailForm({
               autoComplete={channel === "telegram" ? "off" : "tel"}
               className="min-h-11 w-full rounded-md border border-white/10 bg-white/[0.03] px-4 py-2.5 text-primary placeholder-secondary/70 transition-colors duration-200 ease-premium hover:border-white/20 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/35"
               aria-invalid={!!errors.contact}
-              {...register("contact", {
-                validate: (value) => {
-                  // Валидируем только активный канал: значение остаётся в форме
-                  // при переключении, и старый ввод не должен блокировать отправку.
-                  if (!needsContactValue(channel)) return true;
-                  if (!value?.trim()) return t.contactRequired;
-                  return isValidContact(channel, value) || t.contactInvalid;
-                },
-              })}
+              {...register("contact")}
             />
             {errors.contact && (
               <p role="alert" className="mt-2 text-sm text-rose-400">

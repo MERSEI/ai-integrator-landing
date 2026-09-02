@@ -57,6 +57,7 @@ export async function POST(req: NextRequest) {
     channel?: string;
     contact?: string;
     interest?: string;
+    note?: string;
   };
 
   // Honeypot: боты заполняют скрытое поле "website".
@@ -89,6 +90,9 @@ export async function POST(req: NextRequest) {
     channel,
     contact,
     interest: typeof body.interest === "string" ? body.interest.slice(0, 40) : "",
+    // Контекст приходит с клиента и попадает в таблицу как есть, поэтому
+    // режем длину: расчёт калькулятора укладывается в ~300 символов.
+    note: typeof body.note === "string" ? body.note.slice(0, 400) : "",
   });
 
   // Пустой контакт при неemail-канале форму не роняет: лид ценнее валидации,

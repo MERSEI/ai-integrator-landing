@@ -1,4 +1,5 @@
 import type { ContactChannel } from "../contactChannel";
+import type { RoiPresetKey } from "../roiPresets";
 
 /**
  * Типы словаря контента. Оба языка обязаны реализовать `Content` целиком —
@@ -56,6 +57,10 @@ export type PricingTier = {
   audience: string;
   features: string[];
   cta: string;
+  /** Одной строкой: кому и зачем этот тариф — идёт под названием. */
+  tagline: string;
+  /** Бейдж поверх карточки. У популярного тарифа берётся popularBadge. */
+  badge?: string;
 };
 
 export type FaqItem = { question: string; answer: string };
@@ -208,6 +213,8 @@ export type Content = {
     /** Честная замена непроверяемой статистике — CTA на живые демо вместо цифр. */
     demoCta: { title: string; subtitle: string; ctaLabel: string };
     portraitAlt: (name: string) => string;
+    /** Разметка мини-кейса: задача → что внедрили → результат. */
+    caseLabels: { challenge: string; solution: string; result: string };
   };
 
   /** Интерактивный расчёт потенциала — стоит между соцдоказательством и ценами. */
@@ -233,6 +240,17 @@ export type Content = {
     submitCta: string;
     assumptions: string;
     disclaimer: string;
+    /** Пресеты отраслей: подставляют типовые вводные в ползунки. */
+    presetsLabel: string;
+    presets: Record<RoiPresetKey, string>;
+    /** Кнопка под расчётом: уносит посчитанные цифры в заявку. */
+    lockCta: (amount: string) => string;
+    lockCtaHint: string;
+    modalTitle: string;
+    modalSubtitle: (amount: string) => string;
+    modalSummaryTitle: string;
+    modalClose: string;
+    industryLabel: string;
   };
 
   /** Универсальный CTA после демо-инструмента — показывается на всех /apps/*. */
@@ -257,6 +275,10 @@ export type Content = {
     /** Строка про гарантию возврата — рядом с тарифами, а не только в FAQ. */
     guarantee: string;
     footnote: string;
+    /** Из чего складывается цена: разбивка «сборка + абонплата». */
+    setupTooltip: string;
+    monthlyTooltip: string;
+    breakdownLabel: string;
   };
 
   faq: {
@@ -274,6 +296,33 @@ export type Content = {
     contactLead: string;
     emailLabel: string;
     phoneLabel: string;
+  };
+
+  /** Мини-плейграунд агента прямо на лендинге. */
+  liveDemo: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    roleLabel: string;
+    roles: { key: string; label: string; prompt: string }[];
+    placeholder: string;
+    examplesLabel: string;
+    send: string;
+    thinking: string;
+    reset: string;
+    disclaimer: string;
+    cta: string;
+    emptyState: string;
+  };
+
+  /** Лента реальных запусков демо-инструментов. */
+  activity: {
+    title: string;
+    runLabel: (tool: string) => string;
+    justNow: string;
+    minutesAgo: (n: number) => string;
+    hoursAgo: (n: number) => string;
+    close: string;
   };
 
   footer: {

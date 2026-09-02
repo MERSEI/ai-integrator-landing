@@ -151,7 +151,7 @@ export default function Header({ locale }: { locale: Locale }) {
                     ))}
                   </div>
                   <div className="mt-2 border-t border-white/10 pt-2">
-                    <p className="px-3 pb-1 pt-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    <p className="px-3 pb-1 pt-1 text-xs font-semibold uppercase tracking-wide text-secondary">
                       {t.moreTools}
                     </p>
                     <div className="grid grid-cols-2 gap-1">
@@ -190,7 +190,7 @@ export default function Header({ locale }: { locale: Locale }) {
                             <span className="block truncate text-sm font-semibold text-slate-300">
                               {app.name}
                             </span>
-                            <span className="block truncate text-xs text-slate-500">
+                            <span className="block truncate text-xs text-secondary">
                               {app.tagline}
                             </span>
                           </span>

@@ -89,7 +89,7 @@ export default function TrendSniperTool({ locale }: { locale: Locale }) {
         </div>
         <div className="mt-4">
           <label htmlFor="reg" className="mb-1.5 block text-sm font-medium text-slate-300">
-            {t.regionLabel} <span className="text-slate-500">{t.regionHint}</span>
+            {t.regionLabel} <span className="text-secondary">{t.regionHint}</span>
           </label>
           <input
             id="reg"
@@ -146,7 +146,7 @@ export default function TrendSniperTool({ locale }: { locale: Locale }) {
                   <p className="text-sm text-slate-400">{t.interestLevel}</p>
                   <p className="font-heading text-5xl font-extrabold text-gradient">
                     {Math.round(result.interest_level)}
-                    <span className="text-2xl text-slate-500">/100</span>
+                    <span className="text-2xl text-secondary">/100</span>
                   </p>
                 </div>
                 <span
@@ -195,7 +195,7 @@ export default function TrendSniperTool({ locale }: { locale: Locale }) {
                 </h3>
                 <div className="mt-4 grid gap-5 sm:grid-cols-2">
                   <div>
-                    <p className="mb-2 text-xs font-semibold text-slate-500">{t.topQueries}</p>
+                    <p className="mb-2 text-xs font-semibold text-secondary">{t.topQueries}</p>
                     <div className="flex flex-wrap gap-2">
                       {result.related_queries
                         .filter((q) => q.kind !== "rising")

@@ -91,7 +91,7 @@ export default function InboxZeroTool({ locale }: { locale: Locale }) {
           </div>
           <div>
             <label htmlFor="ins" className="mb-1.5 block text-sm font-medium text-slate-300">
-              {t.intentLabel} <span className="text-slate-500">{t.intentHint}</span>
+              {t.intentLabel} <span className="text-secondary">{t.intentHint}</span>
             </label>
             <input
               id="ins"

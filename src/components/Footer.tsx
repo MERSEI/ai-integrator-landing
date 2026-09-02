@@ -14,8 +14,8 @@ export default function Footer({ locale }: { locale: Locale }) {
       <div className="container-section grid gap-10 md:grid-cols-3">
         <div>
           <Logo className="h-8 w-auto" />
-          <p className="mt-3 text-sm text-slate-500">{t.tagline}</p>
-          <p className="mt-6 text-sm text-slate-600">
+          <p className="mt-3 text-sm text-secondary">{t.tagline}</p>
+          <p className="mt-6 text-sm text-secondary">
             © {new Date().getFullYear()} AI Integrator
           </p>
         </div>

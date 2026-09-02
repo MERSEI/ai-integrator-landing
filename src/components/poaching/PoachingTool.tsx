@@ -94,7 +94,7 @@ export default function PoachingTool({ locale }: { locale: Locale }) {
         </div>
         <div className="mt-4">
           <label htmlFor="comp" className="mb-1.5 block text-sm font-medium text-slate-300">
-            {t.competitorsLabel} <span className="text-slate-500">{t.competitorsHint}</span>
+            {t.competitorsLabel} <span className="text-secondary">{t.competitorsHint}</span>
           </label>
           <input
             id="comp"
@@ -211,7 +211,7 @@ function ProspectCard({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="font-semibold text-white">{prospect.handle}</p>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-secondary">
             {t.commentedUnder}{" "}
             <span className="text-slate-400">{prospect.competitor}</span>
           </p>
@@ -240,13 +240,13 @@ function ProspectCard({
       </div>
 
       <p className="mt-3 text-sm text-slate-400">
-        <span className="text-slate-500">{t.scoreLabel}</span> {prospect.reason}
+        <span className="text-secondary">{t.scoreLabel}</span> {prospect.reason}
       </p>
 
       {prospect.dm && (
         <div className="mt-4 rounded-md border border-white/10 bg-white/[0.03] p-3">
           <div className="flex items-center justify-between gap-2">
-            <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-secondary">
               <FiCornerUpLeft size={13} aria-hidden="true" />
               {t.dmTitle}
             </span>

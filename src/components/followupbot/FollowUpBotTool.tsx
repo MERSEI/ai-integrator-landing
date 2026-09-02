@@ -168,7 +168,7 @@ export default function FollowUpBotTool({ locale }: { locale: Locale }) {
                       {i + 1}
                     </span>
                     <span className="text-sm font-semibold text-primary-light">{f.day}</span>
-                    <span className="text-xs text-slate-500">· {f.angle}</span>
+                    <span className="text-xs text-secondary">· {f.angle}</span>
                   </div>
                   <button
                     type="button"
@@ -190,7 +190,7 @@ export default function FollowUpBotTool({ locale }: { locale: Locale }) {
                 </div>
                 {f.subject && (
                   <p className="mt-3 text-sm text-slate-400">
-                    <span className="text-slate-500">{c.subject}</span> {f.subject}
+                    <span className="text-secondary">{c.subject}</span> {f.subject}
                   </p>
                 )}
                 <p className="mt-2 whitespace-pre-wrap leading-relaxed text-slate-200">
@@ -200,7 +200,7 @@ export default function FollowUpBotTool({ locale }: { locale: Locale }) {
             ))}
 
             {result.stop_signal && (
-              <p className="text-center text-sm text-slate-500">
+              <p className="text-center text-sm text-secondary">
                 🛑 {result.stop_signal}
               </p>
             )}

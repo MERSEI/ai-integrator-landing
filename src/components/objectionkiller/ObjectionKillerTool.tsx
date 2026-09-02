@@ -186,7 +186,7 @@ export default function ObjectionKillerTool({ locale }: { locale: Locale }) {
           <button
             type="button"
             onClick={reset}
-            className="mx-auto mt-3 flex cursor-pointer items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-300"
+            className="mx-auto mt-3 flex cursor-pointer items-center gap-1.5 text-sm text-secondary transition-colors hover:text-slate-300"
           >
             <FiRefreshCw size={14} aria-hidden="true" />
             {t.restart}
@@ -290,7 +290,7 @@ function AssistantMessage({
                 </blockquote>
                 {tactic.why && (
                   <p className="mt-2.5 text-sm text-slate-400">
-                    <span className="text-slate-500">{t.whyItWorks}</span>{" "}
+                    <span className="text-secondary">{t.whyItWorks}</span>{" "}
                     {tactic.why}
                   </p>
                 )}

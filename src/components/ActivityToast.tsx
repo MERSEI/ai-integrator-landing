@@ -36,12 +36,20 @@ export default function ActivityToast({ locale }: { locale: Locale }) {
 
   useEffect(() => {
     let alive = true;
-    fetch("/api/activity")
+    // Запрос откладываем до простоя: лента — фоновая деталь, она не должна
+    // забирать главный поток у первой отрисовки.
+    const idle =
+      typeof requestIdleCallback === "function"
+        ? requestIdleCallback
+        : (cb: () => void) => setTimeout(cb, 1200);
+    idle(() =>
+      fetch("/api/activity")
       .then((r) => (r.ok ? r.json() : { runs: [] }))
       .then((data: { runs?: ToolRun[] }) => {
         if (alive && Array.isArray(data.runs)) setRuns(data.runs);
       })
-      .catch(() => {});
+        .catch(() => {}),
+    );
     return () => {
       alive = false;
     };

@@ -310,7 +310,7 @@ export default function ROICalculatorSection({ locale }: { locale: Locale }) {
 
         <Reveal delay={0.2} className="mx-auto mt-6 max-w-2xl text-center">
           <p className="text-xs text-secondary">{t.assumptions}</p>
-          <p className="mt-1 text-xs text-secondary/70">{t.disclaimer}</p>
+          <p className="mt-1 text-xs text-secondary">{t.disclaimer}</p>
         </Reveal>
       </div>
 

@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import TrustBar from "@/components/TrustBar";
@@ -5,14 +6,22 @@ import ProblemsSection from "@/components/ProblemsSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
 import ResultsSection from "@/components/ResultsSection";
-import LiveAgentDemo from "@/components/LiveAgentDemo";
+
 import ROICalculatorSection from "@/components/ROICalculatorSection";
 import PricingSection from "@/components/PricingSection";
 import FAQSection from "@/components/FAQSection";
 import FinalCTASection from "@/components/FinalCTASection";
 import Footer from "@/components/Footer";
-import ActivityToast from "@/components/ActivityToast";
+
 import type { Locale } from "@/lib/i18n";
+
+/**
+ * Оба блока живут ниже первого экрана и целиком клиентские: живое демо держит
+ * состояние чата, лента активности ходит в сеть. Выносим их в отдельные чанки,
+ * чтобы они не удлиняли первую отрисовку — до них ещё нужно доскроллить.
+ */
+const LiveAgentDemo = dynamic(() => import("@/components/LiveAgentDemo"));
+const ActivityToast = dynamic(() => import("@/components/ActivityToast"));
 
 /** Тело главной страницы; маршруты `/` и `/en` рендерят его со своей локалью. */
 export default function HomePage({ locale }: { locale: Locale }) {

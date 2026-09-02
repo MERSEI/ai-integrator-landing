@@ -172,7 +172,7 @@ export default function BizDoctorTool({ locale }: { locale: Locale }) {
               setInput("");
               setError(null);
             }}
-            className="mx-auto mt-3 flex cursor-pointer items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-300"
+            className="mx-auto mt-3 flex cursor-pointer items-center gap-1.5 text-sm text-secondary transition-colors hover:text-slate-300"
           >
             <FiRefreshCw size={14} aria-hidden="true" />
             {t.restart}

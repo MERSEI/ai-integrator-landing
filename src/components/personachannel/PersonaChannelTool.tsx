@@ -76,7 +76,7 @@ export default function PersonaChannelTool({ locale }: { locale: Locale }) {
           </div>
           <div>
             <label htmlFor="pe" className="mb-1.5 block text-sm font-medium text-slate-300">
-              {t.personaLabel} <span className="text-slate-500">{t.personaHint}</span>
+              {t.personaLabel} <span className="text-secondary">{t.personaHint}</span>
             </label>
             <textarea
               id="pe"
@@ -136,7 +136,7 @@ export default function PersonaChannelTool({ locale }: { locale: Locale }) {
               </h3>
               <p className="mt-2 leading-relaxed text-slate-200">{result.persona_summary}</p>
               <p className="mt-2 text-sm text-slate-400">
-                <span className="text-slate-500">{t.toneLabel}</span> {result.tone}
+                <span className="text-secondary">{t.toneLabel}</span> {result.tone}
               </p>
             </div>
 

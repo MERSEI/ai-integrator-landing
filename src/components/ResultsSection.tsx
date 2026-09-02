@@ -145,7 +145,7 @@ export default function ResultsSection({ locale }: { locale: Locale }) {
                   {content.statusLabels[app.status]}
                 </span>
                 <span className="text-sm font-semibold text-white">{app.name}</span>
-                <span className="text-xs text-slate-500">{app.result}</span>
+                <span className="text-xs text-secondary">{app.result}</span>
                 <span className="mt-auto flex items-center gap-1 text-xs font-semibold text-primary-light transition-colors group-hover:text-white">
                   {t.demoCta.ctaLabel}
                   <FiArrowRight size={13} aria-hidden="true" />

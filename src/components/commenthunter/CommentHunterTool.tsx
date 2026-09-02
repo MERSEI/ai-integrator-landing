@@ -104,7 +104,7 @@ export default function CommentHunterTool({ locale }: { locale: Locale }) {
         </div>
         <div className="mt-4">
           <label htmlFor="prod" className="mb-1.5 block text-sm font-medium text-slate-300">
-            {t.offerLabel} <span className="text-slate-500">{t.offerHint}</span>
+            {t.offerLabel} <span className="text-secondary">{t.offerHint}</span>
           </label>
           <input
             id="prod"
@@ -222,10 +222,10 @@ function PostThread({
       <div className="border-b border-white/10 p-5">
         <div className="flex items-center justify-between">
           <p className="font-semibold text-white">{post.author}</p>
-          <p className="text-xs text-slate-500">{post.posted}</p>
+          <p className="text-xs text-secondary">{post.posted}</p>
         </div>
         <p className="mt-2 leading-relaxed text-slate-200">{post.text}</p>
-        <div className="mt-3 flex items-center gap-4 text-sm text-slate-500">
+        <div className="mt-3 flex items-center gap-4 text-sm text-secondary">
           <span className="flex items-center gap-1.5">
             <FiHeart size={14} aria-hidden="true" />
             {post.likes.toLocaleString("ru-RU")}
@@ -254,11 +254,11 @@ function PostThread({
                 </span>
               </div>
               <p className="mt-1.5 leading-relaxed text-slate-300">{cm.text}</p>
-              <p className="mt-2 text-sm text-slate-500">{cm.reason}</p>
+              <p className="mt-2 text-sm text-secondary">{cm.reason}</p>
               {cm.reply && (
                 <div className="mt-3 rounded-md border border-white/10 bg-white/[0.03] p-3">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-secondary">
                       {t.replyTitle}
                     </span>
                     <button

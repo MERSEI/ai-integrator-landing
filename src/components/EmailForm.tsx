@@ -259,7 +259,7 @@ export default function EmailForm({
           </div>
         ) : null}
 
-        <p className={`text-xs text-slate-500 ${stacked ? "text-left" : "text-center"}`}>
+        <p className={`text-xs text-secondary ${stacked ? "text-left" : "text-center"}`}>
           {t.channelHint}
         </p>
       </fieldset>

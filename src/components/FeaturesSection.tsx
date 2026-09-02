@@ -106,7 +106,7 @@ export default function FeaturesSection({ locale }: { locale: Locale }) {
         {category === "all" && (
           <Reveal delay={0.1} className="mt-8">
             <div className="card-glass flex flex-wrap items-center justify-center gap-3 p-5 text-center sm:justify-between sm:text-left">
-              <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+              <p className="text-sm font-semibold uppercase tracking-wide text-secondary">
                 {t.soonTitle}
               </p>
               <div className="flex flex-wrap justify-center gap-3">
@@ -116,7 +116,7 @@ export default function FeaturesSection({ locale }: { locale: Locale }) {
                     className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-sm text-slate-300 opacity-70"
                   >
                     <span className="font-semibold text-white">{app.name}</span>
-                    <span className="text-slate-500">— {app.tagline}</span>
+                    <span className="text-secondary">— {app.tagline}</span>
                   </span>
                 ))}
               </div>

@@ -32,7 +32,7 @@ export default function LanguageSwitcher({
       className={`flex h-10 cursor-pointer items-center justify-center gap-1 rounded-md border border-white/10 bg-white/5 px-3 text-sm font-semibold text-slate-300 transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:border-accent-blue/50 hover:text-white hover:shadow-glow-accent-sm ${className}`}
     >
       <span className={locale === "ru" ? "text-white" : ""}>RU</span>
-      <span className="text-slate-600" aria-hidden="true">
+      <span className="text-secondary" aria-hidden="true">
         /
       </span>
       <span className={locale === "en" ? "text-white" : ""}>EN</span>

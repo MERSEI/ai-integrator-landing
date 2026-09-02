@@ -45,7 +45,7 @@ export default function FinalCTASection({ locale }: { locale: Locale }) {
               </li>
             ))}
           </ul>
-          <p className="mt-6 text-sm text-slate-500">
+          <p className="mt-6 text-sm text-secondary">
             {t.contactLead}{" "}
             <a
               href={`https://t.me/${CONTACTS.telegram.replace("@", "")}`}

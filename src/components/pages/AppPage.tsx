@@ -92,7 +92,7 @@ export default function AppPage({
           )}
 
           {t.disclaimer && (
-            <p className="mx-auto mt-10 max-w-2xl text-center text-xs text-slate-600">
+            <p className="mx-auto mt-10 max-w-2xl text-center text-xs text-secondary">
               {t.disclaimer}
             </p>
           )}

@@ -94,7 +94,7 @@ export default function LeadRadarTool({ locale }: { locale: Locale }) {
         </div>
         <div className="mt-4">
           <label htmlFor="prod" className="mb-1.5 block text-sm font-medium text-slate-300">
-            {t.offerLabel} <span className="text-slate-500">{t.offerHint}</span>
+            {t.offerLabel} <span className="text-secondary">{t.offerHint}</span>
           </label>
           <input
             id="prod"
@@ -213,7 +213,7 @@ function LeadCard({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="font-semibold text-white">{lead.handle}</p>
-          <p className="text-xs text-slate-500">{lead.posted}</p>
+          <p className="text-xs text-secondary">{lead.posted}</p>
         </div>
         <span
           className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${tierClass}`}
@@ -237,13 +237,13 @@ function LeadCard({
       </div>
 
       <p className="mt-3 text-sm text-slate-400">
-        <span className="text-slate-500">{t.scoreLabel}</span> {lead.reason}
+        <span className="text-secondary">{t.scoreLabel}</span> {lead.reason}
       </p>
 
       {lead.reply && (
         <div className="mt-4 rounded-md border border-white/10 bg-white/[0.03] p-3">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <span className="text-xs font-semibold uppercase tracking-wide text-secondary">
               {t.draftTitle}
             </span>
             <button

@@ -120,7 +120,7 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
               htmlFor="link"
               className="mb-1.5 block text-sm font-medium text-slate-300"
             >
-              {t.linkLabel} <span className="text-slate-500">{t.linkHint}</span>
+              {t.linkLabel} <span className="text-secondary">{t.linkHint}</span>
             </label>
             <input
               id="link"
@@ -212,7 +212,7 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
             )}
           </button>
           {!canSubmit && (
-            <p className="text-center text-xs text-slate-500">{t.hint}</p>
+            <p className="text-center text-xs text-secondary">{t.hint}</p>
           )}
         </div>
       </div>
@@ -262,7 +262,7 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
                       key={i}
                       className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm text-slate-200"
                     >
-                      <span className="text-xs uppercase text-slate-500">
+                      <span className="text-xs uppercase text-secondary">
                         {c.type}
                       </span>
                       {c.value}
@@ -333,7 +333,7 @@ export default function ColdMessageTool({ locale }: { locale: Locale }) {
                 </div>
                 {result.subject && (
                   <p className="mt-4 text-sm text-slate-400">
-                    <span className="text-slate-500">{c.subject}</span>{" "}
+                    <span className="text-secondary">{c.subject}</span>{" "}
                     {result.subject}
                   </p>
                 )}

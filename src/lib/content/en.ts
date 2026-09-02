@@ -479,6 +479,23 @@ export const en: Content = {
     modalSummaryTitle: "Your estimate",
     modalClose: "Close",
     industryLabel: "Niche",
+    charts: {
+      paybackTitle: "When the build pays for itself",
+      paybackSubtitle: "Cumulative upside against cumulative cost, 12 months",
+      benefitSeries: "Cumulative upside",
+      costSeries: "Cumulative cost",
+      monthShort: (n) => `${n} mo`,
+      breakEven: (month) => `Break-even in month ${month}`,
+      hoursTitle: "Hours on routine",
+      hoursSubtitle: "Time per month spent on leads, email and follow-ups",
+      hoursBefore: "Today",
+      hoursAfter: "With agents",
+      hoursPerMonth: (n) => `${n} h/mo`,
+      tableToggle: "Show the numbers",
+      tableMonth: "Month",
+      estimateNote:
+        "Both charts are built from your sliders and the assumptions above — a model, not a report on measured results.",
+    },
   },
 
   demoConvert: {

@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
 import GoogleAdsTag from "@/components/GoogleAdsTag";
-import { getContent } from "@/lib/content";
+import { CONTACTS, getContent } from "@/lib/content";
 import { localePath, type Locale } from "@/lib/i18n";
 
 const UMAMI_URL = "https://umami-production-398c.up.railway.app";
@@ -65,27 +65,83 @@ export function buildMetadata(locale: Locale): Metadata {
       type: "website",
       locale: locale === "ru" ? "ru_RU" : "en_US",
       url: path,
+      siteName: "AI Integrator",
+      images: [{ url: "/images/hero.png", width: 1200, height: 630, alt: t.ogAlt }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t.ogAlt,
+      description: t.description,
       images: ["/images/hero.png"],
     },
+    robots: { index: true, follow: true },
   };
 }
 
+/**
+ * Машиночитаемая разметка: сам сервис, каталог тарифов и FAQ.
+ *
+ * Всё собирается из словаря контента, а не пишется руками, — цены и вопросы в
+ * разметке не могут разъехаться со страницей. Ничего, чего нет на сайте, сюда
+ * не добавляется: aggregateRating убран намеренно (в разметке стояли 4.8 и 50
+ * отзывов, которых нет — на сайте пять именных). Выдуманный рейтинг в
+ * машиночитаемых данных это подлог, а не оптимизация.
+ */
 function jsonLd(locale: Locale) {
+  const content = getContent(locale);
+  const url = `${SITE_URL}${localePath(locale, "/")}`;
+
   return {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "AI Integrator",
-    applicationCategory: "BusinessApplication",
-    inLanguage: getContent(locale).htmlLang,
-    description: getContent(locale).meta.description,
-    offers: {
-      "@type": "Offer",
-      price: "490",
-      priceCurrency: "USD",
-    },
-    // aggregateRating убран намеренно: в разметке стояли 4.8 и 50 отзывов,
-    // которых нет — на сайте пять именных отзывов. Выдуманный рейтинг в
-    // машиночитаемых данных это подлог, а не оптимизация.
+    "@graph": [
+      {
+        "@type": "ProfessionalService",
+        "@id": `${url}#organization`,
+        name: "AI Integrator",
+        url,
+        description: content.meta.description,
+        areaServed: "Worldwide",
+        serviceType: locale === "ru" ? "Внедрение AI-агентов" : "AI agent deployment",
+        email: CONTACTS.email,
+        telephone: CONTACTS.phone,
+        address: { "@type": "PostalAddress", addressLocality: CONTACTS.address },
+        sameAs: [`https://t.me/${CONTACTS.telegram.replace("@", "")}`],
+      },
+      {
+        "@type": "Service",
+        "@id": `${url}#service`,
+        name: content.meta.title,
+        provider: { "@id": `${url}#organization` },
+        inLanguage: content.htmlLang,
+        description: content.meta.description,
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: content.pricing.title,
+          itemListElement: content.pricing.tiers.map((tier) => ({
+            "@type": "Offer",
+            name: tier.name,
+            description: tier.tagline,
+            price: String(tier.setup),
+            priceCurrency: "USD",
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: String(tier.price),
+              priceCurrency: "USD",
+              unitCode: "MON",
+            },
+          })),
+        },
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${url}#faq`,
+        mainEntity: content.faq.items.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: { "@type": "Answer", text: item.answer },
+        })),
+      },
+    ],
   };
 }
 

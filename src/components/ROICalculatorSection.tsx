@@ -5,6 +5,7 @@ import { FiClock, FiTrendingUp, FiCheckCircle, FiArrowRight } from "react-icons/
 import { TbCalculator } from "react-icons/tb";
 import Reveal from "./Reveal";
 import BookingModal from "./BookingModal";
+import RoiCharts from "./RoiCharts";
 import { getContent } from "@/lib/content";
 import {
   computeRoi,
@@ -293,6 +294,18 @@ export default function ROICalculatorSection({ locale }: { locale: Locale }) {
               </div>
             </div>
           </div>
+        </Reveal>
+
+        <Reveal delay={0.15} className="mt-6">
+          <RoiCharts
+            locale={locale}
+            t={t}
+            inputs={inputs}
+            monthlyBenefit={total}
+            tier={tier}
+            paybackMonths={paybackMonths}
+          />
+          <p className="mt-3 text-center text-xs text-secondary">{t.charts.estimateNote}</p>
         </Reveal>
 
         <Reveal delay={0.2} className="mx-auto mt-6 max-w-2xl text-center">

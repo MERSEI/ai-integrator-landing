@@ -251,6 +251,22 @@ export type Content = {
     modalSummaryTitle: string;
     modalClose: string;
     industryLabel: string;
+    charts: {
+      paybackTitle: string;
+      paybackSubtitle: string;
+      benefitSeries: string;
+      costSeries: string;
+      monthShort: (n: number) => string;
+      breakEven: (month: number) => string;
+      hoursTitle: string;
+      hoursSubtitle: string;
+      hoursBefore: string;
+      hoursAfter: string;
+      hoursPerMonth: (n: number) => string;
+      tableToggle: string;
+      tableMonth: string;
+      estimateNote: string;
+    };
   };
 
   /** Универсальный CTA после демо-инструмента — показывается на всех /apps/*. */

@@ -479,6 +479,23 @@ export const ru: Content = {
     modalSummaryTitle: "Ваш расчёт",
     modalClose: "Закрыть",
     industryLabel: "Ниша",
+    charts: {
+      paybackTitle: "Когда сборка окупается",
+      paybackSubtitle: "Накопленная выгода против накопленных затрат, 12 месяцев",
+      benefitSeries: "Накопленная выгода",
+      costSeries: "Накопленные затраты",
+      monthShort: (n) => `${n} мес`,
+      breakEven: (month) => `Точка окупаемости — ${month}-й месяц`,
+      hoursTitle: "Часы на рутину",
+      hoursSubtitle: "Сколько времени в месяц уходит на лиды, письма и дожим",
+      hoursBefore: "Сейчас",
+      hoursAfter: "С агентами",
+      hoursPerMonth: (n) => `${n} ч/мес`,
+      tableToggle: "Показать числами",
+      tableMonth: "Месяц",
+      estimateNote:
+        "Графики построены по вашим ползункам и допущениям выше — это модель, а не отчёт по факту.",
+    },
   },
 
   demoConvert: {

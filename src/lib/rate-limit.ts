@@ -109,8 +109,15 @@ export async function checkToolLimit(
     if (count === 1) {
       await upstash(creds, ["EXPIRE", key, DAY_SECONDS]).catch(() => {});
     }
+    const ok = count <= TOOL_DEMO_LIMIT;
+    // Единственная точка, через которую проходят все десять демо-роутов, —
+    // отсюда же пишем ленту активности. Только имя инструмента и время.
+    if (ok) {
+      const { recordToolRun } = await import("./activity");
+      await recordToolRun(tool).catch(() => {});
+    }
     return {
-      ok: count <= TOOL_DEMO_LIMIT,
+      ok,
       remaining: Math.max(0, TOOL_DEMO_LIMIT - count),
       limit: TOOL_DEMO_LIMIT,
     };

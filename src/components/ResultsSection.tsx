@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FiZap, FiTarget, FiArrowRight } from "react-icons/fi";
+import { FiZap, FiTarget, FiArrowRight, FiAlertCircle, FiCpu, FiTrendingUp } from "react-icons/fi";
 import Reveal from "./Reveal";
+import CardSpotlight from "./CardSpotlight";
 import { APP_STATUS_CLASSES, getContent } from "@/lib/content";
 import { localePath, type Locale } from "@/lib/i18n";
 
@@ -50,31 +51,73 @@ export default function ResultsSection({ locale }: { locale: Locale }) {
           })}
         </div>
 
+        {/* Мини-кейс вместо голой цитаты: задача → что внедрили → результат.
+            Три шага читаются за пару секунд и объясняют цифру, а не просто
+            показывают её. */}
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {t.testimonials.map((item, i) => (
-            <Reveal key={item.name} delay={i * 0.1}>
-              <figure className="flex h-full flex-col card-glass p-6 transition-all duration-300 ease-premium hover:-translate-y-1 hover:border-primary-light/30">
-                <blockquote className="flex-1 leading-relaxed text-slate-300">
+            <Reveal key={item.name} delay={i * 0.1} className="h-full">
+              <CardSpotlight className="h-full rounded-lg">
+              <figure className="flex h-full flex-col card-glass p-6 transition-all duration-300 ease-premium hover:-translate-y-1 hover:border-accent/40">
+                <ol className="flex-1 space-y-4">
+                  {[
+                    { icon: FiAlertCircle, label: t.caseLabels.challenge, text: item.task, tone: "text-secondary" },
+                    { icon: FiCpu, label: t.caseLabels.solution, text: item.solution, tone: "text-accent-blue" },
+                  ].map((step) => (
+                    <li key={step.label} className="flex gap-3">
+                      <span
+                        className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-white/[0.04] ring-1 ring-inset ring-white/10 ${step.tone}`}
+                        aria-hidden="true"
+                      >
+                        <step.icon size={14} />
+                      </span>
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-wider text-secondary">
+                          {step.label}
+                        </p>
+                        <p className="mt-0.5 text-sm leading-relaxed text-primary-light">
+                          {step.text}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                  <li className="flex gap-3">
+                    <span
+                      className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-accent-violet/15 text-accent-violet ring-1 ring-inset ring-accent-violet/30"
+                      aria-hidden="true"
+                    >
+                      <FiTrendingUp size={14} />
+                    </span>
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-secondary">
+                        {t.caseLabels.result}
+                      </p>
+                      <p className="mt-0.5 font-heading text-sm font-bold text-accent-violet">
+                        {item.result}
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+
+                <blockquote className="mt-5 border-t border-white/[0.06] pt-5 text-sm leading-relaxed text-primary-light">
                   «{item.quote}»
                 </blockquote>
-                <div className="chip-result mt-6 w-full justify-center py-2">
-                  {item.result}
-                </div>
-                <figcaption className="mt-5 flex items-center gap-3">
+                <figcaption className="mt-4 flex items-center gap-3">
                   <Image
                     src={item.image}
                     alt={t.portraitAlt(item.name)}
-                    width={48}
-                    height={48}
-                    className="h-12 w-12 rounded-full border border-white/10 object-cover"
+                    width={40}
+                    height={40}
+                    className="h-10 w-10 rounded-full border border-white/10 object-cover"
                     loading="lazy"
                   />
                   <div>
-                    <p className="font-semibold text-white">{item.name}</p>
-                    <p className="text-sm text-slate-500">{item.company}</p>
+                    <p className="text-sm font-semibold text-primary">{item.name}</p>
+                    <p className="text-xs text-secondary">{item.company}</p>
                   </div>
                 </figcaption>
               </figure>
+              </CardSpotlight>
             </Reveal>
           ))}
         </div>

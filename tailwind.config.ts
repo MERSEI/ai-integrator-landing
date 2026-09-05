@@ -93,6 +93,28 @@ const config: Config = {
           from: { opacity: "0", transform: "translateY(8px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
+        "fade-in": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+        // Появление модалки: подъём со сжатием, как было у framer-motion.
+        "modal-in": {
+          from: { opacity: "0", transform: "translateY(24px) scale(0.98)" },
+          to: { opacity: "1", transform: "translateY(0) scale(1)" },
+        },
+        "dropdown-in": {
+          from: { opacity: "0", transform: "translate(-50%, -8px) scale(0.97)" },
+          to: { opacity: "1", transform: "translate(-50%, 0) scale(1)" },
+        },
+        // Шапка въезжает сверху один раз при загрузке.
+        "header-in": {
+          from: { opacity: "0", transform: "translateY(-72px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "header-line": {
+          from: { transform: "scaleX(0)" },
+          to: { transform: "scaleX(1)" },
+        },
         blink: {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0" },
@@ -113,6 +135,11 @@ const config: Config = {
       animation: {
         "pulse-dot": "pulse-dot 2.4s ease-in-out infinite",
         "fade-up": "fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both",
+        "fade-in": "fade-in 0.2s ease-out both",
+        "modal-in": "modal-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both",
+        "dropdown-in": "dropdown-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) both",
+        "header-in": "header-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both",
+        "header-line": "header-line 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both",
         blink: "blink 0.9s step-end infinite",
         "flow-dot-x": "flow-dot-x 2.6s ease-in-out infinite",
         "flow-dot-y": "flow-dot-y 2.6s ease-in-out infinite",

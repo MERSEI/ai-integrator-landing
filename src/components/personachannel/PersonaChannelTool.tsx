@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { FiCopy, FiCheck, FiAlertCircle, FiZap, FiUsers } from "react-icons/fi";
 import { getTools } from "@/lib/content/tools";
 import type { Locale } from "@/lib/i18n";
+import { FiAlertCircle, FiCheck, FiCopy, FiUsers, FiZap } from "@/components/icons";
 
 type Post = { type: string; hook: string; text: string; cta: string };
 type Result = {

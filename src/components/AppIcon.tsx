@@ -1,24 +1,10 @@
-import {
-  FiActivity,
-  FiCrosshair,
-  FiFeather,
-  FiInbox,
-  FiMail,
-  FiMessageCircle,
-  FiRadio,
-  FiRefreshCw,
-  FiRepeat,
-  FiShield,
-  FiTrendingUp,
-  FiUserCheck,
-} from "react-icons/fi";
-import type { IconType } from "react-icons";
 
+import { FiActivity, FiCrosshair, FiFeather, FiInbox, FiMail, FiMessageCircle, FiRadio, FiRefreshCw, FiRepeat, FiShield, FiTrendingUp, FiUserCheck , type IconComponent } from "./icons";
 /**
  * Иконки приложений: один набор (Feather) с общей обводкой вместо разнородных
  * сгенерированных картинок. Тон задаёт категория, поэтому в сетке видно группы.
  */
-const GLYPH: Record<string, IconType> = {
+const GLYPH: Record<string, IconComponent> = {
   poaching: FiCrosshair,
   leadradar: FiRadio,
   commenthunter: FiMessageCircle,

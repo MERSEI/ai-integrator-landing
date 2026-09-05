@@ -1,16 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import {
-  FiSend,
-  FiCopy,
-  FiCheck,
-  FiAlertCircle,
-  FiHelpCircle,
-  FiStar,
-  FiRefreshCw,
-} from "react-icons/fi";
-import { TbShieldCheck } from "react-icons/tb";
 import { getTools } from "@/lib/content/tools";
 import type { Locale } from "@/lib/i18n";
 import type {
@@ -18,6 +8,7 @@ import type {
   ObjectionResponse,
   WireMsg,
 } from "@/lib/objectionkiller";
+import { FiAlertCircle, FiCheck, FiCopy, FiHelpCircle, FiRefreshCw, FiSend, FiStar, TbShieldCheck } from "@/components/icons";
 
 function toWire(messages: ChatMsg[]): WireMsg[] {
   return messages.map((m) =>

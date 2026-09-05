@@ -1,12 +1,9 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { FiX } from "react-icons/fi";
 import EmailForm from "./EmailForm";
 import type { Locale } from "@/lib/i18n";
-
-const EASE_PREMIUM = [0.16, 1, 0.3, 1] as const;
+import { FiX } from "./icons";
 
 /**
  * Модалка заявки. Живёт отдельно от формы, потому что одна и та же форма
@@ -82,29 +79,21 @@ export default function BookingModal({
     };
   }, [open, onClose]);
 
+  if (!open) return null;
+
   return (
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          className="fixed inset-0 z-[60] flex items-end justify-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm sm:items-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          onClick={onClose}
-        >
-          <motion.div
-            ref={panelRef}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="booking-modal-title"
-            className="relative my-auto w-full max-w-lg rounded-xl border border-white/10 bg-surface p-6 shadow-[0_24px_80px_-20px_rgba(0,0,0,0.9)] sm:p-8"
-            initial={{ opacity: 0, y: 24, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.98 }}
-            transition={{ duration: 0.35, ease: EASE_PREMIUM }}
-            onClick={(e) => e.stopPropagation()}
-          >
+    <div
+      className="fixed inset-0 z-[60] flex animate-fade-in items-end justify-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm sm:items-center"
+      onClick={onClose}
+    >
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="booking-modal-title"
+        className="relative my-auto w-full max-w-lg animate-modal-in rounded-xl border border-white/10 bg-surface p-6 shadow-[0_24px_80px_-20px_rgba(0,0,0,0.9)] sm:p-8"
+        onClick={(e) => e.stopPropagation()}
+      >
             <div
               className="pointer-events-none absolute -top-24 left-1/2 h-48 w-72 -translate-x-1/2 rounded-full bg-accent/25 blur-[120px]"
               aria-hidden="true"
@@ -153,9 +142,7 @@ export default function BookingModal({
                 />
               </div>
             </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      </div>
+    </div>
   );
 }

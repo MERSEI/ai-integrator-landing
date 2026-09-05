@@ -1,8 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { FiClock, FiTrendingUp, FiCheckCircle, FiArrowRight } from "react-icons/fi";
-import { TbCalculator } from "react-icons/tb";
 import Reveal from "./Reveal";
 import BookingModal from "./BookingModal";
 import RoiCharts from "./RoiCharts";
@@ -17,6 +15,7 @@ import {
 } from "@/lib/roiPresets";
 import { trackEvent } from "@/lib/gtag";
 import type { Locale } from "@/lib/i18n";
+import { FiArrowRight, FiCheckCircle, FiClock, FiTrendingUp, TbCalculator } from "./icons";
 
 function formatMoney(value: number, locale: Locale) {
   return new Intl.NumberFormat(locale === "ru" ? "ru-RU" : "en-US", {

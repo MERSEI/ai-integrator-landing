@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { FiArrowLeft } from "react-icons/fi";
 import Logo from "./Logo";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { getContent } from "@/lib/content";
 import { localePath, type Locale } from "@/lib/i18n";
+import { FiArrowLeft } from "./icons";
 
 export default function AppHeader({
   locale,

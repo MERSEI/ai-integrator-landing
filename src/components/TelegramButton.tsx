@@ -1,8 +1,8 @@
 "use client";
 
-import { TbBrandTelegram } from "react-icons/tb";
 import { CONTACTS } from "@/lib/content";
 import { trackEvent } from "@/lib/gtag";
+import { TbBrandTelegram } from "./icons";
 
 /** Ссылка на личку: "@f1_owe" → "https://t.me/f1_owe". */
 export const TELEGRAM_URL = `https://t.me/${CONTACTS.telegram.replace("@", "")}`;

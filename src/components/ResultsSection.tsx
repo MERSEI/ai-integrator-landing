@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FiZap, FiTarget, FiArrowRight, FiAlertCircle, FiCpu, FiTrendingUp } from "react-icons/fi";
 import Reveal from "./Reveal";
 import CardSpotlight from "./CardSpotlight";
 import { APP_STATUS_CLASSES, getContent } from "@/lib/content";
 import { localePath, type Locale } from "@/lib/i18n";
+import { FiAlertCircle, FiArrowRight, FiCpu, FiTarget, FiTrendingUp, FiZap } from "./icons";
 
 const ADVANTAGE_ICONS = [FiZap, FiTarget];
 

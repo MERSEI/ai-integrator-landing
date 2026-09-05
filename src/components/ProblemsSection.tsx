@@ -1,7 +1,7 @@
-import { FiX, FiSlash } from "react-icons/fi";
 import Reveal from "./Reveal";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
+import { FiSlash, FiX } from "./icons";
 
 export default function ProblemsSection({ locale }: { locale: Locale }) {
   const t = getContent(locale).problems;

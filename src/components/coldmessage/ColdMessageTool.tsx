@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { FiCopy, FiCheck, FiZap, FiAlertCircle } from "react-icons/fi";
 import { getTools } from "@/lib/content/tools";
 import type { Locale } from "@/lib/i18n";
 import {
@@ -9,6 +8,7 @@ import {
   signalColor,
   type ColdMessageResult,
 } from "@/lib/coldmessage";
+import { FiAlertCircle, FiCheck, FiCopy, FiZap } from "@/components/icons";
 
 export default function ColdMessageTool({ locale }: { locale: Locale }) {
   const t = getTools(locale).coldmessage;

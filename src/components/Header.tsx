@@ -2,17 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
-import { HiMenu, HiX } from "react-icons/hi";
-import { FiChevronDown, FiArrowRight } from "react-icons/fi";
-import { TbBrandTelegram } from "react-icons/tb";
 import AppIcon from "./AppIcon";
 import Logo from "./Logo";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { APP_STATUS_CLASSES, CONTACTS, getContent } from "@/lib/content";
 import { localePath, type Locale } from "@/lib/i18n";
-
-const EASE_PREMIUM = [0.16, 1, 0.3, 1] as const;
+import { FiArrowRight, FiChevronDown, HiMenu, HiX, TbBrandTelegram } from "./icons";
 
 export default function Header({ locale }: { locale: Locale }) {
   const content = getContent(locale);
@@ -49,54 +44,22 @@ export default function Header({ locale }: { locale: Locale }) {
   }, [appsOpen]);
 
   return (
-    <motion.header
-      className="fixed inset-x-0 top-0 z-50 h-[72px] border-b border-white/10 bg-black/60 backdrop-blur-[20px]"
-      initial={{ y: -72, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: EASE_PREMIUM }}
-    >
-      <motion.div
-        className="absolute inset-x-0 bottom-0 h-px origin-left bg-gradient-to-r from-transparent via-accent-blue/60 to-transparent"
+    <header className="animate-header-in fixed inset-x-0 top-0 z-50 h-[72px] border-b border-white/10 bg-black/60 backdrop-blur-[20px]">
+      <div
+        className="animate-header-line absolute inset-x-0 bottom-0 h-px origin-left bg-gradient-to-r from-transparent via-accent-blue/60 to-transparent"
         aria-hidden="true"
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 0.9, delay: 0.3, ease: EASE_PREMIUM }}
       />
       <div className="container-section flex h-full items-center justify-between">
-        <motion.div
-          initial={{ opacity: 0, x: -16 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.15, ease: EASE_PREMIUM }}
-        >
+        <div className="animate-fade-up [animation-delay:0.15s]">
           <Link href={home} className="flex cursor-pointer items-center">
             <Logo className="h-8 w-auto sm:h-9 md:h-7" />
           </Link>
-        </motion.div>
+        </div>
 
-        <motion.nav
-          className="hidden items-center gap-1 md:flex"
-          aria-label={t.mainNavLabel}
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: {},
-            visible: {
-              transition: { staggerChildren: 0.08, delayChildren: 0.25 },
-            },
-          }}
-        >
-          <motion.div
-            ref={appsRef}
-            className="relative"
-            variants={{
-              hidden: { opacity: 0, y: -10 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.45, ease: EASE_PREMIUM },
-              },
-            }}
-          >
+        {/* Пункты меню проявляются по очереди — задержку задаёт
+            animation-delay, поэтому JS-библиотека для этого не нужна. */}
+        <nav className="hidden items-center gap-1 md:flex" aria-label={t.mainNavLabel}>
+          <div ref={appsRef} className="animate-fade-up relative [animation-delay:0.25s]">
             <button
               type="button"
               onClick={() => setAppsOpen((v) => !v)}
@@ -112,15 +75,8 @@ export default function Header({ locale }: { locale: Locale }) {
               />
             </button>
 
-            <AnimatePresence>
-              {appsOpen && (
-                <motion.div
-                  className="absolute left-1/2 top-full mt-3 w-[560px] -translate-x-1/2 rounded-lg border border-white/[0.08] bg-surface-2 p-4 shadow-card"
-                  initial={{ opacity: 0, y: -8, scale: 0.97 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -8, scale: 0.97 }}
-                  transition={{ duration: 0.25, ease: EASE_PREMIUM }}
-                >
+            {appsOpen && (
+              <div className="animate-dropdown-in absolute left-1/2 top-full mt-3 w-[560px] -translate-x-1/2 rounded-lg border border-white/[0.08] bg-surface-2 p-4 shadow-card">
                   <div className="grid grid-cols-2 gap-1">
                     {content.featuredApps.map((app) => (
                       <a
@@ -209,36 +165,23 @@ export default function Header({ locale }: { locale: Locale }) {
                     {t.seeAllApps}
                     <FiArrowRight size={15} aria-hidden="true" />
                   </a>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
+              </div>
+            )}
+          </div>
 
-          {navLinks.map((link) => (
-            <motion.a
+          {navLinks.map((link, i) => (
+            <a
               key={link.href}
               href={link.href}
-              className="rounded-md px-4 py-2 text-center text-sm font-medium text-slate-300 transition-colors duration-200 hover:bg-white/5 hover:text-white md:px-3"
-              variants={{
-                hidden: { opacity: 0, y: -10 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: 0.45, ease: EASE_PREMIUM },
-                },
-              }}
+              style={{ animationDelay: `${0.33 + i * 0.08}s` }}
+              className="animate-fade-up rounded-md px-4 py-2 text-center text-sm font-medium text-primary-light transition-colors duration-200 hover:bg-white/5 hover:text-white md:px-3"
             >
               {link.label}
-            </motion.a>
+            </a>
           ))}
-        </motion.nav>
+        </nav>
 
-        <motion.div
-          className="hidden items-center gap-3 md:flex md:gap-2"
-          initial={{ opacity: 0, x: 16 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.45, ease: EASE_PREMIUM }}
-        >
+        <div className="animate-fade-up hidden items-center gap-3 [animation-delay:0.45s] md:flex md:gap-2">
           <LanguageSwitcher locale={locale} className="md:h-8" />
           <a
             href={`https://t.me/${CONTACTS.telegram.replace("@", "")}`}
@@ -254,7 +197,7 @@ export default function Header({ locale }: { locale: Locale }) {
           >
             {t.cta}
           </a>
-        </motion.div>
+        </div>
 
         <div className="flex items-center gap-2 md:hidden">
           <LanguageSwitcher locale={locale} />
@@ -270,16 +213,11 @@ export default function Header({ locale }: { locale: Locale }) {
         </div>
       </div>
 
-      <AnimatePresence>
-        {open && (
-          <motion.nav
-            className="overflow-hidden border-t border-white/5 bg-dark/95 px-4 pb-6 pt-2 backdrop-blur-xl md:hidden"
-            aria-label={t.mobileNavLabel}
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.32, ease: EASE_PREMIUM }}
-          >
+      {/* Меню не размонтируется, а сворачивается: так плавно работает и
+          открытие, и закрытие, без библиотеки анимации. */}
+      <div className={`collapse border-t border-white/5 bg-dark/95 backdrop-blur-xl md:hidden ${open ? "collapse-open" : "border-t-0"}`}>
+        <nav aria-label={t.mobileNavLabel} aria-hidden={!open}>
+          <div className="px-4 pb-6 pt-2">
             <a
               href="#features"
               onClick={() => setOpen(false)}
@@ -312,9 +250,9 @@ export default function Header({ locale }: { locale: Locale }) {
             >
               {t.cta}
             </a>
-          </motion.nav>
-        )}
-      </AnimatePresence>
-    </motion.header>
+          </div>
+        </nav>
+      </div>
+    </header>
   );
 }

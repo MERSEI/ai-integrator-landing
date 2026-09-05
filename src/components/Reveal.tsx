@@ -1,10 +1,18 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
-const EASE_PREMIUM = [0.16, 1, 0.3, 1] as const;
-
+/**
+ * Появление блока при попадании в вьюпорт.
+ *
+ * Раньше здесь стоял framer-motion — ради одного эффекта, который повторяется
+ * на странице три десятка раз, в бандл ехала вся библиотека анимации. Тот же
+ * результат даёт CSS-переход плюс IntersectionObserver: наблюдатель нужен
+ * ровно один на элемент и отключается сразу после первого срабатывания.
+ *
+ * Классы .reveal / .reveal-in описаны в globals.css, там же уважается
+ * prefers-reduced-motion.
+ */
 export default function Reveal({
   children,
   delay = 0,
@@ -14,17 +22,39 @@ export default function Reveal({
   delay?: number;
   className?: string;
 }) {
-  const reduced = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || shown) return;
+
+    // Без IntersectionObserver (очень старые движки) показываем сразу —
+    // контент важнее анимации.
+    if (typeof IntersectionObserver === "undefined") {
+      setShown(true);
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setShown(true);
+        io.disconnect();
+      },
+      { rootMargin: "-70px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [shown]);
 
   return (
-    <motion.div
-      className={className}
-      initial={reduced ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
-      whileInView={reduced ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-70px" }}
-      transition={{ duration: 0.65, delay, ease: EASE_PREMIUM }}
+    <div
+      ref={ref}
+      className={`reveal${shown ? " reveal-in" : ""}${className ? ` ${className}` : ""}`}
+      style={delay ? { transitionDelay: `${delay}s` } : undefined}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

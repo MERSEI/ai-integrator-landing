@@ -1,17 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import {
-  FiSend,
-  FiAlertCircle,
-  FiHelpCircle,
-  FiRefreshCw,
-  FiZap,
-  FiTrendingDown,
-} from "react-icons/fi";
-import { TbStethoscope } from "react-icons/tb";
 import { getTools } from "@/lib/content/tools";
 import type { Locale } from "@/lib/i18n";
+import { FiAlertCircle, FiHelpCircle, FiRefreshCw, FiSend, FiTrendingDown, FiZap, TbStethoscope } from "@/components/icons";
 
 type Leak = { area: string; problem: string; impact: string; severity: string };
 type Rec = { action: string; effect: string; effort: string };

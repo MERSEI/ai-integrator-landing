@@ -26,6 +26,9 @@ export default function LanguageSwitcher({
   return (
     <Link
       href={target || "/"}
+      // Соседнюю локаль не префетчим: язык переключают единицы, а RSC-документ
+      // второй версии страницы тянется при каждой загрузке.
+      prefetch={false}
       hrefLang={locale === "ru" ? "en" : "ru"}
       aria-label={t.switchLanguage}
       title={t.switchLanguage}

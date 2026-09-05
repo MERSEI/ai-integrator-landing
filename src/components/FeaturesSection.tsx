@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { TbTrendingUp } from "react-icons/tb";
-import { FiArrowRight } from "react-icons/fi";
 import AppIcon from "./AppIcon";
 import Reveal from "./Reveal";
 import { APP_STATUS_CLASSES, getContent } from "@/lib/content";
 import type { CategoryKey } from "@/lib/content";
 import { localePath, type Locale } from "@/lib/i18n";
+import { FiArrowRight, TbTrendingUp } from "./icons";
 
 export default function FeaturesSection({ locale }: { locale: Locale }) {
   const content = getContent(locale);

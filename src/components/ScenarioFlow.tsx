@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { FiZap, FiCpu, FiCheckCircle } from "react-icons/fi";
-import type { IconType } from "react-icons";
 import { getContent } from "@/lib/content";
 import type { ScenarioNodeKind } from "@/lib/content/types";
 import type { Locale } from "@/lib/i18n";
+import { FiCheckCircle, FiCpu, FiZap , type IconComponent } from "./icons";
 
 /** Цвет кодирует роль узла в цепочке: событие → работа AI → результат. */
-const KIND: Record<ScenarioNodeKind, { Icon: IconType; chip: string }> = {
+const KIND: Record<ScenarioNodeKind, { Icon: IconComponent; chip: string }> = {
   trigger: {
     Icon: FiZap,
     chip: "bg-accent-blue/10 text-accent-blue ring-accent-blue/25",

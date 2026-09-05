@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { FiSend, FiRotateCcw, FiAlertCircle, FiArrowRight } from "react-icons/fi";
-import { TbSparkles } from "react-icons/tb";
 import Reveal from "./Reveal";
 import { getContent } from "@/lib/content";
 import { trackEvent } from "@/lib/gtag";
 import type { Locale } from "@/lib/i18n";
+import { FiAlertCircle, FiArrowRight, FiRotateCcw, FiSend, TbSparkles } from "./icons";
 
 type Msg = { role: "user" | "model"; content: string };
 

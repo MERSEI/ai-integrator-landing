@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { FiCopy, FiCheck, FiAlertCircle, FiZap, FiClock } from "react-icons/fi";
 import { getTools } from "@/lib/content/tools";
 import type { Locale } from "@/lib/i18n";
 import { CHANNELS } from "@/lib/coldmessage";
+import { FiAlertCircle, FiCheck, FiClock, FiCopy, FiZap } from "@/components/icons";
 
 type FollowUp = { day: string; angle: string; subject: string; message: string };
 type Result = { situation_read: string; followups: FollowUp[]; stop_signal: string };

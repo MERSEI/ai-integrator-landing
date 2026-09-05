@@ -1,7 +1,6 @@
-import { FiCheck } from "react-icons/fi";
-import { TbBolt } from "react-icons/tb";
 import { getContent } from "@/lib/content";
 import { localePath, type Locale } from "@/lib/i18n";
+import { FiCheck, TbBolt } from "./icons";
 
 /** Блок «что в PRO-версии» для страниц приложений. */
 export default function ProBlock({

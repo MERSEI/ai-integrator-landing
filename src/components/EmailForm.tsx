@@ -5,9 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { TbBrandTelegram, TbBrandWhatsapp } from "react-icons/tb";
-import { FiMail, FiPhone } from "react-icons/fi";
-import type { IconType } from "react-icons";
 import { getContent } from "@/lib/content";
 import { trackEvent, trackLeadConversion } from "@/lib/gtag";
 import { localePath, type Locale } from "@/lib/i18n";
@@ -18,6 +15,7 @@ import {
   needsContactValue,
   type ContactChannel,
 } from "@/lib/contactChannel";
+import { FiMail, FiPhone, TbBrandTelegram, TbBrandWhatsapp , type IconComponent } from "./icons";
 
 type FormValues = {
   email: string;
@@ -55,7 +53,7 @@ function buildSchema(t: ReturnType<typeof getContent>["form"]) {
     });
 }
 
-const CHANNEL_ICONS: Record<ContactChannel, IconType> = {
+const CHANNEL_ICONS: Record<ContactChannel, IconComponent> = {
   email: FiMail,
   telegram: TbBrandTelegram,
   whatsapp: TbBrandWhatsapp,

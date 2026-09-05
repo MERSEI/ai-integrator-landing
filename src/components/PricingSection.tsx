@@ -1,9 +1,9 @@
-import { FiCheck, FiShield, FiInfo } from "react-icons/fi";
 import Reveal from "./Reveal";
 import TelegramButton from "./TelegramButton";
 import CardSpotlight from "./CardSpotlight";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
+import { FiCheck, FiInfo, FiShield } from "./icons";
 
 /**
  * Подсказка «из чего складывается цена» — на CSS, без клиентского JS: секция

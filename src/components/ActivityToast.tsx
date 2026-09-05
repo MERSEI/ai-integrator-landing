@@ -1,14 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { FiActivity, FiX } from "react-icons/fi";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
+import { FiActivity, FiX } from "./icons";
 
 type ToolRun = { tool: string; ts: string };
 
-const EASE_PREMIUM = [0.16, 1, 0.3, 1] as const;
 const ROTATE_MS = 7000;
 
 /**
@@ -70,15 +68,12 @@ export default function ActivityToast({ locale }: { locale: Locale }) {
 
   return (
     <div className="pointer-events-none fixed bottom-4 left-4 z-40 hidden max-w-[19rem] sm:block">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={`${run.tool}-${run.ts}`}
-          className="pointer-events-auto flex items-start gap-3 rounded-lg border border-white/10 bg-surface/95 p-3.5 shadow-[0_16px_40px_-16px_rgba(0,0,0,0.9)] backdrop-blur-md"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.4, ease: EASE_PREMIUM }}
-        >
+      {/* key меняется вместе с карточкой — React монтирует новый узел, и
+          CSS-анимация появления проигрывается сама, без библиотеки. */}
+      <div
+        key={`${run.tool}-${run.ts}`}
+        className="pointer-events-auto flex animate-fade-up items-start gap-3 rounded-lg border border-white/10 bg-surface/95 p-3.5 shadow-[0_16px_40px_-16px_rgba(0,0,0,0.9)] backdrop-blur-md"
+      >
           <span
             className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-accent/15 text-accent-blue ring-1 ring-inset ring-accent/25"
             aria-hidden="true"
@@ -102,8 +97,7 @@ export default function ActivityToast({ locale }: { locale: Locale }) {
           >
             <FiX size={14} aria-hidden="true" />
           </button>
-        </motion.div>
-      </AnimatePresence>
+      </div>
     </div>
   );
 }

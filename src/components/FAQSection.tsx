@@ -1,13 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { FiChevronDown } from "react-icons/fi";
 import Reveal from "./Reveal";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
-
-const EASE_PREMIUM = [0.16, 1, 0.3, 1] as const;
+import { FiChevronDown } from "./icons";
 
 export default function FAQSection({ locale }: { locale: Locale }) {
   const t = getContent(locale).faq;
@@ -46,30 +43,28 @@ export default function FAQSection({ locale }: { locale: Locale }) {
                     onClick={() => setOpenIndex(isOpen ? null : i)}
                   >
                     {item.question}
-                    <motion.span
-                      className="shrink-0 text-primary-light"
-                      animate={{ rotate: isOpen ? 180 : 0 }}
-                      transition={{ duration: 0.3, ease: EASE_PREMIUM }}
+                    <span
+                      className={`shrink-0 text-primary-light transition-transform duration-300 ease-premium ${
+                        isOpen ? "rotate-180" : ""
+                      }`}
                       aria-hidden="true"
                     >
                       <FiChevronDown size={20} />
-                    </motion.span>
+                    </span>
                   </button>
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        id={`faq-panel-${i}`}
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.35, ease: EASE_PREMIUM }}
-                      >
-                        <p className="px-6 pb-5 leading-relaxed text-slate-400">
-                          {item.answer}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {/* Панель остаётся в DOM: так работает aria-controls и
+                      поиск по странице находит закрытые ответы. */}
+                  <div
+                    id={`faq-panel-${i}`}
+                    className={`collapse ${isOpen ? "collapse-open" : ""}`}
+                    aria-hidden={!isOpen}
+                  >
+                    <div>
+                      <p className="px-6 pb-5 leading-relaxed text-secondary">
+                        {item.answer}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </Reveal>
             );

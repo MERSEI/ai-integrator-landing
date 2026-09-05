@@ -1,9 +1,9 @@
-import { FiCheck } from "react-icons/fi";
 import Reveal from "./Reveal";
 import EmailForm from "./EmailForm";
 import TelegramButton from "./TelegramButton";
 import { CONTACTS, getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
+import { FiCheck } from "./icons";
 
 export default function FinalCTASection({ locale }: { locale: Locale }) {
   const t = getContent(locale).finalCta;

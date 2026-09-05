@@ -1,17 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import {
-  FiSearch,
-  FiCopy,
-  FiCheck,
-  FiAlertCircle,
-  FiRadio,
-} from "react-icons/fi";
-import { TbBrandTelegram, TbBolt } from "react-icons/tb";
 import { getTools } from "@/lib/content/tools";
 import { localePath, type Locale } from "@/lib/i18n";
 import { TIER_CLASSES, type LeadRadarResult, type Lead } from "@/lib/leadradar";
+import { FiAlertCircle, FiCheck, FiCopy, FiRadio, FiSearch, TbBolt, TbBrandTelegram } from "@/components/icons";
 
 export default function LeadRadarTool({ locale }: { locale: Locale }) {
   const t = getTools(locale).leadradar;

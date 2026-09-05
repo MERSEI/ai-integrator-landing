@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { FiArrowRight } from "react-icons/fi";
 import AppHeader from "@/components/AppHeader";
 import ProBlock from "@/components/ProBlock";
 import TelegramButton from "@/components/TelegramButton";
 import { getContent } from "@/lib/content";
 import type { AppPageId } from "@/lib/content/types";
 import { localePath, type Locale } from "@/lib/i18n";
+import { FiArrowRight } from "@/components/icons";
 
 /** Метаданные страницы приложения — обёртка, чтобы не дублировать в 20 маршрутах. */
 export function appMetadata(locale: Locale, id: AppPageId): Metadata {

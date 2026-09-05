@@ -1,6 +1,6 @@
-import { FiZap, FiClock, FiShield, FiLock } from "react-icons/fi";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
+import { FiClock, FiLock, FiShield, FiZap } from "./icons";
 
 const ICONS = [FiZap, FiClock, FiShield, FiLock];
 

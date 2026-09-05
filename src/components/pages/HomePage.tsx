@@ -3,13 +3,10 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import TrustBar from "@/components/TrustBar";
 import ProblemsSection from "@/components/ProblemsSection";
-import FeaturesSection from "@/components/FeaturesSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
 import ResultsSection from "@/components/ResultsSection";
 
-import ROICalculatorSection from "@/components/ROICalculatorSection";
 import PricingSection from "@/components/PricingSection";
-import FAQSection from "@/components/FAQSection";
 import FinalCTASection from "@/components/FinalCTASection";
 import Footer from "@/components/Footer";
 
@@ -22,6 +19,17 @@ import type { Locale } from "@/lib/i18n";
  */
 const LiveAgentDemo = dynamic(() => import("@/components/LiveAgentDemo"));
 const ActivityToast = dynamic(() => import("@/components/ActivityToast"));
+
+/**
+ * Интерактивные секции ниже первого экрана. Разметку они по-прежнему
+ * отдают с сервера (ssr не отключаем — она нужна поисковикам и для LCP),
+ * но их JS уезжает в отдельные чанки и не конкурирует за загрузку с героем.
+ */
+const FeaturesSection = dynamic(() => import("@/components/FeaturesSection"));
+const ROICalculatorSection = dynamic(
+  () => import("@/components/ROICalculatorSection"),
+);
+const FAQSection = dynamic(() => import("@/components/FAQSection"));
 
 /** Тело главной страницы; маршруты `/` и `/en` рендерят его со своей локалью. */
 export default function HomePage({ locale }: { locale: Locale }) {

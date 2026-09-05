@@ -1,9 +1,9 @@
 import EmailForm from "./EmailForm";
 import ScenarioFlow from "./ScenarioFlow";
 import TelegramButton from "./TelegramButton";
-import { FiCheck } from "react-icons/fi";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
+import { FiCheck } from "./icons";
 
 export default function HeroSection({ locale }: { locale: Locale }) {
   const t = getContent(locale).hero;

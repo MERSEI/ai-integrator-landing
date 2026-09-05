@@ -1,18 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import {
-  FiSearch,
-  FiCopy,
-  FiCheck,
-  FiAlertCircle,
-  FiCrosshair,
-  FiCornerUpLeft,
-} from "react-icons/fi";
-import { TbBrandTelegram, TbBolt } from "react-icons/tb";
 import { getTools } from "@/lib/content/tools";
 import { localePath, type Locale } from "@/lib/i18n";
 import { TIER_CLASSES, type PoachingResult, type Prospect } from "@/lib/poaching";
+import { FiAlertCircle, FiCheck, FiCopy, FiCornerUpLeft, FiCrosshair, FiSearch, TbBolt, TbBrandTelegram } from "@/components/icons";
 
 export default function PoachingTool({ locale }: { locale: Locale }) {
   const t = getTools(locale).poaching;

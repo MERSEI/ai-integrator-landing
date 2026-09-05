@@ -1,21 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import {
-  FiSearch,
-  FiAlertCircle,
-  FiTrendingUp,
-  FiMapPin,
-  FiZap,
-  FiCalendar,
-} from "react-icons/fi";
-import { TbBolt } from "react-icons/tb";
 import { getTools } from "@/lib/content/tools";
 import { localePath, type Locale } from "@/lib/i18n";
 import {
   DIRECTION_META,
   type TrendSniperResult,
 } from "@/lib/trendsniper";
+import { FiAlertCircle, FiCalendar, FiMapPin, FiSearch, FiTrendingUp, FiZap, TbBolt } from "@/components/icons";
 
 export default function TrendSniperTool({ locale }: { locale: Locale }) {
   const t = getTools(locale).trendsniper;

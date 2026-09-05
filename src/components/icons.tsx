@@ -97,6 +97,14 @@ export const FiChevronDown = (p: IconProps) => (
   <Outline {...p}><polyline points="6 9 12 15 18 9" /></Outline>
 );
 
+export const FiChevronLeft = (p: IconProps) => (
+  <Outline {...p}><polyline points="15 18 9 12 15 6" /></Outline>
+);
+
+export const FiChevronRight = (p: IconProps) => (
+  <Outline {...p}><polyline points="9 18 15 12 9 6" /></Outline>
+);
+
 export const FiClock = (p: IconProps) => (
   <Outline {...p}><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></Outline>
 );

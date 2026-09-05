@@ -280,7 +280,8 @@ export default function ROICalculatorSection({ locale }: { locale: Locale }) {
                 <p className="font-heading text-sm font-bold text-primary">{t.ctaTitle}</p>
                 <p className="mt-1 text-sm text-secondary">{t.ctaSubtitle}</p>
                 {/* Кнопка вместо формы: посчитанная сумма — это и есть оффер,
-                    поэтому она стоит в подписи и уходит в заявку. */}
+                    поэтому она стоит в подписи и уходит в заявку. Обе дорожки —
+                    почта и созвон — живут в модалке, чтобы карточка не разрослась. */}
                 <button
                   type="button"
                   onClick={openModal}

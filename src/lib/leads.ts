@@ -18,6 +18,9 @@ export type Lead = {
   name?: string;
   company?: string;
   source?: string;
+  /** Поля заявки на созвон (форма BookingForm); у обычной подписки их нет. */
+  slot?: string;
+  timezone?: string;
   /** Где лиду удобнее общаться — выбор из формы. */
   channel?: ContactChannel;
   /** Контакт в выбранном канале: @ник, номер телефона. Для канала "email" пуст. */

@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { getContent } from "@/lib/content";
+import { emailProblem, suggestEmail } from "@/lib/emailCheck";
 import { trackEvent, trackLeadConversion } from "@/lib/gtag";
 import { localePath, type Locale } from "@/lib/i18n";
 import {
@@ -36,7 +37,10 @@ function buildSchema(t: ReturnType<typeof getContent>["form"]) {
       email: z
         .string()
         .min(1, t.required)
-        .regex(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, t.invalid),
+        // Проверка та же, что на сервере: структура адреса, кириллица, TLD.
+        // Правила из register() при подключённом resolver не выполняются,
+        // поэтому валидация живёт только здесь.
+        .refine((value) => emailProblem(value) === null, t.invalid),
       interest: z.string().optional().default(""),
       channel: z.enum(CONTACT_CHANNELS).default(DEFAULT_CONTACT_CHANNEL),
       contact: z.string().optional().default(""),
@@ -66,8 +70,6 @@ export default function EmailForm({
   source,
   stacked = false,
   note,
-  onSubmitted,
-  autoFocus = false,
 }: {
   locale: Locale;
   cta?: string;
@@ -77,9 +79,6 @@ export default function EmailForm({
   stacked?: boolean;
   /** Контекст заявки — например, посчитанный ROI. Уходит в лид и в таблицу. */
   note?: string;
-  /** Вызывается после успешной отправки, до перехода на /thank-you. */
-  onSubmitted?: () => void;
-  autoFocus?: boolean;
 }) {
   const content = getContent(locale);
   const t = content.form;
@@ -90,6 +89,7 @@ export default function EmailForm({
   const {
     register,
     handleSubmit,
+    setValue,
     watch,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
@@ -101,6 +101,10 @@ export default function EmailForm({
   // лишний обязательный инпут на этом шаге стоит конверсии.
   const channel = watch("channel") ?? DEFAULT_CONTACT_CHANNEL;
   const showContactField = needsContactValue(channel);
+
+  // Опечатка в домене — не ошибка формы, а вопрос: показываем исправленный
+  // вариант рядом с полем и даём подставить его одной кнопкой.
+  const typo = suggestEmail(watch("email") ?? "");
 
   const onSubmit = async (data: FormValues) => {
     setServerError(null);
@@ -119,7 +123,6 @@ export default function EmailForm({
       // благодарности можно вернуться кнопкой «назад» и накрутить дубли.
       trackLeadConversion(source);
       trackEvent("lead_channel", { source, channel: data.channel });
-      onSubmitted?.();
       router.push(localePath(locale, "/thank-you"));
     } catch {
       setServerError(t.networkError);
@@ -144,17 +147,26 @@ export default function EmailForm({
             autoComplete="email"
             className="min-h-11 w-full rounded-md border border-white/10 bg-white/[0.03] px-4 py-2.5 text-primary placeholder-secondary/70 transition-colors duration-200 ease-premium hover:border-white/20 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/35"
             aria-invalid={!!errors.email}
-            {...register("email", {
-              required: t.required,
-              pattern: {
-                value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
-                message: t.invalid,
-              },
-            })}
+            {...register("email")}
           />
           {(errors.email || serverError) && (
             <p role="alert" className="mt-2 text-sm text-rose-400">
               {errors.email?.message ?? serverError}
+            </p>
+          )}
+          {typo && !errors.email && (
+            <p className="mt-2 text-sm text-warning">
+              {t.typoQuestion}{" "}
+              <button
+                type="button"
+                onClick={() =>
+                  setValue("email", typo, { shouldValidate: true, shouldDirty: true })
+                }
+                className="font-medium underline underline-offset-2 hover:text-primary"
+              >
+                {typo}
+              </button>
+              ? <span className="sr-only">{t.typoApply}</span>
             </p>
           )}
         </div>

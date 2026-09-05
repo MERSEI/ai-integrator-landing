@@ -342,6 +342,49 @@ export type Content = {
     links: { href: string; label: string }[];
   };
 
+  /** Форма записи на созвон в финальном CTA: календарь + канал связи. */
+  booking: {
+    tabEmail: string;
+    tabCall: string;
+    title: string;
+    subtitle: string;
+    weekdays: string[];
+    prevMonth: string;
+    nextMonth: string;
+    stepDate: string;
+    stepTime: string;
+    stepContact: string;
+    timezoneNote: string;
+    pickDateFirst: string;
+    /** Тот же текст для узкой раскладки, где календарь стоит сверху, а не слева. */
+    pickDateFirstCompact: string;
+    noSlots: string;
+    slotRequired: string;
+    channelLabel: string;
+    channels: { telegram: string; email: string; phone: string; whatsapp: string };
+    contactLabels: { telegram: string; email: string; phone: string; whatsapp: string };
+    contactPlaceholders: {
+      telegram: string;
+      email: string;
+      phone: string;
+      whatsapp: string;
+    };
+    contactHintEmail: string;
+    contactRequired: string;
+    contactInvalid: string;
+    noteLabel: string;
+    notePlaceholder: string;
+    submit: string;
+    submitting: string;
+    /** Плашка подтверждения: {datetime} подставляется выбранным слотом. */
+    successTitle: string;
+    successText: string;
+    duration: string;
+    telegramTitle: string;
+    telegramText: string;
+    telegramCta: string;
+  };
+
   form: {
     emailLabel: string;
     placeholder: string;
@@ -364,6 +407,9 @@ export type Content = {
     contactInvalid: string;
     /** Пояснение под выбором канала — почему email всё равно спрашиваем. */
     channelHint: string;
+    /** Подсказка при опечатке в домене: «Возможно, вы имели в виду …» + кнопка. */
+    typoQuestion: string;
+    typoApply: string;
   };
 
   pro: {

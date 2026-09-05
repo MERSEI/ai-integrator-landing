@@ -9,8 +9,7 @@ import {
   normalizeChannel,
   normalizeContact,
 } from "@/lib/contactChannel";
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+import { emailProblem, suggestEmail } from "@/lib/emailCheck";
 
 // Простой in-memory rate limit: 5 запросов в минуту с одного IP.
 const hits = new Map<string, { count: number; ts: number }>();
@@ -66,9 +65,18 @@ export async function POST(req: NextRequest) {
   }
 
   const email = body.email?.trim().toLowerCase() ?? "";
-  if (!EMAIL_RE.test(email)) {
+  if (emailProblem(email)) {
     return NextResponse.json(
       { error: apiMessage(locale, "invalidEmail") },
+      { status: 400 }
+    );
+  }
+  // Опечатку в домене отбиваем на сервере тоже: письмо по такому адресу
+  // отобьётся, а лид останется ждать ответа, которого не будет.
+  const suggestion = suggestEmail(email);
+  if (suggestion) {
+    return NextResponse.json(
+      { error: apiMessage(locale, "emailTypo").replace("{email}", suggestion) },
       { status: 400 }
     );
   }
@@ -82,6 +90,12 @@ export async function POST(req: NextRequest) {
 
   // Всегда сохраняем лид в постоянное хранилище (Upstash), чтобы он не терялся,
   // даже если Mailchimp не настроен или временно недоступен.
+  const interest =
+    typeof body.interest === "string" ? body.interest.slice(0, 40) : "";
+  // Контекст приходит с клиента и попадает в таблицу как есть, поэтому
+  // режем длину: расчёт калькулятора укладывается в ~300 символов.
+  const note = typeof body.note === "string" ? body.note.slice(0, 400) : "";
+
   await saveLead({
     email,
     name: body.name,
@@ -89,15 +103,19 @@ export async function POST(req: NextRequest) {
     source: body.source,
     channel,
     contact,
-    interest: typeof body.interest === "string" ? body.interest.slice(0, 40) : "",
-    // Контекст приходит с клиента и попадает в таблицу как есть, поэтому
-    // режем длину: расчёт калькулятора укладывается в ~300 символов.
-    note: typeof body.note === "string" ? body.note.slice(0, 400) : "",
+    interest,
+    note,
   });
 
   // Пустой контакт при неemail-канале форму не роняет: лид ценнее валидации,
   // email для ответа у нас всё равно есть.
-  await sendAuditRequestEmail(email, { channel, contact });
+  await sendAuditRequestEmail({
+    email,
+    source: body.source,
+    interest,
+    channel,
+    contact,
+  });
 
   const { MAILCHIMP_API_KEY, MAILCHIMP_LIST_ID, MAILCHIMP_SERVER_PREFIX } =
     process.env;

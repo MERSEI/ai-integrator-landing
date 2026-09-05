@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
-import EmailForm from "./EmailForm";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
+import CtaTabs from "./CtaTabs";
 import type { Locale } from "@/lib/i18n";
 import { FiX } from "./icons";
 
@@ -13,6 +14,11 @@ import { FiX } from "./icons";
  * `note` — человекочитаемый контекст заявки (посчитанный ROI, ниша, тариф).
  * Он уходит в лид и в таблицу, чтобы на созвон приходить с готовыми цифрами,
  * а не переспрашивать их заново.
+ *
+ * Рисуется порталом в body, и это не вкусовщина: секция калькулятора несёт
+ * `content-visibility: auto`, а он включает `contain: paint` — внутри такой
+ * секции `position: fixed` считается от неё, а не от окна. Модалка тогда
+ * растёт вниз за пределы экрана, и до кнопки отправки не долистать.
  */
 export default function BookingModal({
   locale,
@@ -42,6 +48,9 @@ export default function BookingModal({
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  // На сервере document нет, поэтому портал появляется только после монтирования.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     if (!open) return;
@@ -79,9 +88,9 @@ export default function BookingModal({
     };
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!open || !mounted) return null;
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-[60] flex animate-fade-in items-end justify-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm sm:items-center"
       onClick={onClose}
@@ -132,17 +141,17 @@ export default function BookingModal({
               </div>
 
               <div className="mt-6">
-                <EmailForm
+                <CtaTabs
                   locale={locale}
                   cta={cta}
                   source={source}
                   note={note}
-                  stacked
-                  autoFocus
+                  compact
                 />
               </div>
             </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

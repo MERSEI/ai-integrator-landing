@@ -198,7 +198,7 @@ export const en: Content = {
     secondaryCta: "See the demos first ↓",
     trust: [
       "No credit card required",
-      "Free analysis tailored to you (call after email feedback)",
+      "Free analysis tailored to you — a 15-minute call or a written breakdown",
     ],
   },
 
@@ -593,7 +593,7 @@ export const en: Content = {
     trust: [
       "No credit card required",
       "No results in a week and we refund you",
-      "Free analysis tailored to you (call after email feedback)",
+      "Free analysis tailored to you — a 15-minute call or a written breakdown",
     ],
     contactLead: "Or reach out directly: Telegram",
     emailLabel: "Email",
@@ -659,6 +659,59 @@ export const en: Content = {
     ],
   },
 
+  booking: {
+    tabEmail: "Audit by email",
+    tabCall: "Book a call",
+    title: "Pick a time for the call",
+    subtitle:
+      "15 minutes on video or voice — we go through your process and I tell you what gets automated first.",
+    weekdays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    prevMonth: "Previous month",
+    nextMonth: "Next month",
+    stepDate: "1. Day",
+    stepTime: "2. Time",
+    stepContact: "3. Where to send the confirmation",
+    timezoneNote: "Times are in your timezone",
+    pickDateFirst: "Pick a day first",
+    pickDateFirstCompact: "Pick a day above first",
+    noSlots: "No slots left on this day — pick another one",
+    slotRequired: "Pick a day and a time for the call",
+    channelLabel: "How should I reach you",
+    channels: {
+      telegram: "Telegram",
+      email: "Email",
+      phone: "Phone call",
+      whatsapp: "WhatsApp",
+    },
+    contactLabels: {
+      telegram: "Your Telegram handle",
+      email: "Another address (optional)",
+      phone: "Phone number",
+      whatsapp: "WhatsApp number",
+    },
+    contactPlaceholders: {
+      telegram: "@username",
+      email: "leave empty to use the one above",
+      phone: "+420 773 693 263",
+      whatsapp: "+380 67 123 45 67",
+    },
+    contactHintEmail: "I'll reach out to the email above.",
+    contactRequired: "Add a contact for the channel you picked",
+    contactInvalid: "Check the contact format",
+    noteLabel: "What to cover (optional)",
+    notePlaceholder: "A line about your business and what hurts most right now",
+    submit: "Book the call",
+    submitting: "Booking…",
+    successTitle: "You're booked for {datetime}",
+    successText:
+      "The confirmation and the call link are already in your inbox. I'll reach out through the channel you picked — if plans change, just reply to the email or ping me on Telegram.",
+    duration: "15 minutes · free · no slides, no pitch",
+    telegramTitle: "Not a fan of forms?",
+    telegramText:
+      "Message me on Telegram — I reply personally, usually within an hour between 9:00 and 21:00 CET.",
+    telegramCta: "Message on Telegram",
+  },
+
   form: {
     emailLabel: "Email",
     placeholder: "Your email",
@@ -692,6 +745,8 @@ export const en: Content = {
     contactRequired: "Leave a contact for the channel you picked",
     contactInvalid: "That contact looks incomplete — please check it",
     channelHint: "We'll reply wherever suits you. The email is only used to confirm the request.",
+    typoQuestion: "Did you mean",
+    typoApply: "Fix it",
   },
 
   pro: {

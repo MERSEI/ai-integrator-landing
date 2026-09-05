@@ -1,17 +1,20 @@
 import Reveal from "./Reveal";
-import EmailForm from "./EmailForm";
+import CtaTabs from "./CtaTabs";
 import TelegramButton from "./TelegramButton";
 import { CONTACTS, getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
 import { FiCheck } from "./icons";
 
 export default function FinalCTASection({ locale }: { locale: Locale }) {
-  const t = getContent(locale).finalCta;
+  const content = getContent(locale);
+  const t = content.finalCta;
+  const b = content.booking;
+  const telegramUrl = `https://t.me/${CONTACTS.telegram.replace("@", "")}`;
 
   return (
     <section
       id="final-cta"
-      className="relative overflow-hidden bg-dark py-20 [content-visibility:auto] [contain-intrinsic-size:auto_700px] sm:py-28"
+      className="relative overflow-hidden bg-dark py-20 [content-visibility:auto] [contain-intrinsic-size:auto_900px] sm:py-28"
     >
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
@@ -26,14 +29,7 @@ export default function FinalCTASection({ locale }: { locale: Locale }) {
         </Reveal>
 
         <Reveal delay={0.1} className="mt-8 flex w-full justify-center">
-          <EmailForm locale={locale} cta={t.cta} source="final-cta" />
-        </Reveal>
-
-        <Reveal delay={0.15} className="mt-6 flex w-full justify-center">
-          <div className="flex flex-col items-center gap-3 sm:flex-row">
-            <span className="text-sm text-slate-400">{t.orLabel}</span>
-            <TelegramButton label={t.telegramCta} source="final-cta" />
-          </div>
+          <CtaTabs locale={locale} cta={t.cta} source="final-cta" />
         </Reveal>
 
         <Reveal delay={0.2}>
@@ -45,10 +41,31 @@ export default function FinalCTASection({ locale }: { locale: Locale }) {
               </li>
             ))}
           </ul>
+        </Reveal>
+
+        {/* Прямой канал для тех, кому форма — лишний шаг: обещание ответа держим явным.
+            Ссылка идёт через TelegramButton — иначе клик не отличить от ухода со страницы. */}
+        <Reveal delay={0.25} className="mt-10 w-full">
+          <div className="card-glass mx-auto flex w-full max-w-3xl flex-col items-center gap-4 p-5 text-center sm:flex-row sm:justify-between sm:p-6 sm:text-left">
+            <div>
+              <p className="font-heading text-base font-medium text-primary">
+                {b.telegramTitle}
+              </p>
+              <p className="mt-1 text-sm text-secondary">{b.telegramText}</p>
+            </div>
+            <TelegramButton
+              label={b.telegramCta}
+              source="final-cta"
+              className="w-full shrink-0 sm:w-auto"
+            />
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.3}>
           <p className="mt-6 text-sm text-secondary">
             {t.contactLead}{" "}
             <a
-              href={`https://t.me/${CONTACTS.telegram.replace("@", "")}`}
+              href={telegramUrl}
               className="text-primary-light transition-colors hover:text-white"
             >
               {CONTACTS.telegram}

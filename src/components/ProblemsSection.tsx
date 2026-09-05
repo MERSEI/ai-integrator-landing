@@ -1,6 +1,7 @@
 import Reveal from "./Reveal";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
+import OverloadScene from "./art/OverloadScene";
 import { FiSlash, FiX } from "./icons";
 
 export default function ProblemsSection({ locale }: { locale: Locale }) {
@@ -23,10 +24,12 @@ export default function ProblemsSection({ locale }: { locale: Locale }) {
           </h2>
         </Reveal>
 
-        {/* Две стороны одной боли: что болит — и почему обычные обходные пути
-            не спасают. Раньше правую колонку занимала иллюстрация. */}
-        <div className="mt-12 grid items-start gap-6 lg:grid-cols-2">
-          <Reveal>
+        {/* Слева — вся мысль текстом: что болит и почему обходные пути не
+            спасают. Справа — она же картинкой. Иллюстрация вынесена в свою
+            колонку и центрируется: если поставить её над блоком, левая колонка
+            заканчивается на середине и внизу остаётся дыра. */}
+        <div className="mt-12 grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:gap-12">
+          <Reveal className="space-y-6">
             <ul className="space-y-3">
               {t.items.map((problem) => (
                 <li
@@ -43,9 +46,7 @@ export default function ProblemsSection({ locale }: { locale: Locale }) {
                 </li>
               ))}
             </ul>
-          </Reveal>
 
-          <Reveal delay={0.12}>
             <div className="card-glass p-6">
               <p className="font-heading font-semibold tracking-tight text-primary">
                 {t.boxTitle}
@@ -64,6 +65,12 @@ export default function ProblemsSection({ locale }: { locale: Locale }) {
                 ))}
               </ul>
             </div>
+          </Reveal>
+
+          {/* Все каналы сходятся на одном человеке, часть висит неразобранной,
+              один лид уходит вниз мимо. */}
+          <Reveal delay={0.12}>
+            <OverloadScene className="mx-auto block w-full max-w-[20rem] sm:max-w-md" />
           </Reveal>
         </div>
       </div>

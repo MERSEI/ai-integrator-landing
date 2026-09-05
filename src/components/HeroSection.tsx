@@ -1,4 +1,5 @@
 import CtaTabs from "./CtaTabs";
+import HeroTexture from "./art/HeroTexture";
 import ScenarioFlow from "./ScenarioFlow";
 import TelegramButton from "./TelegramButton";
 import { getContent } from "@/lib/content";
@@ -10,12 +11,14 @@ export default function HeroSection({ locale }: { locale: Locale }) {
 
   return (
     <section className="relative overflow-hidden bg-dark pt-[72px]">
-      {/* Единственный фоновый приём: мягкое свечение из-под шапки. Заменяет
-          видео-фон и дрейфующие блобы — страница легче на 2.8MB. */}
+      {/* Фон первого экрана: свечение из-под шапки плюс векторная фактура —
+          полосы света и зерно. Заменяет видео-фон и дрейфующие блобы, страница
+          легче на 2.8MB, а фактура добавляет ещё около килобайта. */}
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-[560px] bg-[radial-gradient(ellipse_55%_100%_at_50%_0%,rgba(79,70,229,0.30),transparent_72%)]"
         aria-hidden="true"
       />
+      <HeroTexture />
       <div
         className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
         aria-hidden="true"

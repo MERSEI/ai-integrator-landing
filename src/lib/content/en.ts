@@ -30,7 +30,6 @@ export const en: Content = {
       name: "Poaching",
       tagline: "Lead hunting",
       category: "attract",
-      image: "/images/apps/poaching.jpg",
       href: "/apps/poaching",
       status: "demo",
       description:
@@ -42,7 +41,6 @@ export const en: Content = {
       name: "BizDoctor",
       tagline: "Analytics",
       category: "analytics",
-      image: "/images/apps/bizdoctor.jpg",
       href: "/apps/bizdoctor",
       status: "live",
       description:
@@ -54,7 +52,6 @@ export const en: Content = {
       name: "ColdMessage Pro",
       tagline: "Outreach",
       category: "sales",
-      image: "/images/apps/coldmessage.jpg",
       href: "/apps/coldmessage",
       status: "live",
       description:
@@ -66,7 +63,6 @@ export const en: Content = {
       name: "ObjectionKiller",
       tagline: "Objections",
       category: "sales",
-      image: "/images/apps/objectionkiller.jpg",
       href: "/apps/objectionkiller",
       status: "live",
       description:
@@ -78,7 +74,6 @@ export const en: Content = {
       name: "SalesAgent",
       tagline: "AI closer",
       category: "sales",
-      image: "/images/apps/salesagent.jpg",
       status: "soon",
       description:
         "Qualifies leads, handles objections, and books meetings around the clock",
@@ -89,7 +84,6 @@ export const en: Content = {
       name: "ContentLoop",
       tagline: "Content",
       category: "content",
-      image: "/images/apps/contentloop.jpg",
       status: "soon",
       description: "Creates and publishes social content automatically",
       result: "Saves 20+ hours/month",
@@ -102,7 +96,6 @@ export const en: Content = {
       name: "PersonaChannel",
       tagline: "Content in your voice",
       category: "content",
-      image: "/images/apps/personachannel.jpg",
       href: "/apps/personachannel",
       status: "live",
       description:
@@ -114,7 +107,6 @@ export const en: Content = {
       name: "FollowUpBot",
       tagline: "Deal follow-ups",
       category: "sales",
-      image: "/images/apps/followupbot.jpg",
       href: "/apps/followupbot",
       status: "live",
       description:
@@ -126,7 +118,6 @@ export const en: Content = {
       name: "InboxZero",
       tagline: "Inbox triage",
       category: "sales",
-      image: "/images/apps/inboxzero.jpg",
       href: "/apps/inboxzero",
       status: "live",
       description:
@@ -138,7 +129,6 @@ export const en: Content = {
       name: "LeadRadar",
       tagline: "Hot-intent radar",
       category: "attract",
-      image: "/images/apps/leadradar.jpg",
       href: "/apps/leadradar",
       status: "demo",
       description:
@@ -150,7 +140,6 @@ export const en: Content = {
       name: "Comment Hunter",
       tagline: "Leads in comments",
       category: "attract",
-      image: "/images/apps/commenthunter.jpg",
       href: "/apps/commenthunter",
       status: "demo",
       description:
@@ -162,7 +151,6 @@ export const en: Content = {
       name: "Trend Sniper",
       tagline: "Trend analytics",
       category: "analytics",
-      image: "/images/apps/trendsniper.jpg",
       href: "/apps/trendsniper",
       status: "demo",
       description:
@@ -298,15 +286,12 @@ export const en: Content = {
       "A CRM stores the work, it doesn't do it: that's a place for data, not a worker",
       "Hiring a developer means months and a salary, not a single rollout",
     ],
-    imageAlt: "A business owner buried in chaotic manual processes",
   },
 
   features: {
     title: "15 AI tools for your business",
     subtitle:
       "10 are live today and ready to try, the other 5 are in development. Pick the apps you need and start working within 72 hours — each bot takes over its slice of the busywork: leads, analytics, inbox, and content.",
-    imageAlt:
-      "A team of AI bots handling leads, analytics, email, and content",
     categoriesLabel: "App categories",
     open: "Open",
     soonTitle: "Coming soon",
@@ -320,9 +305,6 @@ export const en: Content = {
         number: "01",
         time: "1 hour",
         title: "Diagnosis",
-        image: "/images/steps/step-1.jpg",
-        imageAlt:
-          "A client fills out a questionnaire, AI processes the data and produces a business report",
         points: [
           "You answer questions about your business",
           "Our AI analyzes where you're losing customers",
@@ -333,9 +315,6 @@ export const en: Content = {
         number: "02",
         time: "2–3 hours",
         title: "Setup",
-        image: "/images/steps/step-2.jpg",
-        imageAlt:
-          "Scattered services and data connect into a single workflow",
         points: [
           "We pick the right apps from the catalog",
           "We connect them to your systems (CRM, email, and more)",
@@ -346,8 +325,6 @@ export const en: Content = {
         number: "03",
         time: "48–72 hours",
         title: "Launch",
-        image: "/images/steps/step-3.jpg",
-        imageAlt: "Apps go live and business metrics start climbing",
         points: [
           "A 30-minute training session",
           "Your apps go live in production",
@@ -509,8 +486,6 @@ export const en: Content = {
     title: "Simple pricing, no hidden fees",
     subtitle:
       "The process audit and the agent demos are free. You pay for the build and for support.",
-    imageAlt:
-      "Three plans: from a single tool to every app on the platform",
     tiers: [
       {
         name: "Starter",

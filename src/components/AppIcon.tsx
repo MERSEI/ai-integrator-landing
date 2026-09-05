@@ -1,23 +1,9 @@
 
-import { FiActivity, FiCrosshair, FiFeather, FiInbox, FiMail, FiMessageCircle, FiRadio, FiRefreshCw, FiRepeat, FiShield, FiTrendingUp, FiUserCheck , type IconComponent } from "./icons";
+import { APP_GLYPHS } from "./AppGlyphs";
 /**
- * Иконки приложений: один набор (Feather) с общей обводкой вместо разнородных
- * сгенерированных картинок. Тон задаёт категория, поэтому в сетке видно группы.
+ * Плитка приложения: своя иконка (см. AppGlyphs) в подложке, окрашенной по
+ * категории — в сетке сразу видно группы, а внутри группы иконки различаются.
  */
-const GLYPH: Record<string, IconComponent> = {
-  poaching: FiCrosshair,
-  leadradar: FiRadio,
-  commenthunter: FiMessageCircle,
-  coldmessage: FiMail,
-  objectionkiller: FiShield,
-  followupbot: FiRefreshCw,
-  salesagent: FiUserCheck,
-  inboxzero: FiInbox,
-  personachannel: FiFeather,
-  contentloop: FiRepeat,
-  trendsniper: FiTrendingUp,
-  bizdoctor: FiActivity,
-};
 
 const TINT: Record<string, string> = {
   attract: "from-accent-blue/[0.18] text-accent-blue ring-accent-blue/20",
@@ -35,7 +21,7 @@ export default function AppIcon({
   category: string;
   size?: number;
 }) {
-  const Glyph = GLYPH[id] ?? FiActivity;
+  const Glyph = APP_GLYPHS[id as keyof typeof APP_GLYPHS] ?? APP_GLYPHS.bizdoctor;
   const tint = TINT[category] ?? TINT.attract;
 
   return (
@@ -44,7 +30,7 @@ export default function AppIcon({
       style={{ width: size, height: size }}
       aria-hidden="true"
     >
-      <Glyph size={Math.round(size * 0.42)} />
+      <Glyph size={Math.round(size * 0.46)} />
     </span>
   );
 }

@@ -30,7 +30,6 @@ export const ru: Content = {
       name: "Poaching",
       tagline: "Охота на лидов",
       category: "attract",
-      image: "/images/apps/poaching.jpg",
       href: "/apps/poaching",
       status: "demo",
       description:
@@ -42,7 +41,6 @@ export const ru: Content = {
       name: "BizDoctor",
       tagline: "Аналитика",
       category: "analytics",
-      image: "/images/apps/bizdoctor.jpg",
       href: "/apps/bizdoctor",
       status: "live",
       description:
@@ -54,7 +52,6 @@ export const ru: Content = {
       name: "ColdMessage Pro",
       tagline: "Письма",
       category: "sales",
-      image: "/images/apps/coldmessage.jpg",
       href: "/apps/coldmessage",
       status: "live",
       description:
@@ -66,7 +63,6 @@ export const ru: Content = {
       name: "ObjectionKiller",
       tagline: "Возражения",
       category: "sales",
-      image: "/images/apps/objectionkiller.jpg",
       href: "/apps/objectionkiller",
       status: "live",
       description:
@@ -78,7 +74,6 @@ export const ru: Content = {
       name: "SalesAgent",
       tagline: "AI продажник",
       category: "sales",
-      image: "/images/apps/salesagent.jpg",
       status: "soon",
       description:
         "Квалифицирует лидов, работает с возражениями, назначает встречи 24/7",
@@ -89,7 +84,6 @@ export const ru: Content = {
       name: "ContentLoop",
       tagline: "Контент",
       category: "content",
-      image: "/images/apps/contentloop.jpg",
       status: "soon",
       description: "Автоматически создаёт и публикует контент в соцсети",
       result: "Экономия 20+ часов/месяц",
@@ -102,7 +96,6 @@ export const ru: Content = {
       name: "PersonaChannel",
       tagline: "Контент под персону",
       category: "content",
-      image: "/images/apps/personachannel.jpg",
       href: "/apps/personachannel",
       status: "live",
       description:
@@ -114,7 +107,6 @@ export const ru: Content = {
       name: "FollowUpBot",
       tagline: "Дожим лидов",
       category: "sales",
-      image: "/images/apps/followupbot.jpg",
       href: "/apps/followupbot",
       status: "live",
       description:
@@ -126,7 +118,6 @@ export const ru: Content = {
       name: "InboxZero",
       tagline: "Разбор почты",
       category: "sales",
-      image: "/images/apps/inboxzero.jpg",
       href: "/apps/inboxzero",
       status: "live",
       description:
@@ -138,7 +129,6 @@ export const ru: Content = {
       name: "LeadRadar",
       tagline: "Радар горячих запросов",
       category: "attract",
-      image: "/images/apps/leadradar.jpg",
       href: "/apps/leadradar",
       status: "demo",
       description:
@@ -150,7 +140,6 @@ export const ru: Content = {
       name: "Comment Hunter",
       tagline: "Лиды в комментариях",
       category: "attract",
-      image: "/images/apps/commenthunter.jpg",
       href: "/apps/commenthunter",
       status: "demo",
       description:
@@ -162,7 +151,6 @@ export const ru: Content = {
       name: "Trend Sniper",
       tagline: "Аналитика трендов",
       category: "analytics",
-      image: "/images/apps/trendsniper.jpg",
       href: "/apps/trendsniper",
       status: "demo",
       description:
@@ -298,15 +286,12 @@ export const ru: Content = {
       "CRM хранит работу, а не делает её: это место для данных, а не исполнитель",
       "Свой разработчик — это месяцы и зарплата, а не одно внедрение",
     ],
-    imageAlt: "Предприниматель, перегруженный хаосом ручных процессов",
   },
 
   features: {
     title: "15 AI-инструментов для вашего бизнеса",
     subtitle:
       "10 уже работают и доступны для теста прямо сейчас, ещё 5 — в разработке. Выберите нужные приложения и начните работать через 72 часа — каждый бот берёт на себя свою часть рутины: лидов, аналитику, переписку и контент.",
-    imageAlt:
-      "Команда AI-ботов помогает в работе с лидами, аналитикой, письмами и контентом",
     categoriesLabel: "Категории приложений",
     open: "Открыть",
     soonTitle: "Скоро в каталоге",
@@ -320,9 +305,6 @@ export const ru: Content = {
         number: "01",
         time: "1 час",
         title: "Диагностика",
-        image: "/images/steps/step-1.jpg",
-        imageAlt:
-          "Клиент заполняет анкету, AI обрабатывает данные и формирует отчёт по бизнесу",
         points: [
           "Вы отвечаете на вопросы о бизнесе",
           "Наш AI анализирует, где вы теряете клиентов",
@@ -333,9 +315,6 @@ export const ru: Content = {
         number: "02",
         time: "2–3 часа",
         title: "Подбор",
-        image: "/images/steps/step-2.jpg",
-        imageAlt:
-          "Разрозненные сервисы и данные подключаются в единый рабочий процесс",
         points: [
           "Выбираем нужные приложения из каталога",
           "Подключаем к вашим системам (CRM, Email и др.)",
@@ -346,8 +325,6 @@ export const ru: Content = {
         number: "03",
         time: "48–72 часа",
         title: "Запуск",
-        image: "/images/steps/step-3.jpg",
-        imageAlt: "Приложения запускаются в работу, метрики бизнеса идут вверх",
         points: [
           "Даём training на 30 минут",
           "Запускаем приложения в production",
@@ -509,8 +486,6 @@ export const ru: Content = {
     title: "Простые цены без скрытых платежей",
     subtitle:
       "Аудит процессов и демо агентов — бесплатно. Платите за сборку под вас и за поддержку.",
-    imageAlt:
-      "Три тарифа: от одного инструмента до полного набора приложений платформы",
     tiers: [
       {
         name: "Starter",

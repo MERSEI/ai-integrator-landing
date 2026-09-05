@@ -20,7 +20,6 @@ export type App = {
   name: string;
   tagline: string;
   category: Exclude<CategoryKey, "all">;
-  image: string;
   /** Нет у приложений без своей страницы (status: "soon"). */
   href?: string;
   status: AppStatus;
@@ -34,8 +33,6 @@ export type Step = {
   number: string;
   time: string;
   title: string;
-  image: string;
-  imageAlt: string;
   points: string[];
 };
 
@@ -185,13 +182,11 @@ export type Content = {
     items: string[];
     boxTitle: string;
     boxItems: string[];
-    imageAlt: string;
   };
 
   features: {
     title: string;
     subtitle: string;
-    imageAlt: string;
     categoriesLabel: string;
     open: string;
     soonTitle: string;
@@ -280,7 +275,6 @@ export type Content = {
   pricing: {
     title: string;
     subtitle: string;
-    imageAlt: string;
     tiers: PricingTier[];
     /** Идёт сразу после суммы: "$155 за сборку". */
     setupSuffix: string;

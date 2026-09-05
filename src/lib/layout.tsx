@@ -66,13 +66,13 @@ export function buildMetadata(locale: Locale): Metadata {
       locale: locale === "ru" ? "ru_RU" : "en_US",
       url: path,
       siteName: "AI Integrator",
-      images: [{ url: "/images/hero.png", width: 1200, height: 630, alt: t.ogAlt }],
+      // og:image не задаём: его отдаёт opengraph-image.tsx рядом с маршрутом,
+      // и картинка собирается из того же словаря, что и страница.
     },
     twitter: {
       card: "summary_large_image",
       title: t.ogAlt,
       description: t.description,
-      images: ["/images/hero.png"],
     },
     robots: { index: true, follow: true },
   };

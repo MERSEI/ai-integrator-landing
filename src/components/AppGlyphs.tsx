@@ -144,6 +144,24 @@ export const GlyphBizDoctor = (p: IconProps) => (
   </Glyph>
 );
 
+/** MeetingScribe — две дорожки созвона сходятся в один протокол. */
+export const GlyphMeetingScribe = (p: IconProps) => (
+  <Glyph {...p}>
+    <path d="M3.5 9.5v5M3.5 12h0" />
+    <path d="M3.5 7.5v9M6.3 5.5v13M9.1 9.8v5.4" />
+    <rect x="13" y="4.5" width="7.5" height="15" rx="1.6" />
+    <path d="M15.3 8.5h3M15.3 11.5h3M15.3 14.5h1.7" />
+  </Glyph>
+);
+
+/** Pulse — линия монитора не даёт сбой пропасть незамеченным. */
+export const GlyphPulse = (p: IconProps) => (
+  <Glyph {...p}>
+    <path d="M2.5 12.5h4l1.8-5 3 9.5 2.4-7.5 1.6 3h6.2" />
+    <circle cx="19" cy="6" r="1.4" fill="currentColor" stroke="none" />
+  </Glyph>
+);
+
 /** Соответствие id приложения и его иконки. */
 export const APP_GLYPHS = {
   poaching: GlyphPoaching,
@@ -158,4 +176,6 @@ export const APP_GLYPHS = {
   contentloop: GlyphContentLoop,
   trendsniper: GlyphTrendSniper,
   bizdoctor: GlyphBizDoctor,
+  meetingscribe: GlyphMeetingScribe,
+  pulse: GlyphPulse,
 } as const;

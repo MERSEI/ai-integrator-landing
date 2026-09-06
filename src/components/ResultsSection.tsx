@@ -12,7 +12,7 @@ export default function ResultsSection({ locale }: { locale: Locale }) {
   const content = getContent(locale);
   const t = content.results;
   const liveApps = [...content.featuredApps, ...content.standaloneApps].filter(
-    (app) => app.status === "live" && app.href
+    (app) => app.status === "live" && app.href && !app.noLiveDemo
   );
 
   return (

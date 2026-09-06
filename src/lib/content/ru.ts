@@ -157,12 +157,35 @@ export const ru: Content = {
         "Показывает, какие темы набирают обороты, пока конкуренты ещё не заметили",
       result: "Тренды на 2 шага вперёд",
     },
+    {
+      id: "meetingscribe",
+      name: "MeetingScribe",
+      tagline: "Протокол созвона",
+      category: "content",
+      href: "/apps/meetingscribe",
+      status: "live",
+      description:
+        "Пишет две дорожки созвона (микрофон и собеседник) и собирает структурированный протокол встречи",
+      result: "9.9x реального времени",
+      noLiveDemo: true,
+    },
+    {
+      id: "pulse",
+      name: "Pulse",
+      tagline: "Вотчдог сервисов",
+      category: "analytics",
+      href: "/apps/pulse",
+      status: "live",
+      description:
+        "Следит за сервисами на Railway и Vercel, отличает разовый сбой от реального падения и не будит по пустякам",
+      result: "Алерты без лишнего шума",
+      noLiveDemo: true,
+    },
   ],
 
   soonApps: [
     { id: "competitorwatch", name: "CompetitorWatch", tagline: "Мониторинг конкурентов" },
     { id: "reelfactory", name: "ReelFactory", tagline: "Автомонтаж Reels" },
-    { id: "meetingscribe", name: "MeetingScribe", tagline: "Минуты встреч" },
   ],
 
   nav: {
@@ -929,6 +952,52 @@ export const ru: Content = {
           "Алерты о всплесках активности вокруг темы в реальном времени",
         ],
       },
+    },
+    meetingscribe: {
+      metaTitle: "MeetingScribe — протокол созвона за 2 минуты | AI Integrator",
+      metaDescription:
+        "Windows-приложение пишет две дорожки созвона (микрофон и собеседник) и собирает структурированный протокол встречи. Open source.",
+      badge: "MeetingScribe",
+      titleLead: "MeetingScribe — ",
+      titleAccent: "протокол созвона за 2 минуты",
+      subtitle:
+        "Пишет микрофон и звук из колонок двумя независимыми дорожками — спикер известен по источнику, диаризация не нужна. После звонка собирает структурированный протокол и присылает в Telegram.",
+      external: {
+        url: "https://github.com/MERSEI/debrief",
+        cta: "Открыть на GitHub",
+        features: [
+          "Две дорожки — микрофон и WASAPI loopback — с общим нулём времени",
+          "Эхо-фильтр отсекает то, что проиграно в колонках и попало в микрофон, не трогая живые перебивания",
+          "Протокол — через structured output со строгой схемой: пустой раздел лучше выдуманного",
+          "9.9x реального времени на 12 ядрах CPU, без GPU",
+          "Итог — сразу в Telegram",
+        ],
+      },
+      disclaimer:
+        "Windows-приложение, устанавливается и работает на вашей машине — не встроено в этот сайт.",
+    },
+    pulse: {
+      metaTitle: "Pulse — вотчдог для Railway и Vercel | AI Integrator",
+      metaDescription:
+        "Следит за сервисами на Railway и Vercel, подтверждает инцидент по нескольким отказам подряд и не путает протухший токен с реальным падением. Open source.",
+      badge: "Pulse",
+      titleLead: "Pulse — ",
+      titleAccent: "вотчдог для Railway и Vercel",
+      subtitle:
+        "Опрашивает ваши сервисы, подтверждает инцидент по N отказам подряд вместо тревоги на первый же сбой, а при падении на Railway сразу тянет хвост логов и называет вероятную причину.",
+      external: {
+        url: "https://github.com/MERSEI/pulse",
+        cta: "Открыть на GitHub",
+        features: [
+          "Подтверждение инцидента по N отказам подряд, дедуп с редким напоминанием, мьют до времени",
+          "Отдельный статус UNKNOWN — протухший токен не выглядит как падение и не закрывает открытый инцидент",
+          "Состояние в SQLite — перезапуск контейнера не рассылает повторные алерты",
+          "При падении на Railway — хвост логов деплоя и причина по схеме: причина → строка-основание → первое действие → уверенность",
+          "Управление и алерты — в Telegram, перезапуск сервиса — через отдельное подтверждение",
+        ],
+      },
+      disclaimer:
+        "Разворачивается как отдельный сервис (Railway или любой Python-хостинг) — не встроен в этот сайт.",
     },
   },
 

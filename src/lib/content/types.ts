@@ -25,6 +25,13 @@ export type App = {
   status: AppStatus;
   description: string;
   result: string;
+  /**
+   * Реальный продукт со своей страницей, но без интерактивного демо в
+   * браузере (self-hosted/десктопный инструмент) — исключается из блока
+   * «попробуйте прямо сейчас», где обещание «рабочий AI без регистрации»
+   * для такого продукта было бы неправдой.
+   */
+  noLiveDemo?: boolean;
 };
 
 export type SoonApp = { id: string; name: string; tagline: string };
@@ -95,7 +102,9 @@ export type AppPageId =
   | "inboxzero"
   | "leadradar"
   | "commenthunter"
-  | "trendsniper";
+  | "trendsniper"
+  | "meetingscribe"
+  | "pulse";
 
 export type AppPageCopy = {
   metaTitle: string;
@@ -107,6 +116,11 @@ export type AppPageCopy = {
   subtitle: string;
   pro?: { title: string; intro: string; features: string[] };
   disclaimer?: string;
+  /**
+   * Для приложений без демо в браузере: список возможностей и ссылка на
+   * реальный, работающий репозиторий вместо формы.
+   */
+  external?: { url: string; cta: string; features: string[] };
 };
 
 export type Content = {

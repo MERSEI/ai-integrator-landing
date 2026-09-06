@@ -157,12 +157,35 @@ export const en: Content = {
         "Shows which topics are taking off while your competitors haven't noticed yet",
       result: "Two steps ahead of trends",
     },
+    {
+      id: "meetingscribe",
+      name: "MeetingScribe",
+      tagline: "Call minutes",
+      category: "content",
+      href: "/apps/meetingscribe",
+      status: "live",
+      description:
+        "Records both sides of a call on separate tracks and turns it into a structured meeting protocol",
+      result: "9.9x real time",
+      noLiveDemo: true,
+    },
+    {
+      id: "pulse",
+      name: "Pulse",
+      tagline: "Service watchdog",
+      category: "analytics",
+      href: "/apps/pulse",
+      status: "live",
+      description:
+        "Watches your Railway and Vercel services, tells a real outage from a blip, and doesn't page you for nothing",
+      result: "Alerts without the noise",
+      noLiveDemo: true,
+    },
   ],
 
   soonApps: [
     { id: "competitorwatch", name: "CompetitorWatch", tagline: "Competitor monitoring" },
     { id: "reelfactory", name: "ReelFactory", tagline: "Automated Reels editing" },
-    { id: "meetingscribe", name: "MeetingScribe", tagline: "Meeting notes" },
   ],
 
   nav: {
@@ -927,6 +950,52 @@ export const en: Content = {
           "Real-time alerts when activity around your topic spikes",
         ],
       },
+    },
+    meetingscribe: {
+      metaTitle: "MeetingScribe — call minutes in 2 minutes | AI Integrator",
+      metaDescription:
+        "A Windows app records both sides of a call on separate tracks and turns it into a structured meeting protocol. Open source.",
+      badge: "MeetingScribe",
+      titleLead: "MeetingScribe — ",
+      titleAccent: "call minutes in 2 minutes",
+      subtitle:
+        "Records the microphone and speaker output as two independent tracks — the speaker is known from the source, no diarization needed. After the call it builds a structured protocol and sends it to Telegram.",
+      external: {
+        url: "https://github.com/MERSEI/debrief",
+        cta: "Open on GitHub",
+        features: [
+          "Two tracks — microphone and WASAPI loopback — sharing one time origin",
+          "An echo filter drops what played through the speakers and leaked into the mic, without cutting real interruptions",
+          "The protocol comes from a structured output with a strict schema — an empty section beats a made-up one",
+          "9.9x real time on 12 CPU cores, no GPU needed",
+          "The result lands straight in Telegram",
+        ],
+      },
+      disclaimer:
+        "A Windows app — installs and runs on your own machine, not embedded in this site.",
+    },
+    pulse: {
+      metaTitle: "Pulse — watchdog for Railway and Vercel | AI Integrator",
+      metaDescription:
+        "Watches your Railway and Vercel services, confirms an incident after several consecutive failures, and doesn't mistake a stale token for a real outage. Open source.",
+      badge: "Pulse",
+      titleLead: "Pulse — ",
+      titleAccent: "watchdog for Railway and Vercel",
+      subtitle:
+        "Polls your services, confirms an incident after N consecutive failures instead of alerting on the first blip, and on a Railway failure pulls the deploy log tail and names a likely cause right away.",
+      external: {
+        url: "https://github.com/MERSEI/pulse",
+        cta: "Open on GitHub",
+        features: [
+          "Incident confirmed after N consecutive failures, deduped with an occasional reminder, mutable for a set time",
+          "A separate UNKNOWN status — a stale token doesn't look like an outage and won't close an open incident",
+          "State lives in SQLite — a container restart doesn't re-blast alerts for known failures",
+          "On a Railway failure — the deploy log tail plus a cause by schema: cause → evidence line → first action → confidence",
+          "Control and alerts run through Telegram; restarting a service asks for a separate confirmation",
+        ],
+      },
+      disclaimer:
+        "Deploys as its own service (Railway or any Python host) — not embedded in this site.",
     },
   },
 

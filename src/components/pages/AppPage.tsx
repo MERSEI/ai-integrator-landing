@@ -63,6 +63,7 @@ export default function AppPage({
           {t.pro && (
             <ProBlock
               locale={locale}
+              id={id}
               title={t.pro.title}
               intro={t.pro.intro}
               features={t.pro.features}

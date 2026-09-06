@@ -1,20 +1,30 @@
 import { getContent } from "@/lib/content";
+import type { AppPageId } from "@/lib/content/types";
 import { localePath, type Locale } from "@/lib/i18n";
+import TelegramButton from "./TelegramButton";
 import { FiCheck, TbBolt } from "./icons";
 
-/** Блок «что в PRO-версии» для страниц приложений. */
+/**
+ * Блок «что в PRO-версии» для страниц приложений. У кого есть PRO-апселл,
+ * раньше не было прямого пути в Telegram — только форма после клика на
+ * «Подключить PRO». Кнопка рядом даёт короткий путь тем, кто хочет спросить,
+ * а не сразу оставлять заявку.
+ */
 export default function ProBlock({
   locale,
+  id,
   title,
   intro,
   features,
 }: {
   locale: Locale;
+  id: AppPageId;
   title: string;
   intro: string;
   features: string[];
 }) {
   const t = getContent(locale).pro;
+  const telegramCta = getContent(locale).demoConvert.telegramCta;
 
   return (
     <div className="mx-auto mt-12 max-w-3xl rounded-lg bg-gradient-to-b from-primary/15 to-transparent p-px shadow-glow-sm">
@@ -32,9 +42,12 @@ export default function ProBlock({
             </li>
           ))}
         </ul>
-        <a href={`${localePath(locale, "/")}#final-cta`} className="btn-primary mt-6">
-          {t.cta}
-        </a>
+        <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row">
+          <a href={`${localePath(locale, "/")}#final-cta`} className="btn-primary">
+            {t.cta}
+          </a>
+          <TelegramButton label={telegramCta} source={`pro-${id}`} />
+        </div>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ export const en: Content = {
   htmlLang: "en",
 
   meta: {
-    title: "AI Integrator — 15 AI tools for sales and lead generation",
+    title: "AI Integrator — 16 AI tools for sales and lead generation",
     description:
       "AI apps that automate sales, marketing, and operations. Live in 72 hours, no developers needed.",
     ogAlt: "AI Integrator — AI tools for sales",
@@ -196,7 +196,7 @@ export const en: Content = {
     results: "Results",
     calculator: "Calculator",
     moreTools: "More tools",
-    seeAllApps: "See all 15 apps",
+    seeAllApps: "See all 16 apps",
     soonBadge: "Soon",
     telegram: "Message us on Telegram",
     cta: "Get an audit",
@@ -211,7 +211,7 @@ export const en: Content = {
 
   hero: {
     badge: "Live in 72 hours, no developers",
-    headingLead: "15 AI tools for ",
+    headingLead: "16 AI tools for ",
     headingAccent: "sales and lead generation",
     subtitle:
       "AI apps that automate sales, marketing, and operations. Up and running in 72 hours, no developers needed.",
@@ -312,7 +312,7 @@ export const en: Content = {
   },
 
   features: {
-    title: "15 AI tools for your business",
+    title: "16 AI tools for your business",
     subtitle:
       "10 are live today and ready to try, the other 5 are in development. Pick the apps you need and start working within 72 hours — each bot takes over its slice of the busywork: leads, analytics, inbox, and content.",
     categoriesLabel: "App categories",

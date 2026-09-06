@@ -60,18 +60,22 @@ body {
  * Раскрытие ответа в FAQ. Приём с grid-template-rows: 0fr → 1fr анимирует
  * высоту без измерения контента в JS — контейнеру не нужно знать, сколько
  * места займёт текст.
+ *
+ * Имя НЕ `collapse`: так называется утилита Tailwind (`visibility: collapse`),
+ * она попадала в сборку из-за этого же класса в разметке и гасила панель
+ * даже в раскрытом состоянии — ответы FAQ и мобильное меню были невидимы.
  */
-.collapse {
+.disclosure {
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.collapse-open {
+.disclosure-open {
   grid-template-rows: 1fr;
 }
 
-.collapse > * {
+.disclosure > * {
   overflow: hidden;
 }
 

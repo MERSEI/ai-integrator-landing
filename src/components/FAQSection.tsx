@@ -56,7 +56,7 @@ export default function FAQSection({ locale }: { locale: Locale }) {
                       поиск по странице находит закрытые ответы. */}
                   <div
                     id={`faq-panel-${i}`}
-                    className={`collapse ${isOpen ? "collapse-open" : ""}`}
+                    className={`disclosure ${isOpen ? "disclosure-open" : ""}`}
                     aria-hidden={!isOpen}
                   >
                     <div>

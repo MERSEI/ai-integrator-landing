@@ -215,7 +215,7 @@ export default function Header({ locale }: { locale: Locale }) {
 
       {/* Меню не размонтируется, а сворачивается: так плавно работает и
           открытие, и закрытие, без библиотеки анимации. */}
-      <div className={`collapse border-t border-white/5 bg-dark/95 backdrop-blur-xl md:hidden ${open ? "collapse-open" : "border-t-0"}`}>
+      <div className={`disclosure border-t border-white/5 bg-dark/95 backdrop-blur-xl md:hidden ${open ? "disclosure-open" : "border-t-0"}`}>
         <nav aria-label={t.mobileNavLabel} aria-hidden={!open}>
           <div className="px-4 pb-6 pt-2">
             <a

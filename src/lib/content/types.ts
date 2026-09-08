@@ -80,7 +80,7 @@ export type ScenarioNode = {
   kind: ScenarioNodeKind;
   /** Что происходит: «Новый лид в CRM». */
   label: string;
-  /** Чем именно: «Webhook», «Gemini», «Telegram». */
+  /** Чем именно: «Webhook», «AI-модель», «Telegram». */
   meta: string;
 };
 

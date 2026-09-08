@@ -253,7 +253,7 @@ export const ru: Content = {
             label: "Упоминание конкурента",
             meta: "Соцсети, форумы",
           },
-          { kind: "agent", label: "Оценка намерения купить", meta: "Gemini" },
+          { kind: "agent", label: "Оценка намерения купить", meta: "AI-модель" },
           { kind: "agent", label: "Сбор контактов", meta: "LeadRadar" },
           { kind: "action", label: "Лид падает в CRM", meta: "Webhook" },
         ],
@@ -267,7 +267,7 @@ export const ru: Content = {
             label: "Новый контакт в списке",
             meta: "Google Sheets",
           },
-          { kind: "agent", label: "Разбор профиля компании", meta: "Gemini" },
+          { kind: "agent", label: "Разбор профиля компании", meta: "AI-модель" },
           {
             kind: "agent",
             label: "Письмо под конкретного человека",
@@ -286,7 +286,7 @@ export const ru: Content = {
         nodes: [
           { kind: "trigger", label: "Входящее письмо", meta: "IMAP" },
           { kind: "agent", label: "Категория и приоритет", meta: "InboxZero" },
-          { kind: "agent", label: "Черновик ответа", meta: "Gemini" },
+          { kind: "agent", label: "Черновик ответа", meta: "AI-модель" },
           { kind: "action", label: "Ответ ждёт одобрения", meta: "Черновик" },
         ],
       },

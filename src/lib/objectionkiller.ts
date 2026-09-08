@@ -14,5 +14,5 @@ export type ChatMsg =
   | { role: "user"; text: string }
   | { role: "assistant"; data: ObjectionResponse };
 
-/** Для отправки на сервер — плоский вид, конвертируется в Gemini contents. */
+/** Для отправки на сервер — плоский вид, разбирается шлюзом модели. */
 export type WireMsg = { role: "user" | "model"; content: string };

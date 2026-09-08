@@ -6,6 +6,11 @@
  * Незаполненный слот схлопывается в пустую строку, а не остаётся `{pain}` на
  * виду у пользователя; двойные пробелы после этого убираются. Тест проверяет,
  * что в готовом ответе не осталось ни одной фигурной скобки.
+ *
+ * Замена делается ОДНИМ проходом сознательно: подставляемые значения — это
+ * в том числе текст пользователя, и если он введёт «{outcome}», повторный
+ * проход раскрыл бы это как настоящий слот. Один проход означает, что чужой
+ * текст всегда остаётся данными.
  */
 export function fill(template: string, slots: Record<string, string | number>): string {
   const filled = template
@@ -29,7 +34,7 @@ export function fill(template: string, slots: Record<string, string | number>): 
  */
 export function capitalizeSentences(text: string): string {
   return text.replace(
-    /(^|[.!?…]\s+)([a-zа-яё][a-zа-яё0-9]*)/g,
+    /(^|[.!?…]\s+)([a-zа-яё][a-zа-яё0-9]*)(?![A-Za-zА-ЯЁа-яё])/g,
     (_, prefix: string, word: string) => prefix + word[0].toUpperCase() + word.slice(1)
   );
 }

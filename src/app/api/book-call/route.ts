@@ -3,7 +3,7 @@ import { checkDailyLimit, clientIp } from "@/lib/rate-limit";
 import { saveLead } from "@/lib/leads";
 import { sendBookingEmails } from "@/lib/email";
 import { apiMessage } from "@/lib/apiMessages";
-import { requestLocale } from "@/lib/gemini";
+import { requestLocale } from "@/lib/engine/request";
 import { isBookableSlotIso, isContactChannel, resolveContact } from "@/lib/booking";
 import { emailProblem, suggestEmail } from "@/lib/emailCheck";
 

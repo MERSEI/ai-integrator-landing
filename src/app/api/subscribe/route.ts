@@ -3,7 +3,7 @@ import { checkDailyLimit, clientIp } from "@/lib/rate-limit";
 import { saveLead } from "@/lib/leads";
 import { sendAuditRequestEmail } from "@/lib/email";
 import { apiMessage } from "@/lib/apiMessages";
-import { requestLocale } from "@/lib/gemini";
+import { requestLocale } from "@/lib/engine/request";
 import {
   needsContactValue,
   normalizeChannel,

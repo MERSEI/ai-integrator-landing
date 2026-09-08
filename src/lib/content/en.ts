@@ -253,7 +253,7 @@ export const en: Content = {
             label: "Competitor gets mentioned",
             meta: "Social, forums",
           },
-          { kind: "agent", label: "Scores buying intent", meta: "Gemini" },
+          { kind: "agent", label: "Scores buying intent", meta: "AI model" },
           { kind: "agent", label: "Finds the contacts", meta: "LeadRadar" },
           { kind: "action", label: "Lead lands in your CRM", meta: "Webhook" },
         ],
@@ -267,7 +267,7 @@ export const en: Content = {
             label: "New contact on the list",
             meta: "Google Sheets",
           },
-          { kind: "agent", label: "Reads the company profile", meta: "Gemini" },
+          { kind: "agent", label: "Reads the company profile", meta: "AI model" },
           {
             kind: "agent",
             label: "Writes for that one person",
@@ -286,7 +286,7 @@ export const en: Content = {
         nodes: [
           { kind: "trigger", label: "Email arrives", meta: "IMAP" },
           { kind: "agent", label: "Sorts and prioritises", meta: "InboxZero" },
-          { kind: "agent", label: "Drafts the reply", meta: "Gemini" },
+          { kind: "agent", label: "Drafts the reply", meta: "AI model" },
           { kind: "action", label: "Reply waits for your OK", meta: "Draft" },
         ],
       },

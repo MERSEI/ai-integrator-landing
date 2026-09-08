@@ -9,6 +9,7 @@ import { generatePoaching } from "@/lib/engine/tools/poaching";
 import { generateTrendSniper } from "@/lib/engine/tools/trendsniper";
 import type { EngineLocale } from "@/lib/engine/types";
 import { toolSample } from "./samples";
+import type { SampleOf } from "./types";
 
 /**
  * Готовые результаты, которые страница показывает ещё до первого нажатия.
@@ -18,8 +19,6 @@ import { toolSample } from "./samples";
  * пользователя. Сид фиксирован — пример обязан выглядеть одинаково при
  * каждом заходе, иначе разъедется гидрация.
  */
-
-export type SampleOf<T> = { input: Record<string, string>; result: T };
 
 export function leadRadarSample(locale: EngineLocale): SampleOf<LeadRadarResult> {
   const input = toolSample("leadradar", locale);

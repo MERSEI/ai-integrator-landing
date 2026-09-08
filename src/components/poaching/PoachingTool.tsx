@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import SampleBanner from "@/components/SampleBanner";
-import type { SampleOf } from "@/lib/demo/engineSample";
+import type { SampleOf } from "@/lib/demo/types";
 import { getTools } from "@/lib/content/tools";
 import { localePath, type Locale } from "@/lib/i18n";
 import { TIER_CLASSES, type PoachingResult, type Prospect } from "@/lib/poaching";

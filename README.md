@@ -3,7 +3,7 @@
 [![CI](https://github.com/MERSEI/ai-integrator-landing/actions/workflows/ci.yml/badge.svg)](https://github.com/MERSEI/ai-integrator-landing/actions/workflows/ci.yml)
 
 > Bilingual marketing site for an AI automation platform, with ten working
-> tool demos running against Gemini — not mockups.
+> tool demos that actually run — not mockups.
 
 [![Next.js](https://img.shields.io/badge/Next.js-15-000000?logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
@@ -19,7 +19,7 @@ marketing and operations teams.
 
 The point of difference: visitors don't read about the tools, they run them.
 Ten of the advertised tools are live behind the landing page, each backed by a
-real Gemini call, each free to try twice a day without signing up.
+real engine, each free to try twice a day without signing up.
 
 | Tool | What it does |
 | --- | --- |
@@ -39,7 +39,7 @@ Plus `subscribe` for email capture and `leads` for the internal lead list.
 ## Stack
 
 **Next.js 15** (App Router) · **TypeScript 5.7** · **Tailwind 3** ·
-**Framer Motion** · **React Hook Form** · **Google Gemini** ·
+**Framer Motion** · **React Hook Form** ·
 **Upstash Redis** · **Google Sheets API** · deployed on **Vercel**
 
 ## Architecture decisions
@@ -65,10 +65,23 @@ npm run dev
 
 Opens on <http://localhost:3000>.
 
-Every integration is optional. Without `GEMINI_API_KEY` the tool demos are
-unavailable; without Upstash the rate limiter falls back to memory; without
-Mailchimp leads are still stored. Nothing crashes on a missing key — see
-`.env.example`.
+Every integration is optional, and the demos degrade rather than break.
+
+Four of them — LeadRadar, Poaching, Comment Hunter, Trend Sniper — run on a
+local deterministic engine (`src/lib/engine/`) and need no keys and no network
+at all: their output was always meant to be plausible sample data, so templates
+do the job a model was doing, instantly and for free.
+
+The other six plus the live agent demo rewrite the visitor's own text, so they
+call a model through `src/lib/ai/` — an OpenAI-compatible gateway configured by
+`AI_BASE_URL` / `AI_MODEL` / `AI_API_KEY`. Point it at a self-hosted model or
+any compatible service; there is no vendor lock in the code. Without those
+variables those tools answer "temporarily unavailable" while still showing a
+worked example.
+
+Without Upstash the rate limiter falls back to memory; without Mailchimp leads
+are still stored. Nothing crashes on a missing key — see `.env.example`, and
+`npm run build` needs no environment at all.
 
 ## Tests
 
@@ -100,8 +113,10 @@ src/
 │   └── api/          12 route handlers — 10 tool demos, subscribe, leads
 ├── components/       landing sections
 └── lib/
-    ├── gemini.ts     model calls and locale detection
-    ├── gtag.ts       Google Ads conversion helpers
+    ├── ai/           provider gateway: schema-checked JSON, timeout, retry
+    ├── engine/       local deterministic engine for the sample-data tools
+    ├── demo/         worked examples shown before the first run
+    ├── gtag.ts       GA4 + Google Ads event helpers
     ├── rate-limit.ts two-tier limiter with in-memory fallback
     ├── leads.ts      lead persistence
     └── i18n.ts       locale resolution

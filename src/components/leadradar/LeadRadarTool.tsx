@@ -5,7 +5,7 @@ import { getTools } from "@/lib/content/tools";
 import { localePath, type Locale } from "@/lib/i18n";
 import { TIER_CLASSES, type LeadRadarResult, type Lead } from "@/lib/leadradar";
 import SampleBanner from "@/components/SampleBanner";
-import type { SampleOf } from "@/lib/demo/engineSample";
+import type { SampleOf } from "@/lib/demo/types";
 import { FiAlertCircle, FiCheck, FiCopy, FiRadio, FiSearch, TbBolt, TbBrandTelegram } from "@/components/icons";
 
 /**

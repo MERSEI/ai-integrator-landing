@@ -32,7 +32,7 @@ OUT_ROOT=~/work/tools python3 scripts/extract-tool.py
 
 ## Что остаётся общим — и что с этим делать
 
-`gemini.ts`, `rate-limit.ts`, `apiMessages.ts`, `i18n.ts`, `icons.tsx` и
+`ai/`, `engine/request.ts`, `rate-limit.ts`, `apiMessages.ts`, `i18n.ts`, `icons.tsx` и
 `globals.css` копируются в каждый репозиторий. Это осознанный размен: пакет
 на npm ради шести маленьких приложений — лишняя инфраструктура, а расхождение
 лечится повторным прогоном скрипта.
@@ -50,6 +50,6 @@ OUT_ROOT=~/work/tools python3 scripts/extract-tool.py
 
 ## Переменные окружения
 
-`GEMINI_API_KEY` обязателен. `UPSTASH_REDIS_REST_URL` и
+`AI_BASE_URL` и `AI_MODEL` обязательны. `UPSTASH_REDIS_REST_URL` и
 `UPSTASH_REDIS_REST_TOKEN` — по желанию. `NEXT_PUBLIC_SITE_URL` — для
 канонических ссылок в метаданных. См. `.env.example` в каждом репозитории.

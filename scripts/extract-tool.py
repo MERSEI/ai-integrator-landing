@@ -14,27 +14,27 @@ OUT_ROOT = Path(os.environ.get("OUT_ROOT", "/tmp/standalone-tools"))
 # id → (имя продукта, папка компонента, файл компонента, свой lib, описание)
 TOOLS = {
     "bizdoctor": dict(
-        name="BizDoctor", comp="bizdoctor/BizDoctorTool.tsx", libs=[],
+        name="BizDoctor", comp="bizdoctor/BizDoctorTool.tsx",
         ru="Диагностика бизнеса: где теряются деньги и что чинить первым",
         en="Business diagnosis: where the money leaks and what to fix first"),
     "coldmessage": dict(
-        name="ColdMessage Pro", comp="coldmessage/ColdMessageTool.tsx", libs=["coldmessage"],
+        name="ColdMessage Pro", comp="coldmessage/ColdMessageTool.tsx",
         ru="Холодное сообщение под конкретного человека, а не шаблон",
         en="A cold message written for one specific person, not a template"),
     "objectionkiller": dict(
-        name="ObjectionKiller", comp="objectionkiller/ObjectionKillerTool.tsx", libs=["objectionkiller"],
+        name="ObjectionKiller", comp="objectionkiller/ObjectionKillerTool.tsx",
         ru="Ответы на возражения клиента в диалоге",
         en="Answers to sales objections, in a live dialogue"),
     "followupbot": dict(
-        name="FollowUpBot", comp="followupbot/FollowUpBotTool.tsx", libs=["coldmessage"],
+        name="FollowUpBot", comp="followupbot/FollowUpBotTool.tsx",
         ru="Серия дожимов по сделке, которая зависла",
         en="A follow-up sequence for a deal that went quiet"),
     "inboxzero": dict(
-        name="InboxZero", comp="inboxzero/InboxZeroTool.tsx", libs=[],
+        name="InboxZero", comp="inboxzero/InboxZeroTool.tsx",
         ru="Разбор письма: срочность, суть и готовый ответ",
         en="Inbox triage: urgency, the gist, and a ready reply"),
     "trendsniper": dict(
-        name="Trend Sniper", comp="trendsniper/TrendSniperTool.tsx", libs=["trendsniper"],
+        name="Trend Sniper", comp="trendsniper/TrendSniperTool.tsx",
         ru="Модель поискового интереса к теме по регионам",
         en="A model of search interest in a topic, by region"),
 }
@@ -119,6 +119,52 @@ def write(path: Path, content: str):
     path.write_text(content)
 
 
+# Импорты кода: алиас @/… и относительные пути. Оба нужны — модули движка
+# ссылаются друг на друга относительными путями.
+IMPORT_RE = re.compile(r"""from\s+["'](@/[\w./-]+|\.{1,2}/[\w./-]+)["']""")
+
+# Эти каталоги генератор собирает сам (урезанный словарь текстов, свой shell),
+# поэтому оригиналы копировать нельзя — они перезатрут сгенерированное.
+SKIP_PREFIXES = ("src/lib/content/", "src/lib/shell")
+
+
+def resolve_import(spec: str, importer: Path):
+    """Путь к модулю по спецификатору импорта, либо None."""
+    base = SRC / "src" / spec[2:] if spec.startswith("@/") else (importer.parent / spec)
+    for candidate in (
+        base.with_suffix(".ts"),
+        base.with_suffix(".tsx"),
+        base / "index.ts",
+        base / "index.tsx",
+    ):
+        resolved = candidate.resolve()
+        if resolved.exists():
+            return resolved
+    return None
+
+
+def copy_lib_deps(out: Path, entries: list) -> None:
+    """Копирует всё, что достижимо из entries по импортам, вместе с их импортами."""
+    seen = set()
+    queue = [e.resolve() for e in entries]
+    while queue:
+        current = queue.pop()
+        if not current.exists():
+            continue
+        for spec in IMPORT_RE.findall(current.read_text()):
+            target = resolve_import(spec, current)
+            if target is None:
+                raise SystemExit(f"не нашёл модуль {spec}, на который ссылается {current}")
+            if target in seen:
+                continue
+            seen.add(target)
+            rel = target.relative_to(SRC.resolve())
+            queue.append(target)
+            if str(rel).startswith(SKIP_PREFIXES):
+                continue
+            write(out / rel, target.read_text())
+
+
 def extract(tool: str):
     meta = TOOLS[tool]
     out = OUT_ROOT / tool
@@ -131,12 +177,15 @@ def extract(tool: str):
     shutil.copytree(SRC / "src/app/api" / tool, out / "src/app/api" / tool)
     write(out / "src/components" / comp_file,
           (SRC / "src/components" / meta["comp"]).read_text())
-    for lib in meta["libs"]:
-        write(out / "src/lib" / f"{lib}.ts", (SRC / "src/lib" / f"{lib}.ts").read_text())
-
     # ── общие модули ──────────────────────────────────────────────────
-    for f in ["gemini.ts", "i18n.ts"]:
-        write(out / "src/lib" / f, (SRC / "src/lib" / f).read_text())
+    # Собираем обходом импортов, а не списком: у инструментов зависимости
+    # разные (движковым нужен engine/, провайдерным — ai/), и любой список
+    # рано или поздно отстанет от кода. Обход падает громко и на месте,
+    # а не отдаёт молча собранный репозиторий без одного файла.
+    copy_lib_deps(out, [
+        SRC / "src/app/api" / tool / "route.ts",
+        SRC / "src/components" / meta["comp"],
+    ])
 
     # Текст лимита на лендинге зовёт «оформить доступ» — там для этого есть
     # форма. Здесь её нет, и звать некуда: сообщение говорит только про лимит.
@@ -159,7 +208,13 @@ def extract(tool: str):
     write(out / "src/lib/rate-limit.ts", rl)
 
     write(out / "src/lib/content/tools.ts", build_tools_content(tool))
-    used = icons_used([SRC / "src/components" / meta["comp"]])
+    # Иконки ищем во всех скопированных компонентах, а не только в главном:
+    # вспомогательные (SampleBanner и подобные) приезжают обходом импортов,
+    # и их иконки должны попасть в урезанный icons.tsx.
+    used = icons_used(
+        [SRC / "src/components" / meta["comp"]]
+        + [p for p in (out / "src/components").rglob("*.tsx") if p.name != "icons.tsx"]
+    )
     used |= {"IconProps", "IconComponent"}
     write(out / "src/components/icons.tsx", slice_icons(used))
     # .reveal и .collapse обслуживают компоненты лендинга, которых здесь нет.
@@ -278,14 +333,14 @@ export const COPY: Record<Locale, {{
     title: "{name}",
     subtitle: "{ru}",
     switchLabel: "Switch to English",
-    poweredBy: "Работает на Gemini",
+    poweredBy: "Работает на своей модели",
     limitNote: "Бесплатно, без регистрации — 2 запуска в день с одного адреса.",
   }},
   en: {{
     title: "{name}",
     subtitle: "{en}",
     switchLabel: "Переключить на русский",
-    poweredBy: "Runs on Gemini",
+    poweredBy: "Runs on our own engine",
     limitNote: "Free, no signup — 2 runs a day per address.",
   }},
 }};
@@ -394,9 +449,13 @@ out/
 .DS_Store
 """
 
-ENV_EXAMPLE = """# Ключ Google Gemini — без него роут отвечает 500 с понятным текстом.
-# https://aistudio.google.com/apikey
-GEMINI_API_KEY=
+ENV_EXAMPLE = """# Провайдер модели. Контракт OpenAI-совместимый
+# (POST {AI_BASE_URL}/chat/completions), поэтому подойдёт и свой хостинг
+# (vLLM, Ollama, LM Studio), и любой совместимый сервис.
+# Инструменты на локальном движке работают и без этих переменных.
+AI_BASE_URL=
+AI_MODEL=
+AI_API_KEY=
 
 # Необязательно: Upstash Redis для лимитов, переживающих холодный старт.
 # Без него лимиты живут в памяти инстанса и сбрасываются вместе с ним.
@@ -441,14 +500,15 @@ def readme(tool: str, meta: dict) -> str:
 ## Как это устроено
 
 Одна страница на язык (`/` — русская, `/en` — английская) и один API-роут
-`POST /api/{tool}`. Роут собирает системный промпт, зовёт Gemini со схемой
-ответа и отдаёт готовый JSON — разбирать текст модели на клиенте не нужно.
+`POST /api/{tool}`. Роут собирает системный промпт, обращается к модели через
+шлюз со схемой ответа и отдаёт готовый JSON — разбирать текст модели на
+клиенте не нужно.
 
 | Файл | Назначение |
 |---|---|
 | `src/app/api/{tool}/route.ts` | промпт, схема ответа, вызов модели, лимиты |
 | `src/components/{Path(meta['comp']).name}` | форма и вывод результата |
-| `src/lib/gemini.ts` | общий клиент модели и определение языка ответа |
+| `src/lib/ai/` | шлюз к провайдеру: таймаут, ретрай, проверка ответа по схеме |
 | `src/lib/rate-limit.ts` | лимиты по IP: burst, дневной и на инструмент |
 | `src/lib/content/tools.ts` | весь текст интерфейса на двух языках |
 
@@ -463,7 +523,7 @@ def readme(tool: str, meta: dict) -> str:
 
 ```bash
 npm install
-cp .env.example .env.local   # и вписать GEMINI_API_KEY
+cp .env.example .env.local   # и вписать AI_BASE_URL и AI_MODEL
 npm run dev
 ```
 
@@ -476,7 +536,7 @@ npm run build
 
 ## Деплой
 
-Vercel подхватывает проект без настройки: нужен только `GEMINI_API_KEY`
+Vercel подхватывает проект без настройки: нужны `AI_BASE_URL` и `AI_MODEL`
 в переменных окружения (и пара ключей Upstash, если лимиты должны переживать
 перезапуск).
 

@@ -1,26 +1,48 @@
 "use client";
 
 import { useState } from "react";
+import SampleBanner from "@/components/SampleBanner";
+import type { SampleOf } from "@/lib/demo/engineSample";
 import { getTools } from "@/lib/content/tools";
 import { localePath, type Locale } from "@/lib/i18n";
 import { TIER_CLASSES, type PoachingResult, type Prospect } from "@/lib/poaching";
 import { FiAlertCircle, FiCheck, FiCopy, FiCornerUpLeft, FiCrosshair, FiSearch, TbBolt, TbBrandTelegram } from "@/components/icons";
 
-export default function PoachingTool({ locale }: { locale: Locale }) {
+/**
+ * @param sample готовый пример со страницы: форма и результат заполнены до
+ *   первого нажатия, чтобы инструмент не открывался пустым экраном.
+ */
+export default function PoachingTool({
+  locale,
+  sample,
+}: {
+  locale: Locale;
+  sample?: SampleOf<PoachingResult>;
+}) {
   const t = getTools(locale).poaching;
   const c = getTools(locale).common;
   const tierLabels = getTools(locale).tiers;
-  const [niche, setNiche] = useState("");
-  const [competitors, setCompetitors] = useState("");
+  const [niche, setNiche] = useState(sample?.input.niche ?? "");
+  const [competitors, setCompetitors] = useState(sample?.input.competitors ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<PoachingResult | null>(null);
+  const [result, setResult] = useState<PoachingResult | null>(sample?.result ?? null);
+  const [isSample, setIsSample] = useState(Boolean(sample));
+
+  /** Очистить пример и дать человеку ввести своё. */
+  const resetSample = () => {
+    setIsSample(false);
+    setResult(null);
+    setNiche("");
+    setCompetitors("");
+  };
   const [copied, setCopied] = useState<number | null>(null);
 
   const run = async () => {
     if (niche.trim().length < 2 || loading) return;
     setError(null);
     setResult(null);
+    setIsSample(false);
     setLoading(true);
     try {
       const res = await fetch("/api/poaching", {
@@ -136,6 +158,7 @@ export default function PoachingTool({ locale }: { locale: Locale }) {
 
         {!loading && result && (
           <div className="space-y-4">
+          {isSample && <SampleBanner locale={locale} onReset={resetSample} />}
             <p className="text-sm text-slate-400">
               «<span className="text-slate-200">{result.niche}</span>»:{" "}
               {t.summary(result.niche, result.prospects.length)}

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import SampleBanner from "@/components/SampleBanner";
+import type { SampleOf } from "@/lib/demo/engineSample";
 import { getTools } from "@/lib/content/tools";
 import { localePath, type Locale } from "@/lib/i18n";
 import {
@@ -10,21 +12,41 @@ import {
 } from "@/lib/commenthunter";
 import { FiAlertCircle, FiCheck, FiCopy, FiHeart, FiMessageCircle, FiSearch, TbBolt, TbBrandTelegram } from "@/components/icons";
 
-export default function CommentHunterTool({ locale }: { locale: Locale }) {
+/**
+ * @param sample готовый пример со страницы: форма и результат заполнены до
+ *   первого нажатия, чтобы инструмент не открывался пустым экраном.
+ */
+export default function CommentHunterTool({
+  locale,
+  sample,
+}: {
+  locale: Locale;
+  sample?: SampleOf<CommentHunterResult>;
+}) {
   const t = getTools(locale).commenthunter;
   const c = getTools(locale).common;
   const tierLabels = getTools(locale).tiers;
-  const [keyword, setKeyword] = useState("");
-  const [product, setProduct] = useState("");
+  const [keyword, setKeyword] = useState(sample?.input.keyword ?? "");
+  const [product, setProduct] = useState(sample?.input.product ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<CommentHunterResult | null>(null);
+  const [result, setResult] = useState<CommentHunterResult | null>(sample?.result ?? null);
+  const [isSample, setIsSample] = useState(Boolean(sample));
+
+  /** Очистить пример и дать человеку ввести своё. */
+  const resetSample = () => {
+    setIsSample(false);
+    setResult(null);
+    setKeyword("");
+    setProduct("");
+  };
   const [copied, setCopied] = useState<string | null>(null);
 
   const hunt = async () => {
     if (keyword.trim().length < 2 || loading) return;
     setError(null);
     setResult(null);
+    setIsSample(false);
     setLoading(true);
     try {
       const res = await fetch("/api/commenthunter", {
@@ -146,6 +168,7 @@ export default function CommentHunterTool({ locale }: { locale: Locale }) {
 
         {!loading && result && (
           <div className="space-y-6">
+          {isSample && <SampleBanner locale={locale} onReset={resetSample} />}
             <p className="text-sm text-slate-400">
               {t.summary(result.keyword, result.posts.length, hotCount)}
             </p>

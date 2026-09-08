@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import SampleBanner from "@/components/SampleBanner";
+import type { SampleOf } from "@/lib/demo/engineSample";
 import { getTools } from "@/lib/content/tools";
 import { localePath, type Locale } from "@/lib/i18n";
 import {
@@ -9,20 +11,40 @@ import {
 } from "@/lib/trendsniper";
 import { FiAlertCircle, FiCalendar, FiMapPin, FiSearch, FiTrendingUp, FiZap, TbBolt } from "@/components/icons";
 
-export default function TrendSniperTool({ locale }: { locale: Locale }) {
+/**
+ * @param sample готовый пример со страницы: форма и результат заполнены до
+ *   первого нажатия, чтобы инструмент не открывался пустым экраном.
+ */
+export default function TrendSniperTool({
+  locale,
+  sample,
+}: {
+  locale: Locale;
+  sample?: SampleOf<TrendSniperResult>;
+}) {
   const t = getTools(locale).trendsniper;
   const c = getTools(locale).common;
   const dirLabels = getTools(locale).direction;
-  const [keyword, setKeyword] = useState("");
-  const [region, setRegion] = useState("");
+  const [keyword, setKeyword] = useState(sample?.input.keyword ?? "");
+  const [region, setRegion] = useState(sample?.input.region ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<TrendSniperResult | null>(null);
+  const [result, setResult] = useState<TrendSniperResult | null>(sample?.result ?? null);
+  const [isSample, setIsSample] = useState(Boolean(sample));
+
+  /** Очистить пример и дать человеку ввести своё. */
+  const resetSample = () => {
+    setIsSample(false);
+    setResult(null);
+    setKeyword("");
+    setRegion("");
+  };
 
   const run = async () => {
     if (keyword.trim().length < 2 || loading) return;
     setError(null);
     setResult(null);
+    setIsSample(false);
     setLoading(true);
     try {
       const res = await fetch("/api/trendsniper", {
@@ -131,6 +153,7 @@ export default function TrendSniperTool({ locale }: { locale: Locale }) {
 
         {!loading && result && dirMeta && (
           <div className="space-y-5">
+          {isSample && <SampleBanner locale={locale} onReset={resetSample} />}
             {/* Сводка */}
             <div className="card-glass p-6">
               <div className="flex flex-wrap items-center justify-between gap-4">

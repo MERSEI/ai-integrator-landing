@@ -20,6 +20,10 @@ export type ToolsContent = {
     demoLabel: string;
     proCta: string;
     subject: string;
+    /** Плашка над готовым результатом, который показан до первого запуска. */
+    sampleBadge: string;
+    /** Кнопка «очистить пример и ввести своё». */
+    sampleCta: string;
   };
 
   /** Тон общения — общий список для ColdMessage и FollowUpBot. */
@@ -217,6 +221,8 @@ const ruTools: ToolsContent = {
     demoLabel: "Демо-режим.",
     proCta: "Подключить PRO",
     subject: "Тема:",
+    sampleBadge: "Готовый пример — так выглядит результат",
+    sampleCta: "Попробовать на своём",
   },
 
   tones: [
@@ -473,6 +479,8 @@ const enTools: ToolsContent = {
     demoLabel: "Demo mode.",
     proCta: "Get PRO",
     subject: "Subject:",
+    sampleBadge: "A worked example — this is what the result looks like",
+    sampleCta: "Try it on yours",
   },
 
   tones: ["Friendly", "Business formal", "Neutral", "Expert"],

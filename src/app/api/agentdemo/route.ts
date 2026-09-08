@@ -1,30 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkDailyLimit, checkToolLimit, clientIp } from "@/lib/rate-limit";
 import { apiMessage } from "@/lib/apiMessages";
-import { outputLanguage, requestLocale } from "@/lib/gemini";
+import { burstLimited, requestLocale } from "@/lib/engine/request";
+import { generateText, outputLanguage } from "@/lib/ai/gateway";
+import { aiErrorResponse } from "@/lib/ai/route";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
 
-const GEMINI_MODEL = "gemini-3.1-flash-lite";
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 /** Роль задаёт только тон и рамку; сам ответ пишет модель. */
 const MAX_MESSAGES = 12;
 const MAX_CHARS = 600;
 
 type WireMsg = { role: "user" | "model"; content: string };
-
-const hits = new Map<string, { count: number; ts: number }>();
-function rateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = hits.get(ip);
-  if (!entry || now - entry.ts > 60_000) {
-    hits.set(ip, { count: 1, ts: now });
-    return false;
-  }
-  entry.count += 1;
-  return entry.count > 10;
-}
 
 /**
  * Мини-плейграунд агента с лендинга: обычный текстовый ответ, без structured
@@ -39,7 +27,7 @@ export async function POST(req: NextRequest) {
   const locale = requestLocale(rawBody);
   const ip = clientIp(req.headers);
 
-  if (rateLimited(ip)) {
+  if (burstLimited("agentdemo", ip)) {
     return NextResponse.json(
       { error: apiMessage(locale, "tooManyRequests") },
       { status: 429 },
@@ -73,43 +61,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: apiMessage(locale, "chatTooLong") }, { status: 400 });
   }
 
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) {
-    return NextResponse.json({ error: apiMessage(locale, "noModelKey") }, { status: 500 });
-  }
-
-  const contents = messages.map((m) => ({
-    role: m.role === "model" ? "model" : "user",
-    parts: [{ text: String(m.content ?? "").slice(0, MAX_CHARS) }],
+  const history = messages.map((m) => ({
+    role: (m.role === "model" ? "assistant" : "user") as "assistant" | "user",
+    content: String(m.content ?? "").slice(0, MAX_CHARS),
   }));
 
-  try {
-    const res = await fetch(GEMINI_URL, {
-      method: "POST",
-      headers: { "x-goog-api-key": key, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        system_instruction: { parts: [{ text: role.prompt + outputLanguage(locale) }] },
-        contents,
-        generationConfig: { temperature: 0.7, maxOutputTokens: 400 },
-      }),
-      signal: AbortSignal.timeout(20000),
-    });
+  const result = await generateText({
+    system: role.prompt + outputLanguage(locale),
+    messages: history,
+    temperature: 0.7,
+    maxTokens: 400,
+  });
+  if (!result.ok) return aiErrorResponse(locale, result.reason);
 
-    if (!res.ok) {
-      const errText = await res.text().catch(() => "");
-      console.error("[agentdemo] Gemini error:", res.status, errText.slice(0, 300));
-      return NextResponse.json({ error: apiMessage(locale, "modelSilent") }, { status: 502 });
-    }
-
-    const data = await res.json();
-    const reply: string | undefined = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!reply?.trim()) {
-      return NextResponse.json({ error: apiMessage(locale, "modelEmpty") }, { status: 502 });
-    }
-
-    return NextResponse.json({ reply: reply.trim(), remaining: toolLimit.remaining });
-  } catch (e) {
-    console.error("[agentdemo] запрос к модели упал:", e);
-    return NextResponse.json({ error: apiMessage(locale, "modelSilent") }, { status: 502 });
-  }
+  return NextResponse.json({ reply: result.value, remaining: toolLimit.remaining });
 }

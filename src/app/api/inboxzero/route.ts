@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkDailyLimit, checkToolLimit, clientIp } from "@/lib/rate-limit";
 import { apiMessage } from "@/lib/apiMessages";
-import { callGemini, burstLimited, outputLanguage, requestLocale } from "@/lib/gemini";
+import { burstLimited, requestLocale } from "@/lib/engine/request";
+import { generateJson, outputLanguage } from "@/lib/ai/gateway";
+import { aiErrorResponse } from "@/lib/ai/route";
 
 const RESPONSE_SCHEMA = {
   type: "object",
@@ -69,25 +71,23 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const result = await callGemini({
+  const result = await generateJson({
     system: SYSTEM_PROMPT + outputLanguage(locale),
-    contents: [
+    messages: [
       {
-        parts: [
-          {
-            text: [
-              `ПИСЬМО:\n${email}`,
-              instruction ? `УКАЗАНИЕ ДЛЯ ОТВЕТА: ${instruction}` : null,
-            ]
-              .filter(Boolean)
-              .join("\n\n"),
-          },
-        ],
+        role: "user",
+        content: [
+          `ПИСЬМО:\n${email}`,
+          instruction ? `УКАЗАНИЕ ДЛЯ ОТВЕТА: ${instruction}` : null,
+        ]
+          .filter(Boolean)
+          .join("\n\n"),
       },
     ],
     schema: RESPONSE_SCHEMA,
+    schemaName: "inboxzero",
     temperature: 0.6,
   });
-  if (result instanceof NextResponse) return result;
-  return NextResponse.json(result);
+  if (!result.ok) return aiErrorResponse(locale, result.reason);
+  return NextResponse.json(result.value);
 }

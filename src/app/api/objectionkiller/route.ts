@@ -1,23 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkDailyLimit, checkToolLimit, clientIp } from "@/lib/rate-limit";
 import { apiMessage } from "@/lib/apiMessages";
-import { outputLanguage, requestLocale } from "@/lib/gemini";
+import { burstLimited, requestLocale } from "@/lib/engine/request";
+import { generateJson, outputLanguage } from "@/lib/ai/gateway";
+import { aiErrorResponse } from "@/lib/ai/route";
 
-const GEMINI_MODEL = "gemini-3.1-flash-lite";
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
-// in-memory rate limit: 20 запросов/мин на IP (диалог = несколько шагов)
-const hits = new Map<string, { count: number; ts: number }>();
-function rateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = hits.get(ip);
-  if (!entry || now - entry.ts > 60_000) {
-    hits.set(ip, { count: 1, ts: now });
-    return false;
-  }
-  entry.count += 1;
-  return entry.count > 20;
-}
 
 const RESPONSE_SCHEMA = {
   type: "object",
@@ -71,7 +59,7 @@ export async function POST(req: NextRequest) {
   const rawBody: unknown = await req.json().catch(() => null);
   const locale = requestLocale(rawBody);
   const ip = clientIp(req.headers);
-  if (rateLimited(ip)) {
+  if (burstLimited("objectionkiller", ip, 20)) {
     return NextResponse.json(
       { error: apiMessage(locale, "tooManyRequests") },
       { status: 429 }
@@ -90,14 +78,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       { error: apiMessage(locale, "toolLimit") },
       { status: 429 }
-    );
-  }
-
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) {
-    return NextResponse.json(
-      { error: apiMessage(locale, "noModelKey") },
-      { status: 500 }
     );
   }
 
@@ -122,64 +102,24 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const contents = messages.map((m) => ({
-    role: m.role === "model" ? "model" : "user",
-    parts: [{ text: String(m.content ?? "") }],
+  const history = messages.map((m) => ({
+    role: (m.role === "model" ? "assistant" : "user") as "assistant" | "user",
+    content: String(m.content ?? ""),
   }));
 
-  try {
-    const res = await fetch(GEMINI_URL, {
-      method: "POST",
-      headers: {
-        "x-goog-api-key": key,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        system_instruction: {
-          parts: [{ text: SYSTEM_PROMPT + outputLanguage(locale) }],
-        },
-        contents,
-        generationConfig: {
-          responseMimeType: "application/json",
-          responseSchema: RESPONSE_SCHEMA,
-          temperature: 0.7,
-        },
-      }),
-    });
+  const result = await generateJson<Record<string, unknown>>({
+    system: SYSTEM_PROMPT + outputLanguage(locale),
+    messages: history,
+    schema: RESPONSE_SCHEMA,
+    schemaName: "objectionkiller",
+    temperature: 0.7,
+  });
+  if (!result.ok) return aiErrorResponse(locale, result.reason, "modelEmptyDescription");
 
-    if (!res.ok) {
-      const errText = await res.text().catch(() => "");
-      console.error("Gemini error:", res.status, errText.slice(0, 500));
-      return NextResponse.json(
-        { error: apiMessage(locale, "modelSilent") },
-        { status: 502 }
-      );
-    }
-
-    const data = await res.json();
-    const text: string | undefined =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    if (!text) {
-      const reason = data?.candidates?.[0]?.finishReason ?? "unknown";
-      console.error("Gemini empty response, finishReason:", reason);
-      return NextResponse.json(
-        { error: apiMessage(locale, "modelEmptyDescription") },
-        { status: 502 }
-      );
-    }
-
-    const result = JSON.parse(text);
-    // нормализация на случай пропущенных полей
-    result.status = result.status === "ready" ? "ready" : "clarifying";
-    result.questions = Array.isArray(result.questions) ? result.questions : [];
-    result.tactics = Array.isArray(result.tactics) ? result.tactics : [];
-    return NextResponse.json(result);
-  } catch (e) {
-    console.error("objectionkiller generation failed:", e);
-    return NextResponse.json(
-      { error: apiMessage(locale, "generationFailed") },
-      { status: 500 }
-    );
-  }
+  // нормализация на случай пропущенных полей
+  const r = result.value;
+  r.status = r.status === "ready" ? "ready" : "clarifying";
+  r.questions = Array.isArray(r.questions) ? r.questions : [];
+  r.tactics = Array.isArray(r.tactics) ? r.tactics : [];
+  return NextResponse.json(r);
 }

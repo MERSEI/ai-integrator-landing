@@ -3,7 +3,7 @@
  * иначе англоязычный пользователь упирается в русский текст при первом же
  * лимите или пустом поле.
  *
- * Локаль берётся из тела запроса (см. requestLocale в lib/gemini.ts).
+ * Локаль берётся из тела запроса (см. requestLocale в lib/engine/request.ts).
  */
 
 const ru = {
@@ -12,7 +12,7 @@ const ru = {
   toolLimit:
     "Демо-лимит этого инструмента — 2 запроса в день. Оформите доступ, чтобы использовать без ограничений.",
   badRequest: "Некорректный запрос",
-  noModelKey: "Сервис временно недоступен: не настроен ключ модели.",
+  serviceUnavailable: "Сервис временно недоступен. Попробуйте позже.",
   modelSilent: "Модель не ответила. Попробуйте ещё раз.",
   modelEmpty: "Модель вернула пустой ответ. Попробуйте ещё раз.",
   modelEmptyProfile: "Модель вернула пустой ответ. Уточните текст профиля.",
@@ -43,7 +43,7 @@ const en: typeof ru = {
   toolLimit:
     "This tool's demo limit is 2 requests per day. Get access to use it without limits.",
   badRequest: "Invalid request",
-  noModelKey: "Service temporarily unavailable: the model key is not configured.",
+  serviceUnavailable: "The service is temporarily unavailable. Please try again later.",
   modelSilent: "The model didn't respond. Please try again.",
   modelEmpty: "The model returned an empty response. Please try again.",
   modelEmptyProfile:

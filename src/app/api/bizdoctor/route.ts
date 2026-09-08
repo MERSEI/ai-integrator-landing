@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkDailyLimit, checkToolLimit, clientIp } from "@/lib/rate-limit";
 import { apiMessage } from "@/lib/apiMessages";
-import { callGemini, burstLimited, outputLanguage, requestLocale } from "@/lib/gemini";
+import { burstLimited, requestLocale } from "@/lib/engine/request";
+import { generateJson, outputLanguage } from "@/lib/ai/gateway";
+import { aiErrorResponse } from "@/lib/ai/route";
 
 const RESPONSE_SCHEMA = {
   type: "object",
@@ -104,20 +106,21 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const contents = messages.map((m) => ({
-    role: m.role === "model" ? "model" : "user",
-    parts: [{ text: String(m.content ?? "") }],
+  const history = messages.map((m) => ({
+    role: (m.role === "model" ? "assistant" : "user") as "assistant" | "user",
+    content: String(m.content ?? ""),
   }));
 
-  const result = await callGemini({
+  const result = await generateJson({
     system: SYSTEM_PROMPT + outputLanguage(locale),
-    contents,
+    messages: history,
     schema: RESPONSE_SCHEMA,
+    schemaName: "bizdoctor",
     temperature: 0.6,
   });
-  if (result instanceof NextResponse) return result;
+  if (!result.ok) return aiErrorResponse(locale, result.reason);
 
-  const r = result as Record<string, unknown>;
+  const r = result.value as Record<string, unknown>;
   r.status = r.status === "ready" ? "ready" : "clarifying";
   r.questions = Array.isArray(r.questions) ? r.questions : [];
   r.leaks = Array.isArray(r.leaks) ? r.leaks : [];

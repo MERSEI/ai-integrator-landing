@@ -16,6 +16,15 @@
 
 export const GOOGLE_ADS_ID = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID ?? "";
 
+/**
+ * GA4. Переменная была объявлена в .env.example, но её никто не читал —
+ * счётчик на сайте просто отсутствовал. Для одностраничного лендинга это
+ * важнее обычного: у GA4 отказ считается по вовлечённости, а не по числу
+ * просмотров, тогда как Umami засчитывает отказ любому визиту с одной
+ * страницей — то есть почти каждому.
+ */
+export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "";
+
 export const GOOGLE_ADS_LEAD_LABEL =
   process.env.NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL ?? "";
 
@@ -29,6 +38,8 @@ declare global {
   interface Window {
     dataLayer?: unknown[];
     gtag?: (...args: GtagArgs) => void;
+    /** Self-hosted Umami; появляется после загрузки script.js. */
+    umami?: { track: (name: string, data?: Record<string, unknown>) => void };
   }
 }
 
@@ -42,13 +53,27 @@ export function conversionTarget(label: string): string | null {
   return `${GOOGLE_ADS_ID}/${label}`;
 }
 
-/** Отправляет произвольное событие в gtag. No-op, если тег не загружен. */
+/**
+ * Отправляет произвольное событие во все подключённые счётчики.
+ *
+ * Раньше событие уходило только в gtag, то есть в Google Ads. Umami при этом
+ * стоял на сайте, но не получал ни одного события и видел только переходы
+ * между страницами — а лендинг одностраничный, поэтому в отчётах любой визит
+ * выглядел отказом независимо от того, что человек делал.
+ *
+ * No-op для каждого счётчика, который не загрузился.
+ */
 export function trackEvent(
   name: string,
   params: Record<string, unknown> = {},
 ): void {
-  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
-  window.gtag("event", name, params);
+  if (typeof window === "undefined") return;
+  if (typeof window.gtag === "function") window.gtag("event", name, params);
+  try {
+    window.umami?.track(name, params);
+  } catch {
+    /* счётчик мог быть заблокирован расширением — это не повод ронять обработчик */
+  }
 }
 
 /**

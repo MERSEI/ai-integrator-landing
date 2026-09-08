@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
-import GoogleAdsTag from "@/components/GoogleAdsTag";
+import GoogleTags from "@/components/GoogleTags";
 import { CONTACTS, getContent } from "@/lib/content";
 import { localePath, type Locale } from "@/lib/i18n";
 
@@ -161,12 +161,15 @@ export function LocaleRoot({
         />
         {children}
         <Analytics />
-        <GoogleAdsTag />
+        <GoogleTags />
         {UMAMI_WEBSITE_ID && (
           <Script
             src={`${UMAMI_URL}/script.js`}
             data-website-id={UMAMI_WEBSITE_ID}
-            strategy="lazyOnload"
+            // afterInteractive, а не lazyOnload: при lazyOnload скрипт грузился
+            // последним, в простое браузера, и визиты, которые закрывали
+            // вкладку за первые секунды, в статистику не попадали вовсе.
+            strategy="afterInteractive"
           />
         )}
       </body>

@@ -1,3 +1,5 @@
+import type { EngineLocale } from "./types";
+
 /**
  * Общее для всех API-роутов: локаль запроса и защита от всплесков.
  *
@@ -5,8 +7,13 @@
  * а эти две функции нужны и роутам без генерации (subscribe, book-call).
  */
 
-/** Локаль из тела запроса; всё, кроме "en", считаем русским. */
-export function requestLocale(body: unknown): string {
+/**
+ * Локаль из тела запроса; всё, кроме "en", считаем русским.
+ *
+ * Возвращает союз, а не string: движок и словарь контента принимают только
+ * "ru" | "en", и раньше каждый такой роут приводил тип у себя.
+ */
+export function requestLocale(body: unknown): EngineLocale {
   const raw = (body as { locale?: unknown } | null)?.locale;
   return raw === "en" ? "en" : "ru";
 }

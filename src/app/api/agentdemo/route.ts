@@ -5,7 +5,6 @@ import { burstLimited, requestLocale } from "@/lib/engine/request";
 import { generateText, outputLanguage } from "@/lib/ai/gateway";
 import { aiErrorResponse } from "@/lib/ai/route";
 import { getContent } from "@/lib/content";
-import type { Locale } from "@/lib/i18n";
 
 
 /** Роль задаёт только тон и рамку; сам ответ пишет модель. */
@@ -47,9 +46,7 @@ export async function POST(req: NextRequest) {
   }
   const body = rawBody as { role?: string; messages?: WireMsg[] };
 
-  // requestLocale отдаёт строку, а словарь принимает только "ru" | "en".
-  const contentLocale: Locale = locale === "en" ? "en" : "ru";
-  const roles = getContent(contentLocale).liveDemo.roles;
+  const roles = getContent(locale).liveDemo.roles;
   const role = roles.find((r) => r.key === body.role) ?? roles[0];
 
   const messages = Array.isArray(body.messages) ? body.messages : [];

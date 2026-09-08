@@ -95,21 +95,21 @@ export const TOOL_SAMPLES: SampleMap = {
   },
   objectionkiller: {
     ru: {
-      message:
+      input:
         "Продаю внедрение CRM для стоматологии, 250 тысяч за проект. Главврач говорит: «Дорого, у нас и в экселе всё работает». До этого два раза переносил встречу.",
     },
     en: {
-      message:
+      input:
         "I sell CRM rollouts to dental clinics, $3,000 per project. The head dentist says: 'Too expensive, our spreadsheet works fine.' He'd already rescheduled the meeting twice.",
     },
   },
   bizdoctor: {
     ru: {
-      message:
+      input:
         "Студия детского английского, 4 группы по 8 человек. Выручка 640 тысяч в месяц, абонемент 8 000. Клиенты приходят в основном из инстаграма, на рекламу тратим 90 тысяч. До второго месяца доходит примерно половина. Аренда 120 тысяч, три преподавателя.",
     },
     en: {
-      message:
+      input:
         "A kids' English studio, 4 groups of 8. Revenue is $8,000 a month, a membership is $100. Clients come mostly from Instagram, we spend $1,100 on ads. About half make it to month two. Rent is $1,500, three teachers.",
     },
   },

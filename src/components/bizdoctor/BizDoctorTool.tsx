@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { getTools } from "@/lib/content/tools";
+import { toolSample } from "@/lib/demo/samples";
 import type { Locale } from "@/lib/i18n";
 import { FiAlertCircle, FiHelpCircle, FiRefreshCw, FiSend, FiTrendingDown, FiZap, TbStethoscope } from "@/components/icons";
 
@@ -28,10 +29,13 @@ const SEVERITY_CLASS: Record<string, string> = {
 
 export default function BizDoctorTool({ locale }: { locale: Locale }) {
   const t = getTools(locale).bizdoctor;
+  // Форма открывается заполненной: пустой экран не даёт понять,
+  // работает ли инструмент вообще.
+  const example = toolSample("bizdoctor", locale);
   const c = getTools(locale).common;
   const sev = getTools(locale).severity;
   const [messages, setMessages] = useState<ChatMsg[]>([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(example.input ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);

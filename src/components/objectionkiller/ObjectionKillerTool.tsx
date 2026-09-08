@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { getTools } from "@/lib/content/tools";
+import { toolSample } from "@/lib/demo/samples";
 import type { Locale } from "@/lib/i18n";
 import type {
   ChatMsg,
@@ -20,9 +21,12 @@ function toWire(messages: ChatMsg[]): WireMsg[] {
 
 export default function ObjectionKillerTool({ locale }: { locale: Locale }) {
   const t = getTools(locale).objectionkiller;
+  // Форма открывается заполненной: пустой экран не даёт понять,
+  // работает ли инструмент вообще.
+  const example = toolSample("objectionkiller", locale);
   const c = getTools(locale).common;
   const [messages, setMessages] = useState<ChatMsg[]>([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(example.input ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState<string | null>(null);

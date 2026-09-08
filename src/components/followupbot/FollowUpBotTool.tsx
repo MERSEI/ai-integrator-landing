@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { getTools } from "@/lib/content/tools";
+import { toolSample } from "@/lib/demo/samples";
 import type { Locale } from "@/lib/i18n";
 import { CHANNELS } from "@/lib/coldmessage";
 import { FiAlertCircle, FiCheck, FiClock, FiCopy, FiZap } from "@/components/icons";
@@ -11,9 +12,12 @@ type Result = { situation_read: string; followups: FollowUp[]; stop_signal: stri
 
 export default function FollowUpBotTool({ locale }: { locale: Locale }) {
   const t = getTools(locale).followupbot;
+  // Форма открывается заполненной: пустой экран не даёт понять,
+  // работает ли инструмент вообще.
+  const example = toolSample("followupbot", locale);
   const c = getTools(locale).common;
   const tones = getTools(locale).tones;
-  const [context, setContext] = useState("");
+  const [context, setContext] = useState(example.context ?? "");
   const [channel, setChannel] = useState<string>("Email");
   const [tone, setTone] = useState<string>(tones[1]);
   const [loading, setLoading] = useState(false);

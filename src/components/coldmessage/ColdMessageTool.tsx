@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { getTools } from "@/lib/content/tools";
+import { toolSample } from "@/lib/demo/samples";
 import type { Locale } from "@/lib/i18n";
 import {
   CHANNELS,
@@ -12,11 +13,14 @@ import { FiAlertCircle, FiCheck, FiCopy, FiZap } from "@/components/icons";
 
 export default function ColdMessageTool({ locale }: { locale: Locale }) {
   const t = getTools(locale).coldmessage;
+  // Форма открывается заполненной: пустой экран не даёт понять,
+  // работает ли инструмент вообще.
+  const example = toolSample("coldmessage", locale);
   const c = getTools(locale).common;
   const tones = getTools(locale).tones;
-  const [profileText, setProfileText] = useState("");
-  const [sourceLink, setSourceLink] = useState("");
-  const [offerTemplate, setOfferTemplate] = useState("");
+  const [profileText, setProfileText] = useState(example.profileText ?? "");
+  const [sourceLink, setSourceLink] = useState(example.sourceLink ?? "");
+  const [offerTemplate, setOfferTemplate] = useState(example.offerTemplate ?? "");
   const [channel, setChannel] = useState<string>("Telegram");
   const [tone, setTone] = useState<string>(tones[0]);
 

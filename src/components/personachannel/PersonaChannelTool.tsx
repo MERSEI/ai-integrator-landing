@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { getTools } from "@/lib/content/tools";
+import { toolSample } from "@/lib/demo/samples";
 import type { Locale } from "@/lib/i18n";
 import { FiAlertCircle, FiCheck, FiCopy, FiUsers, FiZap } from "@/components/icons";
 
@@ -15,9 +16,12 @@ type Result = {
 
 export default function PersonaChannelTool({ locale }: { locale: Locale }) {
   const t = getTools(locale).personachannel;
+  // Форма открывается заполненной: пустой экран не даёт понять,
+  // работает ли инструмент вообще.
+  const example = toolSample("personachannel", locale);
   const c = getTools(locale).common;
-  const [channel, setChannel] = useState("");
-  const [persona, setPersona] = useState("");
+  const [channel, setChannel] = useState(example.channel ?? "");
+  const [persona, setPersona] = useState(example.persona ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<Result | null>(null);

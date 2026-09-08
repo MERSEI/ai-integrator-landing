@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { getTools } from "@/lib/content/tools";
+import { toolSample } from "@/lib/demo/samples";
 import type { Locale } from "@/lib/i18n";
 import { FiAlertCircle, FiCheck, FiCopy, FiInbox, FiZap } from "@/components/icons";
 
@@ -23,10 +24,13 @@ const URGENCY_CLASSES: Record<string, string> = {
 
 export default function InboxZeroTool({ locale }: { locale: Locale }) {
   const t = getTools(locale).inboxzero;
+  // Форма открывается заполненной: пустой экран не даёт понять,
+  // работает ли инструмент вообще.
+  const example = toolSample("inboxzero", locale);
   const c = getTools(locale).common;
   const urgencyLabels = getTools(locale).urgency;
-  const [email, setEmail] = useState("");
-  const [instruction, setInstruction] = useState("");
+  const [email, setEmail] = useState(example.email ?? "");
+  const [instruction, setInstruction] = useState(example.instruction ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<Result | null>(null);

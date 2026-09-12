@@ -26,7 +26,7 @@ export default function HeroSection({ locale }: { locale: Locale }) {
         aria-hidden="true"
       />
 
-      <div className="container-section relative flex flex-col items-center pb-24 pt-14 text-center sm:pb-28 sm:pt-20 lg:items-start lg:text-left">
+      <div className="container-section relative flex flex-col items-center pb-24 pt-14 text-center sm:pb-28 sm:pt-20">
         <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs font-medium text-primary-light">
           <span className="relative flex h-1.5 w-1.5">
             <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-success" />
@@ -42,16 +42,16 @@ export default function HeroSection({ locale }: { locale: Locale }) {
           {t.headingAccent}
         </h1>
 
-        <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-secondary lg:mx-0">
+        <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-secondary">
           {t.subtitle}
         </p>
 
-        <div className="mt-9 flex w-full justify-center lg:justify-start">
+        <div className="mt-9 w-full">
           <CtaTabs locale={locale} cta={t.cta} source="hero" />
         </div>
 
         {/* Второй путь конверсии: кто не оставляет email — пишет в личку. */}
-        <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
+        <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <span className="text-sm text-secondary">{t.orLabel}</span>
           <TelegramButton label={t.telegramCta} source="hero" />
         </div>
@@ -63,7 +63,7 @@ export default function HeroSection({ locale }: { locale: Locale }) {
           {t.secondaryCta}
         </a>
 
-        <ul className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-secondary lg:justify-start">
+        <ul className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-secondary">
           {t.trust.map((item) => (
             <li key={item} className="flex items-center gap-1.5">
               <FiCheck className="text-success" aria-hidden="true" />

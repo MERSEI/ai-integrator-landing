@@ -74,7 +74,7 @@ export default function HeroScene3D() {
         data-depth="0.85"
         className="absolute inset-0 h-full w-full will-change-transform"
         viewBox="0 0 1200 720"
-        preserveAspectRatio="xMidYMin slice"
+        preserveAspectRatio="none"
         fill="none"
       >
         <defs>

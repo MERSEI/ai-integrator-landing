@@ -204,6 +204,9 @@ export type Content = {
     categoriesLabel: string;
     open: string;
     soonTitle: string;
+    /** {count} — сколько инструментов скрыто под кнопкой «Показать все». */
+    showMore: string;
+    showLess: string;
   };
 
   howItWorks: {

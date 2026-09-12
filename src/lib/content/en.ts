@@ -318,6 +318,8 @@ export const en: Content = {
     categoriesLabel: "App categories",
     open: "Open",
     soonTitle: "Coming soon",
+    showMore: "Show {count} more",
+    showLess: "Show less",
   },
 
   howItWorks: {

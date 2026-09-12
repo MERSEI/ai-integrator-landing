@@ -318,6 +318,8 @@ export const ru: Content = {
     categoriesLabel: "Категории приложений",
     open: "Открыть",
     soonTitle: "Скоро в каталоге",
+    showMore: "Показать ещё {count}",
+    showLess: "Свернуть",
   },
 
   howItWorks: {

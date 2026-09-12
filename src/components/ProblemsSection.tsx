@@ -1,7 +1,7 @@
+import Image from "next/image";
 import Reveal from "./Reveal";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
-import LossScene from "./art/LossScene";
 import { FiSlash, FiX } from "./icons";
 
 export default function ProblemsSection({ locale }: { locale: Locale }) {
@@ -67,10 +67,19 @@ export default function ProblemsSection({ locale }: { locale: Locale }) {
             </div>
           </Reveal>
 
-          {/* Все каналы сходятся на одном человеке, часть висит неразобранной,
-              один лид уходит вниз мимо. */}
+          {/* Стеклянная воронка теряет часть потока — то же, что и текстом
+              слева, но кинематографичным кадром в премиальном 3D-стиле
+              (Higgsfield), в общей визуальной подаче с первым экраном. */}
           <Reveal delay={0.12}>
-            <LossScene className="mx-auto block w-full max-w-[20rem] sm:max-w-md" />
+            <div className="relative mx-auto aspect-[16/10] w-full max-w-md overflow-hidden rounded-2xl border border-white/10 shadow-[0_0_70px_-18px_rgba(79,70,229,0.4)]">
+              <Image
+                src="/images/loss-funnel.webp"
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 28rem, 90vw"
+                className="object-cover"
+              />
+            </div>
           </Reveal>
         </div>
       </div>

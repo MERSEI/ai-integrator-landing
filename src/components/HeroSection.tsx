@@ -1,4 +1,5 @@
 import CtaTabs from "./CtaTabs";
+import HeroScene3D from "./art/HeroScene3D";
 import HeroTexture from "./art/HeroTexture";
 import ScenarioFlow from "./ScenarioFlow";
 import TelegramButton from "./TelegramButton";
@@ -19,6 +20,7 @@ export default function HeroSection({ locale }: { locale: Locale }) {
         aria-hidden="true"
       />
       <HeroTexture />
+      <HeroScene3D />
       <div
         className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
         aria-hidden="true"

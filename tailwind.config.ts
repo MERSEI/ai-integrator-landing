@@ -48,11 +48,11 @@ const config: Config = {
         "chart-1": "#6366F1",
         "chart-2": "#0EA37A",
       },
-      // Один гарнитур на весь сайт (Inter): различие даёт трекинг и вес, а не
-      // вторая гарнитура. Токен `heading` сохранён — им размечено много JSX.
+      // Один гарнитур на весь сайт (Manrope): различие даёт трекинг и вес, а
+      // не вторая гарнитура. Токен `heading` сохранён — им размечено много JSX.
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        heading: ["var(--font-inter)", "system-ui", "sans-serif"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        heading: ["var(--font-sans)", "system-ui", "sans-serif"],
       },
       letterSpacing: {
         tight: "-0.02em",

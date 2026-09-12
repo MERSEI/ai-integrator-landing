@@ -1,7 +1,7 @@
 import Reveal from "./Reveal";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
-import OverloadScene from "./art/OverloadScene";
+import LossScene from "./art/LossScene";
 import { FiSlash, FiX } from "./icons";
 
 export default function ProblemsSection({ locale }: { locale: Locale }) {
@@ -70,7 +70,7 @@ export default function ProblemsSection({ locale }: { locale: Locale }) {
           {/* Все каналы сходятся на одном человеке, часть висит неразобранной,
               один лид уходит вниз мимо. */}
           <Reveal delay={0.12}>
-            <OverloadScene className="mx-auto block w-full max-w-[20rem] sm:max-w-md" />
+            <LossScene className="mx-auto block w-full max-w-[20rem] sm:max-w-md" />
           </Reveal>
         </div>
       </div>

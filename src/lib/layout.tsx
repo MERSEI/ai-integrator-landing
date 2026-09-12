@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Manrope } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
 import GoogleAdsTag from "@/components/GoogleAdsTag";
@@ -20,10 +20,14 @@ export const SITE_URL = "https://ai-integrator-landing.vercel.app";
 /**
  * Одна гарнитура на весь сайт: заголовки отличаются трекингом и весом, а не
  * второй гарнитурой. Заодно минус один шрифтовой запрос.
+ *
+ * Manrope вместо Inter: та же читаемость в тексте, но геометричные, чуть
+ * более широкие формы заголовков ближе к премиальному тех-бренду, который
+ * задаёт кинематографичная 3D-сцена на первом экране.
  */
-export const inter = Inter({
+export const sans = Manrope({
   subsets: ["latin", "cyrillic"],
-  variable: "--font-inter",
+  variable: "--font-sans",
   display: "swap",
 });
 
@@ -153,7 +157,7 @@ export function LocaleRoot({
   children: React.ReactNode;
 }) {
   return (
-    <html lang={getContent(locale).htmlLang} className={inter.variable}>
+    <html lang={getContent(locale).htmlLang} className={sans.variable}>
       <body>
         <script
           type="application/ld+json"

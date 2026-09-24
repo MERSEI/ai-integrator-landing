@@ -27,7 +27,7 @@ real Gemini call, each free to try twice a day without signing up.
 | `commenthunter` | Finds comment threads worth replying to |
 | `leadradar` | Surfaces buying signals from raw text |
 | `objectionkiller` | Generates responses to sales objections |
-| `poaching` | Identifies hiring signals in company data |
+| `poaching` | Real Threads lead search for a niche (via the TaskZ service) — one free lead, honest "no leads" answer |
 | `trendsniper` | Extracts emerging topics |
 | `bizdoctor` | Diagnoses weak points in a business description |
 | `followupbot` | Writes follow-up sequences |

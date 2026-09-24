@@ -35,6 +35,10 @@ const ru = {
   invalidSlot: "Это время уже недоступно. Выберите другой слот.",
   invalidContact: "Проверьте контакт для выбранного способа связи.",
   emailTypo: "Проверьте адрес — возможно, вы имели в виду {email}",
+  scanBusy: "Сейчас много запросов на поиск. Попробуйте через несколько минут.",
+  scanUnavailable:
+    "Поиск в Threads сейчас недоступен. Это не значит, что лидов нет, — мы просто не смогли искать. Попробуйте позже.",
+  scanExpired: "Результат поиска устарел. Запустите поиск заново.",
 };
 
 const en: typeof ru = {
@@ -68,6 +72,10 @@ const en: typeof ru = {
   invalidSlot: "That time is no longer available. Pick another slot.",
   invalidContact: "Check the contact for the channel you picked.",
   emailTypo: "Check the address — did you mean {email}?",
+  scanBusy: "There are a lot of search requests right now. Please try again in a few minutes.",
+  scanUnavailable:
+    "Threads search is unavailable right now. That doesn't mean there are no leads — we just couldn't search. Please try again later.",
+  scanExpired: "This search result has expired. Please run the search again.",
 };
 
 export type ApiMessageKey = keyof typeof ru;

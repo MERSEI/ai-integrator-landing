@@ -127,18 +127,28 @@ export type ToolsContent = {
   poaching: {
     nicheLabel: string;
     nichePlaceholder: string;
-    competitorsLabel: string;
-    competitorsHint: string;
-    competitorsPlaceholder: string;
+    geoLabel: string;
+    geoHint: string;
+    geoPlaceholder: string;
     submit: string;
     submitting: string;
-    demoNote: string;
+    realNote: string;
+    queued: (position: number) => string;
     loading: string;
+    loadingHint: string;
     empty: string;
-    summary: (niche: string, count: number) => string;
-    commentedUnder: string;
-    scoreLabel: string;
-    dmTitle: string;
+    leadTitle: string;
+    leadOpen: string;
+    leadWhy: string;
+    leadScore: string;
+    leadStats: (keywords: number, posts: number) => string;
+    leadUpsell: string;
+    noLeadsTitle: string;
+    noLeadsBody: (keywords: number, posts: number) => string;
+    noLeadsCta: string;
+    unavailableTitle: string;
+    unavailableBody: string;
+    retry: string;
     proTitle: string;
     proIntro: string;
     proFeatures: string[];
@@ -343,30 +353,45 @@ const ruTools: ToolsContent = {
   poaching: {
     nicheLabel: "Ваша ниша",
     nichePlaceholder:
-      "например: доставка здоровой еды, фитнес-студия, SMM-агентство…",
-    competitorsLabel: "Конкуренты",
-    competitorsHint: "(необязательно, через запятую)",
-    competitorsPlaceholder: "например: @competitor_food, @healthy_delivery",
-    submit: "Найти лидов",
+      "например: стоматология, доставка здоровой еды, ремонт квартир…",
+    geoLabel: "Город или страна",
+    geoHint: "(необязательно)",
+    geoPlaceholder: "например: Киев",
+    submit: "Найти лид",
     submitting: "Ищем…",
-    demoNote:
-      "Люди и комментарии ниже сгенерированы AI как реалистичные примеры — это не реальные пользователи. Демо показывает, как движок находит клиентов у конкурентов. Реальный мониторинг — в PRO.",
-    loading: "Сканируем комментарии у конкурентов…",
+    realNote:
+      "Это реальный поиск по Threads, а не демо с выдуманными людьми. Первый лид бесплатно. Если в вашей нише сейчас никто не ищет ваши услуги, мы так и скажем.",
+    queued: (position) => `Вы в очереди: №${position}. Поиск начнётся, как только освободится предыдущий.`,
+    loading: "Ищем в Threads людей, которые сейчас ищут вашу услугу…",
+    loadingHint: "Это занимает несколько минут — не закрывайте страницу.",
     empty:
-      "Укажите нишу — движок найдёт людей, которые интересовались у конкурентов, и подскажет, как их переманить",
-    summary: (niche, count) =>
-      `найдено ${count} человек с интересом у конкурентов, отсортировано по перспективности:`,
-    commentedUnder: "комментировал у",
-    scoreLabel: "Оценка:",
-    dmTitle: "Заход в ЛС",
-    proTitle: "Poaching PRO — реальное переманивание",
+      "Опишите нишу — мы найдём в Threads человека, который прямо сейчас ищет то, что вы продаёте",
+    leadTitle: "Нашли лид",
+    leadOpen: "Открыть пост в Threads",
+    leadWhy: "Почему это лид:",
+    leadScore: "Оценка",
+    leadStats: (keywords, posts) =>
+      `Проверили ${keywords} ключевых слов и ${posts} свежих постов, выбрали лучший.`,
+    leadUpsell:
+      "Это один лид из разового прогона. В индивидуальной сборке Poaching ищет такие обращения круглосуточно и присылает их вам в Telegram.",
+    noLeadsTitle: "Лидов по вашей нише не нашли",
+    noLeadsBody: (keywords, posts) =>
+      posts > 0
+        ? `Мы реально искали в Threads: ${keywords} ключевых слов, ${posts} свежих постов. Людей, которые сейчас ищут вашу услугу, среди них нет. Так бывает: в некоторых нишах клиентов ищут не в Threads, а в Telegram-чатах, на форумах или в локальных сервисах. Не будем изображать, что лид нашёлся. Если нужен результат — соберём поиск индивидуально под вашу нишу: подберём площадки и настроим отбор под вашего клиента.`
+        : `Мы искали в Threads по ${keywords} ключевым словам, но подходящих постов не нашлось совсем. В вашей нише клиентов, скорее всего, ищут в других местах — например, в Telegram-чатах, на форумах или в локальных сервисах. Не будем изображать, что лид нашёлся. Если нужен результат — соберём поиск индивидуально под вашу нишу.`,
+    noLeadsCta: "Обсудить индивидуальную разработку",
+    unavailableTitle: "Сейчас не можем выполнить поиск",
+    unavailableBody:
+      "Поиск в Threads временно недоступен. Это не значит, что лидов в вашей нише нет — мы просто не смогли искать. Попробуйте через несколько минут.",
+    retry: "Попробовать снова",
+    proTitle: "Poaching PRO — поиск под вашу нишу 24/7",
     proIntro:
-      "В боевой версии Poaching мониторит комментарии у ваших конкурентов и приводит их клиентов к вам:",
+      "Индивидуальная сборка Poaching работает круглосуточно и приносит вам обращения людей, готовых купить:",
     proFeatures: [
-      "Мониторинг комментариев под постами конкурентов в реальном времени",
-      "Сбор людей с подтверждённым интересом — кто уже задавал вопросы",
-      "Готовые тактичные заходы в ЛС и работа с возражениями",
-      "Перевод заинтересованных в ваш Telegram-канал автоматически",
+      "Постоянный мониторинг Threads по ключевым словам вашей ниши",
+      "ИИ-отбор: только люди с реальным намерением купить, без рекламы и болтовни",
+      "Лид сразу приходит в Telegram со ссылкой на пост и оценкой",
+      "Индивидуальная настройка и доработка источников под вашу нишу",
     ],
   },
 
@@ -594,30 +619,45 @@ const enTools: ToolsContent = {
   poaching: {
     nicheLabel: "Your niche",
     nichePlaceholder:
-      "e.g. healthy meal delivery, fitness studio, social media agency…",
-    competitorsLabel: "Competitors",
-    competitorsHint: "(optional, comma-separated)",
-    competitorsPlaceholder: "e.g. @competitor_food, @healthy_delivery",
-    submit: "Find leads",
+      "e.g. dental clinic, healthy meal delivery, apartment renovation…",
+    geoLabel: "City or country",
+    geoHint: "(optional)",
+    geoPlaceholder: "e.g. London",
+    submit: "Find a lead",
     submitting: "Searching…",
-    demoNote:
-      "The people and comments below are AI-generated realistic examples — not real users. The demo shows how the engine finds customers at your competitors. Real monitoring is in PRO.",
-    loading: "Scanning your competitors' comments…",
+    realNote:
+      "This is a real Threads search, not a demo with made-up people. Your first lead is free. If nobody in your niche is looking for your services right now, we'll say so.",
+    queued: (position) => `You're in the queue: #${position}. The search starts as soon as the previous one finishes.`,
+    loading: "Searching Threads for people who are looking for your service right now…",
+    loadingHint: "This takes a few minutes — please keep the page open.",
     empty:
-      "Name your niche — the engine will find people who were interested in your competitors and show you how to win them over",
-    summary: (niche, count) =>
-      `found ${count} people showing interest in competitors, sorted by how promising they are:`,
-    commentedUnder: "commented under",
-    scoreLabel: "Assessment:",
-    dmTitle: "DM opener",
-    proTitle: "Poaching PRO — real customer poaching",
+      "Describe your niche — we'll find someone on Threads who is looking for what you sell right now",
+    leadTitle: "Lead found",
+    leadOpen: "Open the post on Threads",
+    leadWhy: "Why it's a lead:",
+    leadScore: "Score",
+    leadStats: (keywords, posts) =>
+      `We checked ${keywords} keywords and ${posts} recent posts and picked the best one.`,
+    leadUpsell:
+      "This is one lead from a one-off run. In a custom Poaching build, the search runs around the clock and sends these to you in Telegram.",
+    noLeadsTitle: "No leads found for your niche",
+    noLeadsBody: (keywords, posts) =>
+      posts > 0
+        ? `We really searched Threads: ${keywords} keywords, ${posts} recent posts. None of them are people looking for your service right now. It happens: in some niches customers look elsewhere — Telegram chats, forums or local services. We won't pretend a lead turned up. If you want results, we'll build a search for your niche: pick the right platforms and tune the filtering to your customer.`
+        : `We searched Threads on ${keywords} keywords but found no matching posts at all. In your niche, customers are most likely looking elsewhere — Telegram chats, forums or local services. We won't pretend a lead turned up. If you want results, we'll build a search for your niche.`,
+    noLeadsCta: "Discuss a custom build",
+    unavailableTitle: "We can't run the search right now",
+    unavailableBody:
+      "Threads search is temporarily unavailable. That doesn't mean there are no leads in your niche — we just couldn't search. Please try again in a few minutes.",
+    retry: "Try again",
+    proTitle: "Poaching PRO — a search built for your niche, 24/7",
     proIntro:
-      "In the full version Poaching monitors your competitors' comments and brings their customers to you:",
+      "A custom Poaching build runs around the clock and brings you people who are ready to buy:",
     proFeatures: [
-      "Real-time monitoring of comments under competitors' posts",
-      "Collecting people with confirmed intent — those who already asked questions",
-      "Ready tactful DM openers and objection handling",
-      "Automatically moving interested people into your Telegram channel",
+      "Continuous Threads monitoring on your niche's keywords",
+      "AI filtering: only people with real buying intent, no ads or chatter",
+      "Each lead lands in Telegram with a link to the post and a score",
+      "Custom setup and extra sources tailored to your niche",
     ],
   },
 

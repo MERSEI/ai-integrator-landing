@@ -780,14 +780,14 @@ export const en: Content = {
 
   appPages: {
     poaching: {
-      metaTitle: "Poaching — win customers from your competitors | AI Integrator",
+      metaTitle: "Poaching — Threads leads for your niche | AI Integrator",
       metaDescription:
-        "Name your niche and Poaching finds people who were shopping your competitors, scores them, and drafts a tactful DM.",
+        "Name your niche and Poaching searches Threads for people who are looking for your service right now — your first lead is free. If there are none, we'll say so.",
       badge: "Poaching",
       titleLead: "Poaching — ",
-      titleAccent: "hunting your competitors' customers",
+      titleAccent: "people looking for your service",
       subtitle:
-        "People asking questions under your competitors' posts are already warm leads. Name your niche and the engine finds them, then shows you how to win them over tactfully.",
+        "People who write “can anyone recommend”, “looking for”, “how much is” are already warm leads. Name your niche and we will find one on Threads. Your first lead is free.",
     },
     bizdoctor: {
       metaTitle: "BizDoctor — business diagnostics | AI Integrator",
